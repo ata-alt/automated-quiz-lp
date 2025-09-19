@@ -36,6 +36,7 @@
 <link href="../site-assets/css/style-quiz-widget.css?v=5" rel="stylesheet">
 <script src="../site-assets/js/frame.sofa-quiz.js?v=1"></script>
 <script src="../site-assets/js/sofa-quiz.js" defer></script>
+<script src="../site-assets/js/showroom-content.js" defer></script>
 <style>
 	.main {margin-top: 0px;}
 	@media only screen and (max-width: 450px) {
@@ -227,28 +228,30 @@ Our talented team will help you with your floor plans and furniture choices."
     </div>
   </section>
   </section>
-			<h2 class="thick-h1 black text-center">The largest luxury sofa showroom in London</h2>
+			<h2 class="thick-h1 black text-center" id="showroomSectionTitle">The largest luxury sofa showroom in London</h2>
 		</div>
 	</div>
 	<div class="row">
 		<div style="padding: 10px;">
-			<img src="../cdn-cgi/image/quality=75,f=auto/site-assets/shoroomlndn.jpg" class="full-width" width="1110" height="500" loading="lazy" alt="The largest luxury sofa showroom in London" title="The largest luxury sofa showroom in London">
+			<img id="showroomSectionImage" src="../cdn-cgi/image/quality=75,f=auto/site-assets/shoroomlndn.jpg" class="full-width" width="1110" height="500" loading="lazy" alt="The largest luxury sofa showroom in London" title="The largest luxury sofa showroom in London">
 		</div>
 	</div>
 </section>
 <section style="padding:10px 10px 20px 20px">
 	<div class="container">
-		<p class="thick-h1 text-center black">Luxury Sofas, Redefined</p>
+		<p class="thick-h1 text-center black" id="showroomMainTitle">Luxury Sofas, Redefined</p>
 		<div class="row flex" style="flex-wrap: wrap;">
-			<div class="col col-12">
-				<p class="block-text">A sofa is never just a sofa. It’s where you unwind after a long day, host spirited conversations, and perhaps—if it’s truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don’t just sell sofas; we curate spaces of sophistication, tailored to those who appreciate life’s finer details.</p>
-				<p class="block-text">Why Visit Our Showroom?</p>
-				<p class="block-text"><strong>1. The Largest Collection in London</strong><br>Why settle for standard when you can have the exceptional? Our showroom houses an unparalleled selection of luxury sofas, from timeless classics to contemporary masterpieces, all meticulously crafted by the world’s finest artisans.</p>
-				<p class="block-text"><strong>2. Bespoke, Just for You</strong><br>Luxury is personal. That’s why we offer fully customisable designs—every stitch, curve, and cushion tailored to your exacting standards. Whether it’s hand-stitched Italian leather or a sumptuous velvet that whispers elegance, we bring your vision to life.</p>
-				<p class="block-text"><strong>3. The Touch Test</strong><br>A sofa should never be chosen from a screen. It’s about how it feels—the depth of the cushioning, the smoothness of the upholstery, the perfect balance of support and indulgence. Our showroom invites you to experience craftsmanship in its truest form.</p>
-				<p class="block-text"><strong>4. Design Expertise, on Demand</strong><br>Our team of seasoned interior designers are at your service, ready to refine, reimagine, and elevate your space with tailored advice and creative insight. Whether you’re seeking a statement piece or an entire living room transformation, we make it effortless.</p>
-				<p class="block-text"><strong>5. Instant Gratification</strong><br>Impatience is a virtue when it comes to interiors. With many of our luxury sofas available for immediate delivery, there’s no need to wait months for perfection to arrive.</p>
-				<p class="block-text"><strong>Visit Us &amp; Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the sofa you never knew you needed.</p>
+			<div class="col col-12" id="showroomContent">
+				<p class="block-text" id="showroomIntroduction">A sofa is never just a sofa. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell sofas; we curate spaces of sophistication, tailored to those who appreciate life's finer details.</p>
+				<p class="block-text" id="showroomWhyVisitTitle">Why Visit Our Showroom?</p>
+				<div id="showroomPoints">
+					<p class="block-text"><strong>1. The Largest Collection in London</strong><br>Why settle for standard when you can have the exceptional? Our showroom houses an unparalleled selection of luxury sofas, from timeless classics to contemporary masterpieces, all meticulously crafted by the world's finest artisans.</p>
+					<p class="block-text"><strong>2. Bespoke, Just for You</strong><br>Luxury is personal. That's why we offer fully customisable designs—every stitch, curve, and cushion tailored to your exacting standards. Whether it's hand-stitched Italian leather or a sumptuous velvet that whispers elegance, we bring your vision to life.</p>
+					<p class="block-text"><strong>3. The Touch Test</strong><br>A sofa should never be chosen from a screen. It's about how it feels—the depth of the cushioning, the smoothness of the upholstery, the perfect balance of support and indulgence. Our showroom invites you to experience craftsmanship in its truest form.</p>
+					<p class="block-text"><strong>4. Design Expertise, on Demand</strong><br>Our team of seasoned interior designers are at your service, ready to refine, reimagine, and elevate your space with tailored advice and creative insight. Whether you're seeking a statement piece or an entire living room transformation, we make it effortless.</p>
+					<p class="block-text"><strong>5. Instant Gratification</strong><br>Impatience is a virtue when it comes to interiors. With many of our luxury sofas available for immediate delivery, there's no need to wait months for perfection to arrive.</p>
+				</div>
+				<p class="block-text" id="showroomConclusion"><strong>Visit Us &amp; Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the sofa you never knew you needed.</p>
 			</div>
 		</div>
 	</div>
@@ -659,6 +662,7 @@ Our talented team will help you with your floor plans and furniture choices."
 	</dialog>
 </div>
 <!-- Zaraz consent Pop up ends here -->
+ <script src="../site-assets/js/showroom-content.js"></script>
 <script src="../site-assets/js/libs/jquery.fitvids.js" defer></script>
 <script src="../site-assets/js/libs/lightslider.js" defer></script>
 <script src="../site-assets/js/libs/jquery.accordion.js" defer></script>
