@@ -1,0 +1,27 @@
+/*
+* HMI Technologies Mumbai
+** CSS **
+*
+* This is the default Over ride CSS file.
+*
+*/
+.signupboxs-lp .offerbox{padding:20px 33px;}
+.blockmobile{display:block;}
+.brands{padding:10px 0;}
+.brands .scroll-auto{padding:10px;overflow-x:auto;}
+.brands .brand-box{flex:1 0 auto;padding:0 20px;}
+.brands .scroll-auto .mobile-show{display:block;}
+section.container.big {max-width: 1920px;}
+.signupboxs-lp {background: #ffffff;}
+.col.col-12.col-4-mid.nopadding {padding: 1px;}
+.col.col-12.col-4-mid {padding: 9px;}
+.article-list-title {font-size: 120%;}
+.block-text {color: #000000;font-weight: 400 !important;}
+.show-sm-only {display: none !important;}
+.thick-h4 {font-weight: 800;font-size: 20px;line-height: 32px;}
+.product-list-each {margin: 0 0 0 0;}
+.font-regular {color: #000;}
+@media only screen and (min-width:939px){.blockmobile.flex{display:flex;width: 100%;}}
+@media only screen and (max-width: 450px){.thick-h1 {font-size: 25px;line-height: 35px;}}
+@media (max-width: 639px) {.banner-heading, .banner-sub-heading {color: #0c0000;}.show-sm-only {display: block !important;}}
+

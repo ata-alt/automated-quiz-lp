@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sofa Quiz Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .dashboard-header {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1976D2;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #45a049;
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #da190b;
+        }
+
+        .question-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question-number {
+            background: #2196F3;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .question-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .option-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fafafa;
+            position: relative;
+        }
+
+        .option-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            background: #666;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .image-upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-size: cover;
+            background-position: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .image-upload-area:hover {
+            border-color: #2196F3;
+            background-color: rgba(33, 150, 243, 0.05);
+        }
+
+        .image-upload-area.has-image {
+            border: 2px solid #4CAF50;
+        }
+
+        .upload-text {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .option-text-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .preview-section {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .preview-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .json-output {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+        }
+
+        .status-message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>🛋️ Sofa Quiz Content Management Dashboard</h1>
+        </div>
+
+        <div class="status-message" id="statusMessage"></div>
+
+        <div class="actions-bar">
+            <div>
+                <button class="btn btn-primary" onclick="loadCurrentQuiz()">Load Current Quiz</button>
+                <button class="btn btn-primary" onclick="importJSON()">Import JSON</button>
+                <button class="btn btn-primary" onclick="addNewQuestion()">+ Add Question</button>
+            </div>
+            <div>
+                <button class="btn btn-success" onclick="saveQuiz()">💾 Save All Changes</button>
+                <button class="btn btn-success" onclick="exportJSON()">📥 Export JSON</button>
+                <button class="btn btn-primary" onclick="previewQuiz()">👁️ Preview</button>
+            </div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div class="preview-section" id="previewSection" style="display: none;">
+            <div class="preview-title">Quiz Preview</div>
+            <div id="previewContent"></div>
+        </div>
+    </div>
+
+    <!-- Modal for JSON Export/Import -->
+    <div id="jsonModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Quiz Data</h2>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        let quizData = {
+            questions: []
+        };
+
+        // Initialize with sample data (from original quiz)
+        function initializeSampleData() {
+            quizData = {
+                questions: [
+                    {
+                        id: 1,
+                        text: 'What best describes your household?',
+                        options: [
+                            {
+                                id: 'a',
+                                text: 'Young kids—energetic, messy, and always moving',
+                                image: '/site-assets/images/sofa-quiz/young-kids-energetic-messy-and-always-moving.jpg'
+                            },
+                            {
+                                id: 'b',
+                                text: 'Teenagers or young adults still at home',
+                                image: '/site-assets/images/sofa-quiz/teenagers-or-young-adults-still-at-home.jpg'
+                            },
+                            {
+                                id: 'c',
+                                text: 'Just the two of us—calm and design-focused',
+                                image: '/site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg'
+                            },
+                            {
+                                id: 'd',
+                                text: 'Grown-up home—quiet, elegant, mostly adults',
+                                image: '/site-assets/images/sofa-quiz/grown-up-home.jpg'
+                            }
+                        ]
+                    }
+                ]
+            };
+            renderQuestions();
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            quizData.questions.forEach((question, qIndex) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">Question ${question.id}</span>
+                        <button class="btn btn-danger" onclick="removeQuestion(${qIndex})">Remove</button>
+                    </div>
+                    <input type="text" class="question-input" value="${question.text}" 
+                           onchange="updateQuestionText(${qIndex}, this.value)"
+                           placeholder="Enter question text...">
+                    <div class="options-grid" id="options-${qIndex}">
+                        ${renderOptions(question.options, qIndex)}
+                    </div>
+                    <button class="btn btn-primary" onclick="addOption(${qIndex})" style="margin-top: 15px;">+ Add Option</button>
+                `;
+                container.appendChild(questionCard);
+            });
+        }
+
+        function renderOptions(options, qIndex) {
+            return options.map((option, oIndex) => `
+                <div class="option-card">
+                    <div class="option-header">
+                        <span class="option-label">Option ${option.id.toUpperCase()}</span>
+                        <button class="btn btn-danger" style="padding: 5px 10px; font-size: 12px;" 
+                                onclick="removeOption(${qIndex}, ${oIndex})">×</button>
+                    </div>
+                    <div class="image-upload-area ${option.image ? 'has-image' : ''}" 
+                         id="image-${qIndex}-${oIndex}"
+                         style="${option.image ? `background-image: url('${option.image}')` : ''}"
+                         onclick="document.getElementById('file-${qIndex}-${oIndex}').click()">
+                        <div class="upload-text">
+                            ${option.image ? '📷 Click to change image' : '📤 Click to upload image'}
+                        </div>
+                    </div>
+                    <input type="file" id="file-${qIndex}-${oIndex}" 
+                           style="display: none;" accept="image/*"
+                           onchange="handleImageUpload(${qIndex}, ${oIndex}, this)">
+                    <input type="text" class="option-text-input" 
+                           value="${option.text}"
+                           onchange="updateOptionText(${qIndex}, ${oIndex}, this.value)"
+                           placeholder="Enter option text...">
+                </div>
+            `).join('');
+        }
+
+        function updateQuestionText(qIndex, text) {
+            quizData.questions[qIndex].text = text;
+            showStatus('Question text updated', 'success');
+        }
+
+        function updateOptionText(qIndex, oIndex, text) {
+            quizData.questions[qIndex].options[oIndex].text = text;
+            showStatus('Option text updated', 'success');
+        }
+
+        function handleImageUpload(qIndex, oIndex, input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    quizData.questions[qIndex].options[oIndex].image = imageData;
+                    const imageArea = document.getElementById(`image-${qIndex}-${oIndex}`);
+                    imageArea.style.backgroundImage = `url('${imageData}')`;
+                    imageArea.classList.add('has-image');
+                    imageArea.innerHTML = '<div class="upload-text">📷 Click to change image</div>';
+                    showStatus('Image uploaded successfully', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function addNewQuestion() {
+            const newId = quizData.questions.length + 1;
+            quizData.questions.push({
+                id: newId,
+                text: `New Question ${newId}`,
+                options: [
+                    { id: 'a', text: 'Option A', image: '' },
+                    { id: 'b', text: 'Option B', image: '' },
+                    { id: 'c', text: 'Option C', image: '' },
+                    { id: 'd', text: 'Option D', image: '' }
+                ]
+            });
+            renderQuestions();
+            showStatus('New question added', 'success');
+        }
+
+        function removeQuestion(qIndex) {
+            if (confirm('Are you sure you want to remove this question?')) {
+                quizData.questions.splice(qIndex, 1);
+                // Renumber remaining questions
+                quizData.questions.forEach((q, i) => {
+                    q.id = i + 1;
+                });
+                renderQuestions();
+                showStatus('Question removed', 'success');
+            }
+        }
+
+        function addOption(qIndex) {
+            const options = quizData.questions[qIndex].options;
+            const nextId = String.fromCharCode(97 + options.length); // Generate next letter (a, b, c, ...)
+            options.push({
+                id: nextId,
+                text: `Option ${nextId.toUpperCase()}`,
+                image: ''
+            });
+            renderQuestions();
+            showStatus('New option added', 'success');
+        }
+
+        function removeOption(qIndex, oIndex) {
+            if (confirm('Are you sure you want to remove this option?')) {
+                quizData.questions[qIndex].options.splice(oIndex, 1);
+                // Re-letter remaining options
+                quizData.questions[qIndex].options.forEach((opt, i) => {
+                    opt.id = String.fromCharCode(97 + i);
+                });
+                renderQuestions();
+                showStatus('Option removed', 'success');
+            }
+        }
+
+        function saveQuiz() {
+            // In a real implementation, this would send data to a server
+            localStorage.setItem('sofaQuizData', JSON.stringify(quizData));
+            showStatus('Quiz saved successfully! (Saved to browser localStorage)', 'success');
+            
+            // Generate JavaScript code for the quiz
+            generateQuizCode();
+        }
+
+        function loadCurrentQuiz() {
+            const savedData = localStorage.getItem('sofaQuizData');
+            if (savedData) {
+                quizData = JSON.parse(savedData);
+                renderQuestions();
+                showStatus('Quiz loaded from saved data', 'success');
+            } else {
+                initializeSampleData();
+                showStatus('Loaded sample quiz data', 'success');
+            }
+        }
+
+        function exportJSON() {
+            const modal = document.getElementById('jsonModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = 'Export Quiz Data (JSON)';
+            modalBody.innerHTML = `
+                <p>Copy this JSON data to save or share your quiz configuration:</p>
+                <div class="json-output">${JSON.stringify(quizData, null, 2)}</div>
+                <button class="btn btn-primary" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function importJSON() {
+            const modal = document.getElementById('jsonModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = 'Import Quiz Data (JSON)';
+            modalBody.innerHTML = `
+                <p>Paste your quiz JSON data below:</p>
+                <textarea id="jsonInput" style="width: 100%; height: 300px; font-family: monospace;"></textarea>
+                <button class="btn btn-success" onclick="processImport()">Import Data</button>
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function processImport() {
+            const jsonInput = document.getElementById('jsonInput').value;
+            try {
+                quizData = JSON.parse(jsonInput);
+                renderQuestions();
+                closeModal();
+                showStatus('Quiz data imported successfully', 'success');
+            } catch (error) {
+                alert('Invalid JSON format. Please check your data.');
+                showStatus('Import failed: Invalid JSON', 'error');
+            }
+        }
+
+        function copyToClipboard() {
+            const jsonText = JSON.stringify(quizData, null, 2);
+            navigator.clipboard.writeText(jsonText).then(() => {
+                showStatus('Copied to clipboard!', 'success');
+            });
+        }
+
+        function closeModal() {
+            document.getElementById('jsonModal').style.display = 'none';
+        }
+
+        function previewQuiz() {
+            const previewSection = document.getElementById('previewSection');
+            const previewContent = document.getElementById('previewContent');
+            
+            previewSection.style.display = 'block';
+            
+            // Simple preview rendering
+            let html = '<div style="background: white; padding: 20px; border-radius: 8px;">';
+            
+            quizData.questions.forEach((q, qIndex) => {
+                html += `
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #333; margin-bottom: 20px;">${q.text}</h3>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                `;
+                
+                q.options.forEach(opt => {
+                    html += `
+                        <div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px; text-align: center;">
+                            ${opt.image ? `<img src="${opt.image}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">` : '<div style="height: 100px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-bottom: 10px;">No Image</div>'}
+                            <div style="font-size: 14px;">${opt.text}</div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div></div>';
+            });
+            
+            html += '</div>';
+            previewContent.innerHTML = html;
+            
+            // Scroll to preview
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function generateQuizCode() {
+            console.log('Generated quiz JavaScript code:');
+            console.log('questions:', JSON.stringify(quizData.questions, null, 2));
+        }
+
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('statusMessage');
+            statusEl.textContent = message;
+            statusEl.className = `status-message status-${type}`;
+            statusEl.style.display = 'block';
+            
+            setTimeout(() => {
+                statusEl.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize on load
+        window.onload = function() {
+            loadCurrentQuiz();
+        };
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('jsonModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
