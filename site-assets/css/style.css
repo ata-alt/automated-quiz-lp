@@ -1665,8 +1665,8 @@ hr {
 
 @font-face {
     font-family: 'icomoon';
-    src: local('icomoon'), url("/site-assets/font-icons/fonts/icomoon.eot?uo8nu");
-    src: local('icomoon'), url("/site-assets/font-icons/fonts/icomoon.eot?uo8nu#iefix") format("embedded-opentype"), url("/site-assets/font-icons/fonts/icomoon.ttf?uo8nu") format("truetype"), url("/site-assets/font-icons/fonts/icomoon.woff?uo8nu") format("woff"), url("/site-assets/font-icons/fonts/icomoon.svg?uo8nu#icomoon") format("svg");
+    src: local('icomoon'), url("../font-icons/fonts/icomoon.ttf?uo8nu");
+    src: local('icomoon'), url("../font-icons/fonts/icomoon.eot?uo8nu#iefix") format("embedded-opentype"), url("../font-icons/fonts/icomoon.ttf?uo8nu") format("truetype"), url("../font-icons/fonts/icomoon.woff?uo8nu") format("woff"), url("../font-icons/fonts/icomoon.svg?uo8nu#icomoon") format("svg");
     font-weight: normal;
     font-style: normal;
     font-display: swap

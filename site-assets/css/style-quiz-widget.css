@@ -1,7 +1,13 @@
+.quiz-block {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 .quiz-block .option-button {
-  display: inline-block;
-  width: 21%;
-  margin: 1%;
+  display: block;
+  width: 100%;
+  margin: 0;
   padding: 10px;
   text-align: center;
   border: 2px solid #ddd;
@@ -22,8 +28,9 @@
 }
 
 .options-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   gap: 16px;
 }
 
@@ -57,7 +64,12 @@
 }
 
 @media only screen and (max-width: 768px) {
+  .options-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 12px;
+  }
   .quiz-block .option-button {
-    width: 100% !important;
+    padding: 8px;
   }
 }

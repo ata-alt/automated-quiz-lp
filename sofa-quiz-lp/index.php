@@ -24,8 +24,9 @@
 <link rel="preload" href="../site-assets/fonts/gilroy/348C7F_4_0.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../site-assets/font-icons/fonts/icomoon.ttf?uo8nu" as="font" type="font/ttf" crossorigin>
 
-<link rel="stylesheet" href="../site-assets/css/style.css?v=19">
-<link rel="stylesheet" href="/style.css?v=13">
+
+
+<link rel="stylesheet" href="../site-assets/css/style.css">
 <link rel="stylesheet" href="../site-assets/css/zaraz-consent.css">
 
 <script src="../site-assets/js/libs/jquery-3.6.0.min.js"></script>
@@ -33,7 +34,8 @@
 <meta name="popup" content="0">
 <meta name="robots" content="noindex, nofollow">
 <link href="../site-assets/css/luxurylp.css" rel="stylesheet">
-<link href="../site-assets/css/style-quiz-widget.css?v=5" rel="stylesheet">
+<link href="../site-assets/css/style-quiz-widget.css?v=6" rel="stylesheet">
+<script src="../api/api-client.js"></script>
 <script src="../site-assets/js/frame.sofa-quiz.js?v=1"></script>
 <script src="../site-assets/js/sofa-quiz.js" defer></script>
 <script src="../site-assets/js/showroom-content.js" defer></script>
@@ -184,9 +186,8 @@ Our talented team will help you with your floor plans and furniture choices."
         <h3 class="thick-h3 black">
           "We'll send you an email shortly with your lifestyle matched to a few sofa options."
         </h3>
-      </div>
-      <div class="spacing-v"></div>
-      <form id="sofaquiz" class="webform" action="#" method="POST" onsubmit="submitDetails(event)" data-hs-cf-bound="true">
+        <div class="spacing-v"></div>
+        <form id="sofaquiz" class="webform" action="#" method="POST" onsubmit="submitDetails(event)" data-hs-cf-bound="true">
         <div class="row">
           <div class="col col-12 col-4-mid">
             <div class="field-block">
@@ -223,7 +224,8 @@ Our talented team will help you with your floor plans and furniture choices."
             </div>
           </div>
         </div>
-      </form>    
+        </form>
+      </div>
     </div>
     </div>
   </section>
@@ -662,7 +664,7 @@ Our talented team will help you with your floor plans and furniture choices."
 	</dialog>
 </div>
 <!-- Zaraz consent Pop up ends here -->
- <script src="../site-assets/js/showroom-content.js"></script>
+ <script src="../site-assets/js/showroom-content-fallback.js"></script>
 <script src="../site-assets/js/libs/jquery.fitvids.js" defer></script>
 <script src="../site-assets/js/libs/lightslider.js" defer></script>
 <script src="../site-assets/js/libs/jquery.accordion.js" defer></script>
@@ -671,7 +673,7 @@ Our talented team will help you with your floor plans and furniture choices."
 <script src="../site-assets/js/libs/jquery.lazy.min.js" defer></script>
 <script src="../site-assets/js/libs/classie.js" defer></script>
 <script src="../site-assets/js/libs/selectFx.js" defer></script>
-<script src="/main.js?v=35" defer></script>
+<script src="../main.js?v=35" defer></script>
 <script src="//scripts.iconnode.com/121386.js" defer></script>
 <script src="../site-assets/js/cf-zaraz-init.js" defer></script><script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"rayId":"980ec71b8bcdf881","serverTiming":{"name":{"cfExtPri":true,"cfEdge":true,"cfOrigin":true,"cfL4":true,"cfSpeedBrain":true,"cfCacheStatus":true}},"version":"2025.8.0","token":"84f74e2a1b444425bd5c6e76422307ec"}' crossorigin="anonymous"></script>
 </body></html>

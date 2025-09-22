@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Database Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .quiz-container { max-width: 800px; margin: 0 auto; }
+        .loading-state, .error-state { text-align: center; padding: 20px; }
+        .option-button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: white;
+            cursor: pointer;
+            width: 100%;
+        }
+        .option-button img {
+            max-width: 200px;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+        }
+        .progress-dots {
+            height: 4px;
+            background: #eee;
+            margin: 20px 0;
+        }
+        .progress-dots-inner {
+            height: 100%;
+            background: #007cba;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz Database Integration Test</h1>
+        <div id="quiz">
+            <p>Initializing...</p>
+        </div>
+    </div>
+
+    <script src="api/api-client.js"></script>
+    <script src="site-assets/js/sofa-quiz.js"></script>
+
+    <script>
+        // Test logging
+        console.log('Test page loaded');
+
+        // Wait a moment then try to initialize
+        setTimeout(() => {
+            console.log('Attempting manual initialization...');
+            if (window.styleQuiz) {
+                window.styleQuiz.init();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

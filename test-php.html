@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .test-result { margin: 20px 0; padding: 15px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>PHP Backend Test</h1>
+    <p>This page will help diagnose PHP setup issues.</p>
+
+    <div id="results">
+        <div class="test-result warning">
+            <strong>Starting tests...</strong>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <button onclick="runTests()">Run All Tests</button>
+        <button onclick="testBasicPHP()">Test Basic PHP</button>
+        <button onclick="testDatabase()">Test Database</button>
+        <button onclick="testAPI()">Test API Endpoints</button>
+    </div>
+
+    <script>
+        const resultsDiv = document.getElementById('results');
+
+        function addResult(message, type = 'success') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = message;
+            resultsDiv.appendChild(div);
+        }
+
+        function clearResults() {
+            resultsDiv.innerHTML = '';
+        }
+
+        async function testBasicPHP() {
+            addResult('Testing basic PHP functionality...', 'warning');
+
+            try {
+                const response = await fetch('./api/test.php');
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    addResult(`✅ PHP is working! Version: ${data.php_version}`, 'success');
+                    return true;
+                } else {
+                    addResult('❌ PHP test failed: Invalid response', 'error');
+                    return false;
+                }
+            } catch (error) {
+                addResult(`❌ PHP test failed: ${error.message}`, 'error');
+                addResult('💡 This likely means you\'re not running on a PHP server. See SETUP-PHP.md for instructions.', 'warning');
+                return false;
+            }
+        }
+
+        async function testDatabase() {
+            addResult('Testing database connection...', 'warning');
+
+            try {
+                const response = await fetch('./api/debug.php');
+                const data = await response.json();
+
+                addResult(`<strong>Database Test Results:</strong><pre>${JSON.stringify(data, null, 2)}</pre>`, 'success');
+
+                if (data.database_test && data.database_test.includes('SUCCESS')) {
+                    addResult('✅ Database connection successful!', 'success');
+                    return true;
+                } else {
+                    addResult(`❌ Database connection failed: ${data.database_test}`, 'error');
+                    return false;
+                }
+            } catch (error) {
+                addResult(`❌ Database test failed: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        async function testAPI() {
+            addResult('Testing API endpoints...', 'warning');
+
+            const tests = [
+                { name: 'Products API', url: './api/products.php' },
+                { name: 'Content API', url: './api/content.php' },
+                { name: 'Settings API', url: './api/settings.php' }
+            ];
+
+            let allPassed = true;
+
+            for (const test of tests) {
+                try {
+                    const response = await fetch(test.url);
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        addResult(`✅ ${test.name}: Working`, 'success');
+                    } else {
+                        addResult(`❌ ${test.name}: Error ${response.status}`, 'error');
+                        allPassed = false;
+                    }
+                } catch (error) {
+                    addResult(`❌ ${test.name}: ${error.message}`, 'error');
+                    allPassed = false;
+                }
+            }
+
+            return allPassed;
+        }
+
+        async function runTests() {
+            clearResults();
+            addResult('🚀 Running comprehensive PHP backend tests...', 'warning');
+
+            const phpWorking = await testBasicPHP();
+
+            if (phpWorking) {
+                await testDatabase();
+                await testAPI();
+                addResult('🎉 All tests completed! Check results above.', 'success');
+            } else {
+                addResult('⚠️ Cannot proceed with other tests until PHP is working.', 'warning');
+                addResult('<strong>Next Steps:</strong><br>1. Install XAMPP or WAMP<br>2. Start Apache and MySQL services<br>3. Move project to htdocs folder<br>4. Access via http://localhost/sofa-quiz-lp/', 'warning');
+            }
+        }
+
+        // Auto-run tests on page load
+        window.onload = () => {
+            setTimeout(runTests, 1000);
+        };
+    </script>
+</body>
+</html>
