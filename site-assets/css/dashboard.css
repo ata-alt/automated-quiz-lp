@@ -86,18 +86,23 @@ body {
 
 /* Status Messages */
 .status-message {
-  margin: 20px 40px;
-  padding: 16px 20px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 16px 24px;
   border-radius: var(--border-radius);
   display: none;
   font-weight: 500;
-  animation: slideDown 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: slideUp 0.3s ease;
+  max-width: 400px;
 }
 
-@keyframes slideDown {
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -115,6 +120,16 @@ body {
   background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
   color: #991b1b;
   border-left: 4px solid var(--danger-color);
+}
+
+/* Mobile responsive for status message */
+@media (max-width: 600px) {
+  .status-message {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    max-width: none;
+  }
 }
 
 /* Actions Bar */
@@ -627,6 +642,198 @@ input[type="checkbox"] {
 .p-10 { padding: 10px; }
 .p-20 { padding: 20px; }
 
+/* Tab Navigation Styles */
+.tab-navigation {
+  background: white;
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.tab-buttons {
+  display: flex;
+  background: linear-gradient(135deg, var(--light-gray) 0%, #f8f9fa 100%);
+  border-bottom: 1px solid var(--border-color);
+  overflow-x: auto;
+  padding: 0 20px;
+  gap: 5px;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px 20px;
+  border: none;
+  background: transparent;
+  color: var(--medium-gray);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  border-radius: 10px 10px 0 0;
+  transition: var(--transition);
+  position: relative;
+  margin-top: 5px;
+}
+
+.tab-btn:hover {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.tab-btn.active {
+  background: white;
+  color: var(--primary-color);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  border-bottom: 1px solid white;
+  margin-bottom: -1px;
+  z-index: 1;
+}
+
+.tab-btn.active .tab-icon {
+  transform: scale(1.2);
+}
+
+.tab-icon {
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.tab-text {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tab Content Styles */
+.tab-content-container {
+  background: white;
+  min-height: 60vh;
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Enhanced Actions Bar for Tabs */
+.tab-navigation .actions-bar {
+  margin: 0;
+  padding: 15px 40px;
+  background: white;
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Improve Question Cards for Tab Layout */
+.tab-content .question-card {
+  margin: 0 40px 40px 40px;
+  margin-top: 20px;
+}
+
+.tab-content .question-card:first-child {
+  margin-top: 40px;
+}
+
+/* Button Enhancements */
+.btn-info {
+  background: linear-gradient(135deg, var(--info-color) 0%, #2563eb 100%);
+  color: white;
+}
+
+.btn-info:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Enhanced Responsive Design for Tabs */
+@media (max-width: 768px) {
+  .tab-buttons {
+    padding: 0 10px;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tab-buttons::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-btn {
+    padding: 12px 15px;
+    font-size: 12px;
+    min-width: 120px;
+  }
+
+  .tab-icon {
+    font-size: 16px;
+  }
+
+  .tab-text {
+    font-size: 11px;
+  }
+
+  .tab-content .question-card {
+    margin: 20px 20px;
+  }
+
+  .tab-navigation .actions-bar {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-btn {
+    padding: 10px 12px;
+    min-width: 100px;
+  }
+
+  .tab-text {
+    display: none;
+  }
+
+  .tab-icon {
+    font-size: 20px;
+  }
+
+  .tab-content .question-card {
+    margin: 15px 10px;
+    padding: 20px;
+  }
+}
+
+/* Tab Indicator Line */
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  border-radius: 2px 2px 0 0;
+}
+
+/* Smooth Tab Transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Print Styles */
 @media print {
   body {
@@ -640,7 +847,12 @@ input[type="checkbox"] {
 
   .btn,
   .actions-bar,
-  .close {
+  .close,
+  .tab-navigation {
     display: none;
+  }
+
+  .tab-content {
+    display: block !important;
   }
 }

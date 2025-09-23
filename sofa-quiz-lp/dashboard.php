@@ -37,6 +37,9 @@
 </head>
 
 <body>
+    <!-- Status message outside container for fixed positioning -->
+    <div class="status-message" id="statusMessage"></div>
+
     <div class="dashboard-container">
         <div class="dashboard-header">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
@@ -53,24 +56,59 @@
             </div>
         </div>
 
-        <div class="status-message" id="statusMessage"></div>
-
-        <div class="actions-bar">
-            <div>
-                <button class="btn btn-primary" onclick="loadCurrentQuiz()">Load Current Quiz</button>
-                <button class="btn btn-primary" onclick="importJSON()">Import JSON</button>
-                <button class="btn btn-primary" onclick="addNewQuestion()">+ Add Question</button>
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showTab('banner')" data-tab="banner">
+                    <span class="tab-icon">🎨</span>
+                    <span class="tab-text">Hero Banner</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('showroom')" data-tab="showroom">
+                    <span class="tab-icon">📸</span>
+                    <span class="tab-text">Showroom</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('content')" data-tab="content">
+                    <span class="tab-icon">✨</span>
+                    <span class="tab-text">Luxury Content</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('gallery')" data-tab="gallery">
+                    <span class="tab-icon">🖼️</span>
+                    <span class="tab-text">Gallery</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('cta')" data-tab="cta">
+                    <span class="tab-icon">💡</span>
+                    <span class="tab-text">Expert CTA</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('promo')" data-tab="promo">
+                    <span class="tab-icon">🎯</span>
+                    <span class="tab-text">Quiz Promo</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('questions')" data-tab="questions">
+                    <span class="tab-icon">❓</span>
+                    <span class="tab-text">Questions</span>
+                </button>
             </div>
-            <div>
-                <button class="btn btn-success" onclick="saveQuiz()">💾 Save All Changes</button>
-                <button class="btn btn-success" onclick="exportJSON()">📥 Export JSON</button>
-                <button class="btn btn-primary" onclick="previewQuiz()">👁️ Preview</button>
+            <div class="actions-bar">
+                <div>
+                    <span id="currentTabActions"></span>
+                </div>
+                <div>
+                    <button class="btn btn-success" onclick="saveQuiz()">💾 Save All Changes</button>
+                    <button class="btn btn-primary" onclick="previewQuiz()">👁️ Preview</button>
+                </div>
             </div>
         </div>
 
-        <!-- Banner Section Editor -->
-        <div class="question-card" style="background: #fff3e0; border: 2px solid #ff6f00;">
-            <h2 style="color: #ff6f00; margin-bottom: 20px;">🎨 Hero Banner Section</h2>
+        <!-- Tab Content Container -->
+        <div class="tab-content-container">
+
+            <!-- Banner Tab Content -->
+            <div class="tab-content active" id="banner-tab">
+                <div class="question-card" style="background: #fff3e0; border: 2px solid #ff6f00;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #ff6f00; margin: 0;">🎨 Hero Banner Section</h2>
+                <button class="btn btn-success" onclick="saveBannerSection()" style="padding: 8px 20px;">💾 Save Banner</button>
+            </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
                     <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Heading:</label>
@@ -113,11 +151,16 @@
                         onchange="handleBannerImageUpload('mobile', this)">
                 </div>
             </div>
-        </div>
+                </div>
+            </div>
 
-        <!-- Showroom Section Editor -->
-        <div class="question-card" style="background: #e8f4f8; border: 2px solid #2196F3;">
-            <h2 style="color: #2196F3; margin-bottom: 20px;">📸 Showroom Section</h2>
+            <!-- Showroom Tab Content -->
+            <div class="tab-content" id="showroom-tab">
+                <div class="question-card" style="background: #e8f4f8; border: 2px solid #2196F3;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #2196F3; margin: 0;">📸 Showroom Section</h2>
+                <button class="btn btn-success" onclick="saveShowroomSection()" style="padding: 8px 20px;">💾 Save Showroom</button>
+            </div>
             <div style="margin-bottom: 20px;">
                 <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading:</label>
                 <input type="text"
@@ -143,11 +186,16 @@
                     accept="image/*"
                     onchange="handleShowroomImageUpload(this)">
             </div>
-        </div>
+                </div>
+            </div>
 
-        <!-- Luxury Sofas Content Editor - NEW SECTION -->
-        <div class="question-card" style="background: #f0e6ff; border: 2px solid #6b46c1;">
-            <h2 style="color: #6b46c1; margin-bottom: 20px;">✨ Luxury Sofas Content Section</h2>
+            <!-- Luxury Content Tab Content -->
+            <div class="tab-content" id="content-tab">
+                <div class="question-card" style="background: #f0e6ff; border: 2px solid #6b46c1;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #6b46c1; margin: 0;">✨ Luxury Sofas Content Section</h2>
+                <button class="btn btn-success" onclick="saveLuxurySofasSection()" style="padding: 8px 20px;">💾 Save Content</button>
+            </div>
 
             <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Title:</label>
             <input type="text"
@@ -182,22 +230,31 @@
                 style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-height: 80px;"
                 onchange="updateLuxurySofasContent('conclusion', this.value)"
                 placeholder="Enter conclusion paragraph..."><strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the sofa you never knew you needed.</textarea>
-        </div>
+                </div>
+            </div>
 
-        <!-- Gallery Section Editor -->
-        <div class="question-card" style="background: #f3e5f5; border: 2px solid #9c27b0; margin-top: 20px;">
-            <h2 style="color: #9c27b0; margin-bottom: 20px;">🖼️ Gallery Section (3 Images)</h2>
+            <!-- Gallery Tab Content -->
+            <div class="tab-content" id="gallery-tab">
+                <div class="question-card" style="background: #f3e5f5; border: 2px solid #9c27b0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #9c27b0; margin: 0;">🖼️ Gallery Section (3 Images)</h2>
+                <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
+            </div>
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
                 <div id="gallery-item-0"></div>
                 <div id="gallery-item-1"></div>
                 <div id="gallery-item-2"></div>
             </div>
-        </div>
+                </div>
+            </div>
 
-
-        <!-- Design Disaster Section Editor -->
-        <div class="question-card" style="background: #e3f2fd; border: 2px solid #1976d2; margin-top: 20px;">
-            <h2 style="color: #1976d2; margin-bottom: 20px;">💡 Design Expert CTA Section</h2>
+            <!-- CTA Tab Content -->
+            <div class="tab-content" id="cta-tab">
+                <div class="question-card" style="background: #e3f2fd; border: 2px solid #1976d2;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #1976d2; margin: 0;">💡 Design Expert CTA Section</h2>
+                <button class="btn btn-success" onclick="saveDesignCTASection()" style="padding: 8px 20px;">💾 Save CTA</button>
+            </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div>
                     <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading (use \n for line break):</label>
@@ -236,11 +293,16 @@ Talk to an expert.</textarea>
                         onchange="handleDesignDisasterImageUpload(this)">
                 </div>
             </div>
-        </div>
+                </div>
+            </div>
 
-        <!-- Quiz Promo Section Editor -->
-        <div class="question-card" style="background: #fff8e1; border: 2px solid #ff9800; margin-top: 20px;">
-            <h2 style="color: #ff9800; margin-bottom: 20px;">🎯 Quiz Promo Section</h2>
+            <!-- Promo Tab Content -->
+            <div class="tab-content" id="promo-tab">
+                <div class="question-card" style="background: #fff8e1; border: 2px solid #ff9800;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #ff9800; margin: 0;">🎯 Quiz Promo Section</h2>
+                <button class="btn btn-success" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
+            </div>
             <div style="margin-bottom: 20px;">
                 <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading:</label>
                 <input type="text"
@@ -280,14 +342,27 @@ Talk to an expert.</textarea>
                 <div id="quizPromoImages" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;"></div>
                 <button class="btn btn-primary" onclick="addQuizPromoImage()" style="margin-top: 10px;">+ Add Image</button>
             </div>
-        </div>
+                </div>
+            </div>
 
-        <div id="questionsContainer"></div>
+            <!-- Questions Tab Content -->
+            <div class="tab-content" id="questions-tab">
+                <div id="questionsContainer"></div>
 
-        <div class="preview-section" id="previewSection" style="display: none;">
-            <div class="preview-title">Preview</div>
-            <div id="previewContent"></div>
-        </div>
+                <!-- Add New Question Card -->
+                <div class="question-card" id="addQuestionCard" style="background: #e8f5e9; border: 2px solid #4caf50;">
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <h3 style="color: #4caf50; margin-bottom: 20px;">Add New Question</h3>
+                        <button class="btn btn-primary" onclick="addNewQuestion()" style="padding: 15px 30px; font-size: 18px;">
+                            ➕ Add Question
+                        </button>
+                        <p style="margin-top: 15px; color: #666;">Click to add a new quiz question</p>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End tab-content-container -->
+
     </div>
 
     <!-- Modal for JSON Export/Import -->
@@ -413,61 +488,129 @@ Talk to an expert.</textarea>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
 
 <script>
-// Emoji Picker Functions
-function toggleEmojiPicker() {
-    const picker = document.getElementById('emojiPicker');
-    if (picker.style.display === 'none' || picker.style.display === '') {
-        picker.style.display = 'block';
-
-        // Close picker when clicking outside
-        setTimeout(() => {
-            document.addEventListener('click', closeEmojiPickerOnOutsideClick);
-        }, 100);
-    } else {
-        picker.style.display = 'none';
-        document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
-    }
-}
-
-function selectEmoji(emoji) {
-    const emojiInput = document.getElementById('productEmoji');
-    emojiInput.value = emoji;
-
-    // Hide the picker
-    document.getElementById('emojiPicker').style.display = 'none';
-    document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
-
-    // Show visual feedback
-    emojiInput.style.backgroundColor = '#e8f5e8';
-    setTimeout(() => {
-        emojiInput.style.backgroundColor = '';
-    }, 500);
-}
-
-function closeEmojiPickerOnOutsideClick(event) {
-    const picker = document.getElementById('emojiPicker');
-    const emojiInput = document.getElementById('productEmoji');
-    const chooseButton = event.target.closest('button');
-
-    // Don't close if clicking on the picker itself, the input, or the choose button
-    if (!picker.contains(event.target) &&
-        event.target !== emojiInput &&
-        !(chooseButton && chooseButton.textContent.includes('Choose Emoji'))) {
-        picker.style.display = 'none';
-        document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
-    }
-}
-
-// Close picker with Escape key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
+    // Emoji Picker Functions
+    function toggleEmojiPicker() {
         const picker = document.getElementById('emojiPicker');
-        if (picker.style.display === 'block') {
+        if (picker.style.display === 'none' || picker.style.display === '') {
+            picker.style.display = 'block';
+
+            // Close picker when clicking outside
+            setTimeout(() => {
+                document.addEventListener('click', closeEmojiPickerOnOutsideClick);
+            }, 100);
+        } else {
             picker.style.display = 'none';
             document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
         }
     }
-});
+
+    function selectEmoji(emoji) {
+        const emojiInput = document.getElementById('productEmoji');
+        emojiInput.value = emoji;
+
+        // Hide the picker
+        document.getElementById('emojiPicker').style.display = 'none';
+        document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
+
+        // Show visual feedback
+        emojiInput.style.backgroundColor = '#e8f5e8';
+        setTimeout(() => {
+            emojiInput.style.backgroundColor = '';
+        }, 500);
+    }
+
+    function closeEmojiPickerOnOutsideClick(event) {
+        const picker = document.getElementById('emojiPicker');
+        const emojiInput = document.getElementById('productEmoji');
+        const chooseButton = event.target.closest('button');
+
+        // Don't close if clicking on the picker itself, the input, or the choose button
+        if (!picker.contains(event.target) &&
+            event.target !== emojiInput &&
+            !(chooseButton && chooseButton.textContent.includes('Choose Emoji'))) {
+            picker.style.display = 'none';
+            document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
+        }
+    }
+
+    // Close picker with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const picker = document.getElementById('emojiPicker');
+            if (picker.style.display === 'block') {
+                picker.style.display = 'none';
+                document.removeEventListener('click', closeEmojiPickerOnOutsideClick);
+            }
+        }
+    });
+
+    // Tab Management Functions
+    function showTab(tabName) {
+        // Hide all tab contents
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Remove active class from all tab buttons
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Show selected tab content
+        const selectedTab = document.getElementById(tabName + '-tab');
+        if (selectedTab) {
+            selectedTab.classList.add('active');
+        }
+
+        // Add active class to clicked tab button
+        const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+        if (activeBtn) {
+            activeBtn.classList.add('active');
+        }
+
+        // Update current tab actions (if needed)
+        updateTabActions(tabName);
+    }
+
+    function updateTabActions(tabName) {
+        const actionsContainer = document.getElementById('currentTabActions');
+        if (!actionsContainer) return;
+
+        // Clear current actions
+        actionsContainer.innerHTML = '';
+
+        // Add specific actions based on tab
+        switch(tabName) {
+            case 'banner':
+                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveBannerSection()">💾 Save Banner</button>';
+                break;
+            case 'showroom':
+                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveShowroomSection()">💾 Save Showroom</button>';
+                break;
+            case 'content':
+                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveLuxurySofasSection()">💾 Save Content</button>';
+                break;
+            case 'gallery':
+                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveGallerySection()">💾 Save Gallery</button>';
+                break;
+            case 'cta':
+                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveDesignCTASection()">💾 Save CTA</button>';
+                break;
+            case 'promo':
+                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveQuizPromoSection()">💾 Save Promo</button>';
+                break;
+            case 'questions':
+                actionsContainer.innerHTML = '<button class="btn btn-primary" onclick="addNewQuestion()">➕ Add Question</button>';
+                break;
+        }
+    }
+
+    // Initialize first tab on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        showTab('banner');
+    });
 </script>
 
 </html>

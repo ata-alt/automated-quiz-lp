@@ -5,7 +5,7 @@
 		j=d.createElement(s);j.async=true;j.src='/7b50/';
 		f.parentNode.insertBefore(j,f);
 		})(window,document,'script','dataLayer');</script>
-	<title>Luxury Sofa Quiz</title>
+	<title id="page-title">Luxury Sofa Quiz</title>
 <link rel="canonical" href="https://www.fcilondon.co.uk/sofa-quiz-lp/">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="keywords" content="Luxury sofas London, Bespoke sofas showroom, Handcrafted sofas London, Designer sofas London, Luxury furniture London, High-end sofas showroom, Custom sofas London, Luxury living room furniture, Elegant sofas London, Showroom luxury sofas, sofas, sofa, sofa bed, sofa be, sofa b, Sofa pools, Sofa pool, Sofa poo, Sofa po, Sofa p,sofabed, sofabe, sofab,  Italian sofa, Sofas, modular sofa, Full grain leather sofa, 3 and 2 recliner sofas, 3 and 2 reclimer sofas, 3 and 2 reclimer sofa, curved sofa">
@@ -665,6 +665,143 @@ Our talented team will help you with your floor plans and furniture choices."
 </div>
 <!-- Zaraz consent Pop up ends here -->
  <script src="../site-assets/js/showroom-content-fallback.js"></script>
+<script>
+// Dynamic Title Management
+(function() {
+  'use strict';
+
+  // Function to capitalize first letter of each word
+  function capitalize(str) {
+    return str.replace(/\b\w/g, l => l.toUpperCase());
+  }
+
+  // Function to get product display name
+  function getProductDisplayName(productKey) {
+    const productNames = {
+      'sofa': 'Sofa',
+      'sofas': 'Sofa',
+      'wardrobe': 'Wardrobe',
+      'wardrobes': 'Wardrobe',
+      'kitchen': 'Kitchen',
+      'kitchens': 'Kitchen',
+      'bedroom': 'Bedroom',
+      'closet': 'Closet',
+      'table': 'Table',
+      'tables': 'Table'
+    };
+
+    // Check if it's a known product key
+    if (productNames[productKey?.toLowerCase()]) {
+      return productNames[productKey.toLowerCase()];
+    }
+
+    // If not found, capitalize the input
+    if (productKey) {
+      return capitalize(productKey.replace(/[_-]/g, ' '));
+    }
+
+    return 'Sofa'; // Default fallback
+  }
+
+  // Function to update page title
+  async function updatePageTitle() {
+    try {
+      // Get current product from API
+      const currentProduct = await window.apiClient.getCurrentProduct();
+
+      if (currentProduct && currentProduct !== 'sofa') {
+        // Get product data to get the actual name
+        try {
+          const productData = await window.apiClient.getContent(currentProduct);
+          let productName = currentProduct;
+
+          // Try to get the product name from the data
+          if (productData && productData.productName) {
+            productName = productData.productName;
+          } else if (productData && productData.name) {
+            productName = productData.name;
+          }
+
+          const displayName = getProductDisplayName(productName);
+          const newTitle = `Luxury ${displayName} Quiz`;
+
+          // Update page title
+          document.title = newTitle;
+          const titleElement = document.getElementById('page-title');
+          if (titleElement) {
+            titleElement.textContent = newTitle;
+          }
+
+          console.log(`[Title] Updated to: ${newTitle}`);
+
+        } catch (error) {
+          // If we can't get product data, use the product key
+          const displayName = getProductDisplayName(currentProduct);
+          const newTitle = `Luxury ${displayName} Quiz`;
+
+          document.title = newTitle;
+          const titleElement = document.getElementById('page-title');
+          if (titleElement) {
+            titleElement.textContent = newTitle;
+          }
+
+          console.log(`[Title] Updated to: ${newTitle} (fallback)`);
+        }
+      } else {
+        // Default to Sofa Quiz
+        const defaultTitle = 'Luxury Sofa Quiz';
+        document.title = defaultTitle;
+        const titleElement = document.getElementById('page-title');
+        if (titleElement) {
+          titleElement.textContent = defaultTitle;
+        }
+        console.log(`[Title] Using default: ${defaultTitle}`);
+      }
+
+    } catch (error) {
+      console.warn('[Title] Could not update title:', error);
+      // Keep default title if API fails
+    }
+  }
+
+  // Function to listen for product changes
+  function setupProductChangeListener() {
+    // Listen for storage changes (when dashboard updates current product)
+    window.addEventListener('storage', function(e) {
+      if (e.key === 'currentProduct' || e.key === 'productQuizzes') {
+        console.log('[Title] Detected product change, updating title...');
+        updatePageTitle();
+      }
+    });
+
+    // Listen for custom events (for real-time updates)
+    window.addEventListener('productChanged', function(e) {
+      console.log('[Title] Product changed event received:', e.detail);
+      updatePageTitle();
+    });
+  }
+
+  // Initialize title management
+  function initializeTitleManagement() {
+    // Wait for API client to be ready
+    if (typeof window.apiClient !== 'undefined') {
+      updatePageTitle();
+      setupProductChangeListener();
+    } else {
+      // Retry after a short delay if API client not ready
+      setTimeout(initializeTitleManagement, 100);
+    }
+  }
+
+  // Start when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeTitleManagement);
+  } else {
+    initializeTitleManagement();
+  }
+
+})();
+</script>
 <script src="../site-assets/js/libs/jquery.fitvids.js" defer></script>
 <script src="../site-assets/js/libs/lightslider.js" defer></script>
 <script src="../site-assets/js/libs/jquery.accordion.js" defer></script>

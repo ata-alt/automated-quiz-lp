@@ -279,6 +279,59 @@ class ApiClient {
         });
     }
 
+    async saveSectionOnly(productKey, sectionName, sectionData) {
+        // First get the current data
+        const currentData = await this.getContent(productKey);
+
+        // Update only the specified section
+        const updatedSections = {
+            banner: currentData.content.banner || {},
+            showroom: currentData.content.showroom || {},
+            luxury_content: currentData.content.luxury_content || {},
+            gallery: currentData.content.gallery || {},
+            design_expert: currentData.content.design_expert || {},
+            quiz_promo: currentData.content.quiz_promo || {}
+        };
+
+        // Update the specific section
+        updatedSections[sectionName] = sectionData;
+
+        // Save with the updated section
+        return this.request('content.php', {
+            method: 'POST',
+            body: JSON.stringify({
+                product_key: productKey,
+                sections: updatedSections,
+                questions: currentData.content.questions || []
+            })
+        });
+    }
+
+    async saveQuestionsOnly(productKey, questions) {
+        // First get the current data
+        const currentData = await this.getContent(productKey);
+
+        // Keep all sections unchanged
+        const sections = {
+            banner: currentData.content.banner || {},
+            showroom: currentData.content.showroom || {},
+            luxury_content: currentData.content.luxury_content || {},
+            gallery: currentData.content.gallery || {},
+            design_expert: currentData.content.design_expert || {},
+            quiz_promo: currentData.content.quiz_promo || {}
+        };
+
+        // Save with the updated questions
+        return this.request('content.php', {
+            method: 'POST',
+            body: JSON.stringify({
+                product_key: productKey,
+                sections: sections,
+                questions: questions
+            })
+        });
+    }
+
     // Settings endpoints
     async getSetting(key) {
         return this.request(`settings.php?key=${key}`, {

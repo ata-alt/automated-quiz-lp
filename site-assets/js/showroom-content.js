@@ -27,11 +27,21 @@
   }
 
   // Function to get current product data from database
-  function getCurrentProductData() {
-    // TODO: Replace with database API call
-    // For now returning null until database integration is complete
-    // const currentProduct = 'sofa'; // This would come from database/API
-    return null;
+  async function getCurrentProductData() {
+    try {
+      // Get current product from API
+      const currentProduct = await window.apiClient.getCurrentProduct();
+      if (!currentProduct || currentProduct === 'sofa') {
+        return null; // Use default content for sofa
+      }
+
+      // Get product content data
+      const productData = await window.apiClient.getContent(currentProduct);
+      return { productData, productKey: currentProduct };
+    } catch (error) {
+      console.warn('[Content] Could not get current product data:', error);
+      return null;
+    }
   }
 
   // Function to convert product quiz format to expected format
@@ -102,10 +112,11 @@
   }
 
   // Function to load and update banner section
-  function loadBannerSection() {
+  async function loadBannerSection() {
     try {
-      const rawData = getCurrentProductData();
-      const currentProduct = 'sofa'; // TODO: Get from database/API
+      const result = await getCurrentProductData();
+      const rawData = result?.productData;
+      const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       if (data && data.bannerSection) {
@@ -163,10 +174,11 @@
   }
 
   // Function to load and update showroom section
-  function loadShowroomSection() {
+  async function loadShowroomSection() {
     try {
-      const rawData = getCurrentProductData();
-      const currentProduct = 'sofa'; // TODO: Get from database/API
+      const result = await getCurrentProductData();
+      const rawData = result?.productData;
+      const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       if (data && data.showroomSection) {
@@ -214,10 +226,11 @@
   }
 
   // Function to load and update Luxury Sofas Content Section
-  function loadLuxurySofasSection() {
+  async function loadLuxurySofasSection() {
     try {
-      const rawData = getCurrentProductData();
-      const currentProduct = 'sofa'; // TODO: Get from database/API
+      const result = await getCurrentProductData();
+      const rawData = result?.productData;
+      const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       if (data && data.luxurySofasSection) {
@@ -298,10 +311,11 @@
   }
 
   // Function to load and update Gallery section (3 images)
-  function loadGallerySection() {
+  async function loadGallerySection() {
     try {
-      const rawData = getCurrentProductData();
-      const currentProduct = 'sofa'; // TODO: Get from database/API
+      const result = await getCurrentProductData();
+      const rawData = result?.productData;
+      const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       if (data && data.gallerySection && data.gallerySection.images) {
@@ -331,10 +345,11 @@
   }
 
   // Function to load and update Design Disaster section
-  function loadDesignDisasterSection() {
+  async function loadDesignDisasterSection() {
     try {
-      const rawData = getCurrentProductData();
-      const currentProduct = 'sofa'; // TODO: Get from database/API
+      const result = await getCurrentProductData();
+      const rawData = result?.productData;
+      const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       if (data && data.designDisasterSection) {
@@ -387,10 +402,11 @@
   }
 
   // Function to load and update Quiz Promo section
-  function loadQuizPromoSection() {
+  async function loadQuizPromoSection() {
     try {
-      const rawData = getCurrentProductData();
-      const currentProduct = 'sofa'; // TODO: Get from database/API
+      const result = await getCurrentProductData();
+      const rawData = result?.productData;
+      const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       if (data && data.quizPromoSection) {
@@ -499,21 +515,33 @@
   }
 
   // Function to load all dynamic content
-  function loadDynamicContent() {
+  async function loadDynamicContent() {
     addImageConsistencyStyles();
-    loadBannerSection();
-    loadShowroomSection();
-    loadLuxurySofasSection(); // Load the new Luxury Sofas section
-    loadGallerySection();
-    loadDesignDisasterSection();
-    loadQuizPromoSection();
+    await loadBannerSection();
+    await loadShowroomSection();
+    await loadLuxurySofasSection(); // Load the new Luxury Sofas section
+    await loadGallerySection();
+    await loadDesignDisasterSection();
+    await loadQuizPromoSection();
   }
 
   // Load on DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadDynamicContent);
+    document.addEventListener('DOMContentLoaded', function() {
+      // Wait for API client to be ready
+      if (typeof window.apiClient !== 'undefined') {
+        loadDynamicContent();
+      } else {
+        setTimeout(loadDynamicContent, 100);
+      }
+    });
   } else {
-    loadDynamicContent();
+    // Wait for API client to be ready
+    if (typeof window.apiClient !== 'undefined') {
+      loadDynamicContent();
+    } else {
+      setTimeout(loadDynamicContent, 100);
+    }
   }
 
   // Listen for storage changes (live updates from admin dashboard)
@@ -528,5 +556,11 @@
       );
       loadDynamicContent();
     }
+  });
+
+  // Listen for custom product change events
+  window.addEventListener('productChanged', function(e) {
+    console.log('[Dynamic Content] Product changed event received:', e.detail);
+    loadDynamicContent();
   });
 })();

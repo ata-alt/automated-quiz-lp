@@ -717,7 +717,10 @@ function renderQuestions() {
     questionCard.innerHTML = `
             <div class="question-header">
                 <span class="question-number">Question ${question.id}</span>
-                <button class="btn btn-danger" onclick="removeQuestion(${qIndex})">Remove</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-success" onclick="saveQuestion(${qIndex})" style="padding: 5px 15px;">💾 Save</button>
+                    <button class="btn btn-danger" onclick="removeQuestion(${qIndex})">Remove</button>
+                </div>
             </div>
             <input type="text" class="question-input" value="${question.text}"
                    onchange="updateQuestionText(${qIndex}, this.value)"
@@ -812,6 +815,15 @@ function addNewQuestion() {
   });
   renderQuestions();
   showStatus('New question added', 'success');
+
+  // Scroll to the newly added question
+  setTimeout(() => {
+    const questionCards = document.querySelectorAll('#questionsContainer .question-card');
+    if (questionCards.length > 0) {
+      const lastQuestion = questionCards[questionCards.length - 1];
+      lastQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
 }
 
 function removeQuestion(qIndex) {
@@ -919,88 +931,37 @@ function closeModal() {
 }
 
 function previewQuiz() {
-  const previewSection = document.getElementById('previewSection');
-  const previewContent = document.getElementById('previewContent');
+  // Save current data first to ensure preview shows latest changes
+  saveQuiz().then(() => {
+    // Set the current product in the API client for the preview
+    window.apiClient.setCurrentProduct(currentProductKey);
 
-  previewSection.style.display = 'block';
+    // Construct the correct URL for index.php
+    // Current URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/Dashboard.php
+    // Target URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/index.php
+    const currentUrl = window.location.href;
+    console.log('Current URL:', currentUrl);
 
-  // Preview rendering with all sections
-  let html =
-    '<div style="background: white; padding: 20px; border-radius: 8px;">';
+    // Split the URL to get the base path
+    const urlParts = currentUrl.split('/');
+    const fileName = urlParts[urlParts.length - 1];
+    console.log('Current file:', fileName);
 
-  // Add showroom section preview
-  html += `
-        <div style="margin-bottom: 40px; padding: 20px; background: #f9f9f9; border-radius: 8px;">
-            <h2 style="color: #333; text-align: center; margin-bottom: 20px;">${
-              quizData.showroomSection.heading
-            }</h2>
-            ${
-              quizData.showroomSection.image
-                ? `<img src="${quizData.showroomSection.image}" style="width: 100%; max-width: 800px; height: auto; border-radius: 8px; display: block; margin: 0 auto;">`
-                : '<div style="height: 300px; background: #e0e0e0; display: flex; align-items: center; justify-content: center; border-radius: 8px;">No Showroom Image</div>'
-            }
-        </div>
-    `;
+    // Replace the filename with index.php
+    const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+    const previewUrl = `${baseUrl}/index.php?preview=1&t=${Date.now()}`;
 
-  // Add Luxury Content section preview
-  if (quizData.luxurySofasSection) {
-    html += `
-            <div style="margin-bottom: 40px; padding: 20px; background: #f0e6ff; border-radius: 8px;">
-                <h2 style="color: #6b46c1; text-align: center; margin-bottom: 20px;">${quizData.luxurySofasSection.title}</h2>
-                <p style="margin-bottom: 20px;">${quizData.luxurySofasSection.introduction}</p>
-                <h3 style="color: #6b46c1; margin-bottom: 15px;">${quizData.luxurySofasSection.subtitle}</h3>
-        `;
+    console.log('Base URL:', baseUrl);
+    console.log('Opening preview URL:', previewUrl);
 
-    if (quizData.luxurySofasSection.points) {
-      quizData.luxurySofasSection.points.forEach((point) => {
-        html += `
-                    <div style="margin-bottom: 15px;">
-                        <strong>${point.title}</strong><br>
-                        ${point.description}
-                    </div>
-                `;
-      });
-    }
+    // Open in new tab
+    window.open(previewUrl, '_blank');
 
-    html += `
-                <div style="margin-top: 20px;">${quizData.luxurySofasSection.conclusion}</div>
-            </div>
-        `;
-  }
-
-  html += `
-        <hr style="border: 1px solid #e0e0e0; margin: 30px 0;">
-        <h3 style="color: #2196F3; margin-bottom: 30px;">Quiz Questions:</h3>
-    `;
-
-  quizData.questions.forEach((q, qIndex) => {
-    html += `
-            <div style="margin-bottom: 30px;">
-                <h3 style="color: #333; margin-bottom: 20px;">${q.text}</h3>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-        `;
-
-    q.options.forEach((opt) => {
-      html += `
-                <div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px; text-align: center;">
-                    ${
-                      opt.image
-                        ? `<img src="${opt.image}" style="width: 100%; height: 100px; object-fit: cover; border-radius: 5px; margin-bottom: 10px;">`
-                        : '<div style="height: 100px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-bottom: 10px;">No Image</div>'
-                    }
-                    <div style="font-size: 14px;">${opt.text}</div>
-                </div>
-            `;
-    });
-
-    html += '</div></div>';
+    showStatus('Opening preview in new tab...', 'success');
+  }).catch((error) => {
+    console.error('Failed to save before preview:', error);
+    showStatus('Failed to save data before preview', 'error');
   });
-
-  html += '</div>';
-  previewContent.innerHTML = html;
-
-  // Scroll to preview
-  previewSection.scrollIntoView({ behavior: 'smooth' });
 }
 
 function generateQuizCode() {
@@ -1009,13 +970,129 @@ function generateQuizCode() {
 
 function showStatus(message, type) {
   const statusEl = document.getElementById('statusMessage');
-  statusEl.textContent = message;
+
+  // Add icon based on status type
+  const icon = type === 'success' ? '✓' : '✗';
+  statusEl.innerHTML = `<strong>${icon}</strong> ${message}`;
+
   statusEl.className = `status-message status-${type}`;
   statusEl.style.display = 'block';
 
-  setTimeout(() => {
+  // Clear any existing timeout
+  if (window.statusTimeout) {
+    clearTimeout(window.statusTimeout);
+  }
+
+  // Hide after 4 seconds (slightly longer for better visibility)
+  window.statusTimeout = setTimeout(() => {
     statusEl.style.display = 'none';
-  }, 3000);
+  }, 4000);
+}
+
+// Individual section save functions
+async function saveBannerSection() {
+  try {
+    await apiClient.saveSectionOnly(
+      currentProductKey,
+      'banner',
+      quizData.bannerSection
+    );
+
+    showStatus('Banner section saved successfully!', 'success');
+  } catch (error) {
+    console.error('Error saving banner section:', error);
+    showStatus('Failed to save banner section', 'error');
+  }
+}
+
+async function saveShowroomSection() {
+  try {
+    await apiClient.saveSectionOnly(
+      currentProductKey,
+      'showroom',
+      quizData.showroomSection
+    );
+
+    showStatus('Showroom section saved successfully!', 'success');
+  } catch (error) {
+    console.error('Error saving showroom section:', error);
+    showStatus('Failed to save showroom section', 'error');
+  }
+}
+
+async function saveLuxurySofasSection() {
+  try {
+    await apiClient.saveSectionOnly(
+      currentProductKey,
+      'luxury_content',
+      quizData.luxurySofasSection
+    );
+
+    showStatus('Luxury content section saved successfully!', 'success');
+  } catch (error) {
+    console.error('Error saving luxury content section:', error);
+    showStatus('Failed to save luxury content section', 'error');
+  }
+}
+
+async function saveGallerySection() {
+  try {
+    await apiClient.saveSectionOnly(
+      currentProductKey,
+      'gallery',
+      quizData.gallerySection
+    );
+
+    showStatus('Gallery section saved successfully!', 'success');
+  } catch (error) {
+    console.error('Error saving gallery section:', error);
+    showStatus('Failed to save gallery section', 'error');
+  }
+}
+
+async function saveDesignCTASection() {
+  try {
+    await apiClient.saveSectionOnly(
+      currentProductKey,
+      'design_expert',
+      quizData.designDisasterSection
+    );
+
+    showStatus('Design Expert CTA section saved successfully!', 'success');
+  } catch (error) {
+    console.error('Error saving Design Expert CTA section:', error);
+    showStatus('Failed to save Design Expert CTA section', 'error');
+  }
+}
+
+async function saveQuizPromoSection() {
+  try {
+    await apiClient.saveSectionOnly(
+      currentProductKey,
+      'quiz_promo',
+      quizData.quizPromoSection
+    );
+
+    showStatus('Quiz Promo section saved successfully!', 'success');
+  } catch (error) {
+    console.error('Error saving Quiz Promo section:', error);
+    showStatus('Failed to save Quiz Promo section', 'error');
+  }
+}
+
+// Save individual question
+async function saveQuestion(questionIndex) {
+  try {
+    await apiClient.saveQuestionsOnly(
+      currentProductKey,
+      quizData.questions
+    );
+
+    showStatus(`Question ${questionIndex + 1} saved successfully!`, 'success');
+  } catch (error) {
+    console.error('Error saving question:', error);
+    showStatus(`Failed to save Question ${questionIndex + 1}`, 'error');
+  }
 }
 
 // Initialize on load
