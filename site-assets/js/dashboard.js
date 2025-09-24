@@ -123,11 +123,6 @@ function initializeSampleData() {
             image:
               '/site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg',
           },
-          {
-            id: 'd',
-            text: 'Grown-up home—quiet, elegant, mostly adults',
-            image: '/site-assets/images/sofa-quiz/grown-up-home.jpg',
-          },
         ],
       },
     ],
@@ -1040,7 +1035,6 @@ function createNewProductQuiz() {
           { id: 'a', text: 'Option A', image: '' },
           { id: 'b', text: 'Option B', image: '' },
           { id: 'c', text: 'Option C', image: '' },
-          { id: 'd', text: 'Option D', image: '' },
         ],
       },
     ],

@@ -111,6 +111,16 @@ function createDefaultContent($db, $productKey, $productName)
             ])
         ],
         [
+            'section_type' => 'gallery',
+            'content_data' => json_encode([
+                'images' => [
+                    ['src' => '', 'alt' => ''],
+                    ['src' => '', 'alt' => ''],
+                    ['src' => '', 'alt' => '']
+                ]
+            ])
+        ],
+        [
             'section_type' => 'design_expert',
             'content_data' => json_encode([
                 'heading' => "Avoid a design disaster.\nTalk to an expert.",
@@ -160,7 +170,7 @@ function createDefaultContent($db, $productKey, $productName)
     $questionId = $db->lastInsertId();
 
     // Create default options
-    $optionQuery = "INSERT INTO question_options (question_id, option_key, option_text, option_order) VALUES (?, ?, ?)";
+    $optionQuery = "INSERT INTO question_options (question_id, option_key, option_text, option_order) VALUES (?, ?, ?, ?)";
     $optionStmt = $db->prepare($optionQuery);
 
     $defaultOptions = [

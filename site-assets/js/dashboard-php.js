@@ -121,25 +121,14 @@ async function loadCurrentQuiz() {
     const content = response.content;
 
     // Check if this is a newly created product
-    const justCreated = localStorage.getItem('justCreatedProduct');
-    const isNewlyCreated = justCreated === currentProductKey;
+    // Note: Previously used localStorage, now relies on database state
 
-    // Clear the flag if it matches
-    if (isNewlyCreated) {
-      localStorage.removeItem('justCreatedProduct');
-    }
+    // Check if this is a new product with default template content
+    // New products should show empty fields in dashboard even if they have template content in DB
+    const hasTemplateContent = content && content.banner &&
+      content.banner.mainHeading?.includes('Match Your Personality To A Luxury');
 
-    // More comprehensive check for new products
-    const isNewProduct =
-      isNewlyCreated ||
-      !content ||
-      Object.keys(content).length === 0 ||
-      (!content.banner &&
-        !content.showroom &&
-        !content.luxury_content &&
-        !content.gallery &&
-        !content.design_expert &&
-        !content.quiz_promo);
+    const isNewProduct = currentProductKey !== 'sofa' && hasTemplateContent;
 
     // Get product info for placeholders
     const productResponse = await apiClient.getProducts();
@@ -320,9 +309,6 @@ async function createNewProductQuiz() {
 
     // Set the new product as current and reload the page
     await apiClient.setCurrentProduct(productKey);
-
-    // Mark this as a newly created product in localStorage
-    localStorage.setItem('justCreatedProduct', productKey);
 
     // Add a small delay to ensure the status message is visible
     setTimeout(() => {

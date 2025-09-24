@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sofa Quiz Admin Dashboard</title>
+    <title>Quiz Admin Dashboard</title>
     <link rel="stylesheet" href="../site-assets/css/dashboard.css">
     <style>
         .emoji-item {

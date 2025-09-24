@@ -312,10 +312,6 @@
                                                 <img src="../site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg" alt="Apartment-stylish but space-conscious">
                                                 <div class="spacing-v block-text" style="margin: 0px;">Apartment-stylish but space-conscious</div>
                                             </button>
-                                            <button class="option-button" onclick="styleQuiz.handleAnswer('6', 'd')" fdprocessedid="0kwwu">
-                                                <img src="../site-assets/images/sofa-quiz/grown-up-home.jpg" alt="Townhouse-multi-floor, mixed styles">
-                                                <div class="spacing-v block-text" style="margin: 0px;">Townhouse-multi-floor, mixed styles</div>
-                                            </button>
                                         </div>
                                     </div>
                                     <div class="progress-dots">

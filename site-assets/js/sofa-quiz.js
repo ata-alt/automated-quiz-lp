@@ -69,11 +69,6 @@
             image:
               '../site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg',
           },
-          {
-            id: 'd',
-            text: 'Grown-up home—quiet, elegant, mostly adults',
-            image: '../site-assets/images/sofa-quiz/grown-up-home.jpg',
-          },
         ],
       },
       {
@@ -97,12 +92,6 @@
             text: 'Practical—tough furniture, daily use',
             image:
               '../site-assets/images/sofa-quiz/practical-tough-furniture-daily-use.jpg',
-          },
-          {
-            id: 'd',
-            text: 'Understated luxury—soft tones, high-end finishes',
-            image:
-              '../site-assets/images/sofa-quiz/understated-luxury-soft-tones-high-end-finishes.jpg',
           },
         ],
       },
@@ -128,12 +117,6 @@
             image:
               '../site-assets/images/sofa-quiz/aniline-leather-aged-rich-full-of-character.jpg',
           },
-          {
-            id: 'd',
-            text: 'Natural fabrics—linen, wool, boucle, velvet',
-            image:
-              '../site-assets/images/sofa-quiz/natural-fabrics-linen-woo-boucle-velvet.jpg',
-          },
         ],
       },
       {
@@ -157,12 +140,6 @@
             text: 'We like structure and firm support',
             image:
               '../site-assets/images/sofa-quiz/we-like-structure-and-firm-support.jpg',
-          },
-          {
-            id: 'd',
-            text: 'We want soft, deep, all-day comfort',
-            image:
-              '../site-assets/images/sofa-quiz/we-want-soft-deep-all-day-comfort.jpg',
           },
         ],
       },
@@ -188,12 +165,6 @@
             image:
               '../site-assets/images/sofa-quiz/hosting-friends-drinks-movies-conversation.jpg',
           },
-          {
-            id: 'd',
-            text: 'Quiet evenings—reading, wine, feet up',
-            image:
-              '../site-assets/images/sofa-quiz/quiet-evenings-reading-wine-feet-up.jpg',
-          },
         ],
       },
       {
@@ -217,12 +188,6 @@
             text: 'Apartment—stylish but space-conscious',
             image:
               '../site-assets/images/sofa-quiz/apartment-stylish-but-space-conscious.jpg',
-          },
-          {
-            id: 'd',
-            text: 'Townhouse—multi-floor, mixed styles',
-            image:
-              '../site-assets/images/sofa-quiz/townhouse-multi-floor-mixed-styles.jpg',
           },
         ],
       },
@@ -360,7 +325,7 @@
     handleAnswer: function (questionId, optionId, evt) {
       // Flip all option buttons
       const allButtons = document.querySelectorAll('.option-button');
-      allButtons.forEach(button => {
+      allButtons.forEach((button) => {
         button.classList.add('flip-all');
       });
 
