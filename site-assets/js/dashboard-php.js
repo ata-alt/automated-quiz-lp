@@ -502,30 +502,39 @@ function updateBannerText(field, value) {
   showStatus(`Banner ${field} updated`, 'success');
 }
 
-function handleBannerImageUpload(type, input) {
+async function handleBannerImageUpload(type, input) {
   const file = input.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const imageData = e.target.result;
-      if (type === 'desktop') {
-        quizData.bannerSection.backgroundImage = imageData;
-        const imageArea = document.getElementById('banner-desktop-image');
-        imageArea.style.backgroundImage = `url('${imageData}')`;
-        imageArea.style.backgroundSize = 'cover';
-        imageArea.innerHTML =
-          '<div class="upload-text">📷 Change Desktop Banner</div>';
-      } else if (type === 'mobile') {
-        quizData.bannerSection.mobileImage = imageData;
-        const imageArea = document.getElementById('banner-mobile-image');
-        imageArea.style.backgroundImage = `url('${imageData}')`;
-        imageArea.style.backgroundSize = 'cover';
-        imageArea.innerHTML =
-          '<div class="upload-text">📱 Change Mobile Banner</div>';
+    try {
+      showStatus(`Uploading ${type} banner image...`, 'info');
+      const response = await apiClient.uploadImage(file);
+
+      if (response.status === 'success') {
+        const imageUrl = response.data.url;
+
+        if (type === 'desktop') {
+          quizData.bannerSection.backgroundImage = imageUrl;
+          const imageArea = document.getElementById('banner-desktop-image');
+          imageArea.style.backgroundImage = `url('${imageUrl}')`;
+          imageArea.style.backgroundSize = 'cover';
+          imageArea.innerHTML =
+            '<div class="upload-text">📷 Change Desktop Banner</div>';
+        } else if (type === 'mobile') {
+          quizData.bannerSection.mobileImage = imageUrl;
+          const imageArea = document.getElementById('banner-mobile-image');
+          imageArea.style.backgroundImage = `url('${imageUrl}')`;
+          imageArea.style.backgroundSize = 'cover';
+          imageArea.innerHTML =
+            '<div class="upload-text">📱 Change Mobile Banner</div>';
+        }
+        showStatus(`Banner ${type} image uploaded successfully`, 'success');
+      } else {
+        showStatus(`Failed to upload ${type} banner image: ` + response.message, 'error');
       }
-      showStatus(`Banner ${type} image uploaded`, 'success');
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('Banner image upload error:', error);
+      showStatus(`Error uploading ${type} banner image: ` + error.message, 'error');
+    }
   }
 }
 
@@ -542,20 +551,28 @@ function updateDesignDisasterText(field, value) {
   showStatus(`Design section ${field} updated`, 'success');
 }
 
-function handleDesignDisasterImageUpload(input) {
+async function handleDesignDisasterImageUpload(input) {
   const file = input.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const imageData = e.target.result;
-      quizData.designDisasterSection.image = imageData;
-      const imageArea = document.getElementById('design-disaster-image');
-      imageArea.style.backgroundImage = `url('${imageData}')`;
-      imageArea.style.backgroundSize = 'cover';
-      imageArea.innerHTML = '<div class="upload-text">📷 Change Image</div>';
-      showStatus('Design section image uploaded', 'success');
-    };
-    reader.readAsDataURL(file);
+    try {
+      showStatus('Uploading design section image...', 'info');
+      const response = await apiClient.uploadImage(file);
+
+      if (response.status === 'success') {
+        const imageUrl = response.data.url;
+        quizData.designDisasterSection.image = imageUrl;
+        const imageArea = document.getElementById('design-disaster-image');
+        imageArea.style.backgroundImage = `url('${imageUrl}')`;
+        imageArea.style.backgroundSize = 'cover';
+        imageArea.innerHTML = '<div class="upload-text">📷 Change Image</div>';
+        showStatus('Design section image uploaded successfully', 'success');
+      } else {
+        showStatus('Failed to upload design section image: ' + response.message, 'error');
+      }
+    } catch (error) {
+      console.error('Design section image upload error:', error);
+      showStatus('Error uploading design section image: ' + error.message, 'error');
+    }
   }
 }
 
@@ -651,17 +668,25 @@ function addQuizPromoImage() {
   showStatus('Image slot added', 'success');
 }
 
-function handleQuizPromoImageUpload(index, input) {
+async function handleQuizPromoImageUpload(index, input) {
   const file = input.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const imageData = e.target.result;
-      quizData.quizPromoSection.images[index] = imageData;
-      renderQuizPromoImages();
-      showStatus('Image uploaded', 'success');
-    };
-    reader.readAsDataURL(file);
+    try {
+      showStatus(`Uploading promo image ${index + 1}...`, 'info');
+      const response = await apiClient.uploadImage(file);
+
+      if (response.status === 'success') {
+        const imageUrl = response.data.url;
+        quizData.quizPromoSection.images[index] = imageUrl;
+        renderQuizPromoImages();
+        showStatus('Promo image uploaded successfully', 'success');
+      } else {
+        showStatus('Failed to upload promo image: ' + response.message, 'error');
+      }
+    } catch (error) {
+      console.error('Quiz promo image upload error:', error);
+      showStatus('Error uploading promo image: ' + error.message, 'error');
+    }
   }
 }
 
@@ -717,17 +742,25 @@ function renderGalleryItems() {
   });
 }
 
-function handleGalleryImageUpload(index, input) {
+async function handleGalleryImageUpload(index, input) {
   const file = input.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const imageData = e.target.result;
-      quizData.gallerySection.images[index].src = imageData;
-      renderGalleryItems();
-      showStatus('Gallery image uploaded successfully', 'success');
-    };
-    reader.readAsDataURL(file);
+    try {
+      showStatus(`Uploading gallery image ${index + 1}...`, 'info');
+      const response = await apiClient.uploadImage(file);
+
+      if (response.status === 'success') {
+        const imageUrl = response.data.url;
+        quizData.gallerySection.images[index].src = imageUrl;
+        renderGalleryItems();
+        showStatus('Gallery image uploaded successfully', 'success');
+      } else {
+        showStatus('Failed to upload gallery image: ' + response.message, 'error');
+      }
+    } catch (error) {
+      console.error('Gallery image upload error:', error);
+      showStatus('Error uploading gallery image: ' + error.message, 'error');
+    }
   }
 }
 
@@ -978,21 +1011,29 @@ function updateOptionText(qIndex, oIndex, text) {
   showStatus('Option text updated', 'success');
 }
 
-function handleImageUpload(qIndex, oIndex, input) {
+async function handleImageUpload(qIndex, oIndex, input) {
   const file = input.files[0];
   if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const imageData = e.target.result;
-      quizData.questions[qIndex].options[oIndex].image = imageData;
-      const imageArea = document.getElementById(`image-${qIndex}-${oIndex}`);
-      imageArea.style.backgroundImage = `url('${imageData}')`;
-      imageArea.classList.add('has-image');
-      imageArea.innerHTML =
-        '<div class="upload-text">📷 Click to change image</div>';
-      showStatus('Image uploaded successfully', 'success');
-    };
-    reader.readAsDataURL(file);
+    try {
+      showStatus(`Uploading question ${qIndex + 1} option ${oIndex + 1} image...`, 'info');
+      const response = await apiClient.uploadImage(file);
+
+      if (response.status === 'success') {
+        const imageUrl = response.data.url;
+        quizData.questions[qIndex].options[oIndex].image = imageUrl;
+        const imageArea = document.getElementById(`image-${qIndex}-${oIndex}`);
+        imageArea.style.backgroundImage = `url('${imageUrl}')`;
+        imageArea.classList.add('has-image');
+        imageArea.innerHTML =
+          '<div class="upload-text">📷 Click to change image</div>';
+        showStatus('Question image uploaded successfully', 'success');
+      } else {
+        showStatus('Failed to upload question image: ' + response.message, 'error');
+      }
+    } catch (error) {
+      console.error('Question image upload error:', error);
+      showStatus('Error uploading question image: ' + error.message, 'error');
+    }
   }
 }
 

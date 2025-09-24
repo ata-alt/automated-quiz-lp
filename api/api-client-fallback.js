@@ -168,6 +168,28 @@ class ApiClient {
     async setCurrentProduct(productKey) {
         return this.updateSetting('current_product', productKey);
     }
+
+    // File upload endpoint
+    async uploadImage(file) {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch(this.baseUrl + 'upload.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            throw error;
+        }
+    }
 }
 
 // Create global instance
