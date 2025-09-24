@@ -130,6 +130,11 @@
   letter-spacing: -0.5px;
 }
 
+/* Question title styling */
+.thick-h3 {
+  color: #005743 !important;
+}
+
 /* Option text styling */
 .quiz-block .option-button .spacing-v {
   font-size: 17px;

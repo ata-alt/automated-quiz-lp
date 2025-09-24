@@ -216,12 +216,47 @@ function deleteProduct($db)
             sendError('Cannot delete the default sofa product');
         }
 
-        $query = "UPDATE product_quizzes SET is_active = 0 WHERE product_key = ?";
-        $stmt = $db->prepare($query);
-        $stmt->execute([$productKey]);
+        // Start transaction to ensure data integrity
+        $db->beginTransaction();
 
-        sendResponse(['message' => 'Product deleted successfully']);
+        // First, get all question IDs for this product to delete their options
+        $questionQuery = "SELECT id FROM quiz_questions WHERE product_key = ?";
+        $questionStmt = $db->prepare($questionQuery);
+        $questionStmt->execute([$productKey]);
+        $questionIds = $questionStmt->fetchAll(PDO::FETCH_COLUMN);
+
+        // Delete question options for all questions of this product
+        if (!empty($questionIds)) {
+            $placeholders = str_repeat('?,', count($questionIds) - 1) . '?';
+            $optionQuery = "DELETE FROM question_options WHERE question_id IN ($placeholders)";
+            $optionStmt = $db->prepare($optionQuery);
+            $optionStmt->execute($questionIds);
+        }
+
+        // Delete all quiz questions for this product
+        $deleteQuestionsQuery = "DELETE FROM quiz_questions WHERE product_key = ?";
+        $deleteQuestionsStmt = $db->prepare($deleteQuestionsQuery);
+        $deleteQuestionsStmt->execute([$productKey]);
+
+        // Delete all quiz content for this product
+        $deleteContentQuery = "DELETE FROM quiz_content WHERE product_key = ?";
+        $deleteContentStmt = $db->prepare($deleteContentQuery);
+        $deleteContentStmt->execute([$productKey]);
+
+        // Finally, delete the product itself
+        $deleteProductQuery = "DELETE FROM product_quizzes WHERE product_key = ?";
+        $deleteProductStmt = $db->prepare($deleteProductQuery);
+        $deleteProductStmt->execute([$productKey]);
+
+        // Commit the transaction
+        $db->commit();
+
+        sendResponse(['message' => 'Product and all related data deleted successfully']);
     } catch (Exception $e) {
+        // Rollback transaction on error
+        if ($db->inTransaction()) {
+            $db->rollback();
+        }
         sendError('Failed to delete product: ' . $e->getMessage(), 500);
     }
 }
