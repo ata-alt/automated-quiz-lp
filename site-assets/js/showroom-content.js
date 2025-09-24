@@ -16,6 +16,18 @@
     quizPromo: { width: 800, height: 560 },
   };
 
+  // Function to generate placeholder image URL
+  function getPlaceholderImage(width, height, text = 'No Image') {
+    return `https://placehold.co/${width}x${height}/e5e5e5/666666?text=${encodeURIComponent(
+      text
+    )}`;
+  }
+
+  // Function to check if image source is valid and not empty
+  function isValidImageSource(src) {
+    return src && src.trim() !== '' && !src.includes('placeholder');
+  }
+
   // Helper function to apply consistent image sizing
   function applyImageSizing(img, dimensions) {
     img.style.width = '100%';
@@ -50,7 +62,77 @@
       return productData; // Return as-is for sofa or null data
     }
 
-    // Convert product quiz format to the format expected by the existing functions
+    // Check if data is in the new API format (direct content sections)
+    if (productData.banner || productData.showroom || productData.quiz_promo) {
+      return {
+        bannerSection: {
+          mainHeading:
+            productData.banner?.mainHeading ||
+            `Match Your Personality To A Luxury ${productKey}.`,
+          subHeading: productData.banner?.subHeading || 'Try Our AI Tool',
+          backgroundImage: productData.banner?.backgroundImage || '',
+          mobileImage: productData.banner?.mobileImage || '',
+        },
+        showroomSection: {
+          heading:
+            productData.showroom?.heading ||
+            `The largest luxury ${productKey?.toLowerCase()} showroom in London`,
+          image: productData.showroom?.image || '',
+        },
+        luxurySofasSection: {
+          title:
+            productData.luxury_content?.title ||
+            `Luxury ${productKey}, Redefined`,
+          introduction:
+            productData.luxury_content?.introduction ||
+            `Experience the finest ${productKey?.toLowerCase()} collection.`,
+          subtitle:
+            productData.luxury_content?.subtitle || 'Why Visit Our Showroom?',
+          points: productData.luxury_content?.points || [],
+          conclusion:
+            productData.luxury_content?.conclusion ||
+            '<strong>Visit Us & Experience Luxury Firsthand</strong>',
+        },
+        gallerySection: {
+          images:
+            productData.gallery?.images?.map((img) => ({
+              src: img.src || img.image || '',
+              alt:
+                img.alt ||
+                img.description ||
+                `Luxury ${productKey?.toLowerCase()}`,
+            })) || [],
+        },
+        designDisasterSection: {
+          heading:
+            productData.design_expert?.heading?.replace('\\n', '\n') ||
+            'Avoid a design disaster.\nTalk to an expert.',
+          image: productData.design_expert?.image || '',
+          buttonText: productData.design_expert?.buttonText || 'Book now',
+          buttonLink:
+            productData.design_expert?.buttonLink ||
+            '/book-a-showroom-visit.html',
+        },
+        quizPromoSection: {
+          heading:
+            productData.quiz_promo?.heading ||
+            `Take our lifestyle quiz & find the perfect ${
+              productKey?.toLowerCase() || 'sofa'
+            } match.`,
+          features: productData.quiz_promo?.features || [],
+          buttonText:
+            productData.quiz_promo?.buttonText ||
+            `Try our ${productKey || 'Sofa'} Matching Quiz`,
+          buttonLink: productData.quiz_promo?.buttonLink || '#quiz',
+          images:
+            productData.quiz_promo?.images ||
+            productData.quiz_promo?.sliderImages ||
+            [],
+        },
+      };
+    }
+
+    // Fallback to old format (productData format)
     return {
       bannerSection: {
         mainHeading:
@@ -100,11 +182,13 @@
       quizPromoSection: {
         heading:
           productData.quizPromoContent?.heading ||
-          `Take our lifestyle quiz & find the perfect ${productData.name?.toLowerCase()} match.`,
+          `Take our lifestyle quiz & find the perfect ${
+            productData.name?.toLowerCase() || 'sofa'
+          } match.`,
         features: productData.quizPromoContent?.features || [],
         buttonText:
           productData.quizPromoContent?.buttonText ||
-          `Try our ${productData.name} Matching Quiz`,
+          `Try our ${productData.name || 'Sofa'} Matching Quiz`,
         buttonLink: productData.quizPromoContent?.buttonLink || '#quiz',
         images: productData.quizPromoContent?.sliderImages || [],
       },
@@ -119,12 +203,11 @@
       const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
-      if (data && data.bannerSection) {
-        // Find the banner section
-        const bannerSection = document.querySelector('.banner-block');
-
-        if (bannerSection) {
-          // Update main heading
+      // Always update banner images, use placeholders if no data
+      const bannerSection = document.querySelector('.banner-block');
+      if (bannerSection) {
+        // Update main heading if data exists
+        if (data && data.bannerSection) {
           const mainHeading = bannerSection.querySelector(
             '.banner-heading.thick-h1'
           );
@@ -137,37 +220,48 @@
           if (subHeading) {
             subHeading.textContent = data.bannerSection.subHeading;
           }
-
-          // Update background images
-          if (
-            data.bannerSection.backgroundImage ||
-            data.bannerSection.mobileImage
-          ) {
-            const picture = bannerSection.querySelector('picture');
-            if (picture) {
-              // Update mobile image source
-              if (data.bannerSection.mobileImage) {
-                const source = picture.querySelector('source');
-                if (source) {
-                  source.srcset = data.bannerSection.mobileImage;
-                }
-              }
-
-              // Update desktop image with sizing
-              if (data.bannerSection.backgroundImage) {
-                const img = picture.querySelector('img.banner-img');
-                if (img) {
-                  img.srcset = data.bannerSection.backgroundImage;
-                  img.src = data.bannerSection.backgroundImage;
-                  applyImageSizing(img, IMAGE_SIZES.banner.desktop);
-                }
-              }
-            }
-          }
         }
 
-        console.log('[Banner] Section updated from saved data');
+        // Always update background images with placeholder fallback
+        const picture = bannerSection.querySelector('picture');
+        if (picture) {
+          // Update mobile image source
+          const source = picture.querySelector('source');
+          if (source) {
+            const mobileImage =
+              data &&
+              data.bannerSection &&
+              isValidImageSource(data.bannerSection.mobileImage)
+                ? data.bannerSection.mobileImage
+                : getPlaceholderImage(
+                    IMAGE_SIZES.banner.mobile.width,
+                    IMAGE_SIZES.banner.mobile.height,
+                    'Mobile Banner'
+                  );
+            source.srcset = mobileImage;
+          }
+
+          // Update desktop image with sizing
+          const img = picture.querySelector('img.banner-img');
+          if (img) {
+            const desktopImage =
+              data &&
+              data.bannerSection &&
+              isValidImageSource(data.bannerSection.backgroundImage)
+                ? data.bannerSection.backgroundImage
+                : getPlaceholderImage(
+                    IMAGE_SIZES.banner.desktop.width,
+                    IMAGE_SIZES.banner.desktop.height,
+                    'Hero Banner'
+                  );
+            img.srcset = desktopImage;
+            img.src = desktopImage;
+            applyImageSizing(img, IMAGE_SIZES.banner.desktop);
+          }
+        }
       }
+
+      console.log('[Banner] Section updated from saved data');
     } catch (error) {
       console.error('[Banner] Error loading section:', error);
     }
@@ -181,8 +275,8 @@
       const currentProduct = result?.productKey || 'sofa';
       const data = convertProductDataFormat(rawData, currentProduct);
 
+      // Update showroom heading if data exists
       if (data && data.showroomSection) {
-        // Update showroom heading by ID first, then fallback to text search
         const showroomTitle = document.getElementById('showroomSectionTitle');
         if (showroomTitle) {
           showroomTitle.textContent = data.showroomSection.heading;
@@ -195,31 +289,57 @@
             }
           });
         }
-
-        // Update showroom image by ID first, then fallback
-        const showroomImage = document.getElementById('showroomSectionImage');
-        if (showroomImage && data.showroomSection.image) {
-          showroomImage.src = data.showroomSection.image;
-          showroomImage.alt = data.showroomSection.heading;
-          showroomImage.title = data.showroomSection.heading;
-          applyImageSizing(showroomImage, IMAGE_SIZES.showroom);
-        } else {
-          // Fallback to finding images by attributes
-          const showroomImages = document.querySelectorAll(
-            'img[alt*="showroom"], img[src*="shoroomlndn"]'
-          );
-          showroomImages.forEach((img) => {
-            if (data.showroomSection.image) {
-              img.src = data.showroomSection.image;
-              img.alt = data.showroomSection.heading;
-              img.title = data.showroomSection.heading;
-              applyImageSizing(img, IMAGE_SIZES.showroom);
-            }
-          });
-        }
-
-        console.log('[Showroom] Section updated from saved data');
       }
+
+      // Always update showroom image with placeholder fallback
+      const showroomImage = document.getElementById('showroomSectionImage');
+      if (showroomImage) {
+        const imageSource =
+          data &&
+          data.showroomSection &&
+          isValidImageSource(data.showroomSection.image)
+            ? data.showroomSection.image
+            : getPlaceholderImage(
+                IMAGE_SIZES.showroom.width,
+                IMAGE_SIZES.showroom.height,
+                'Showroom'
+              );
+        const altText =
+          data && data.showroomSection && data.showroomSection.heading
+            ? data.showroomSection.heading
+            : 'Luxury Showroom';
+        showroomImage.src = imageSource;
+        showroomImage.alt = altText;
+        showroomImage.title = altText;
+        applyImageSizing(showroomImage, IMAGE_SIZES.showroom);
+      } else {
+        // Fallback to finding images by attributes
+        const showroomImages = document.querySelectorAll(
+          'img[alt*="showroom"], img[src*="shoroomlndn"]'
+        );
+        showroomImages.forEach((img) => {
+          const imageSource =
+            data &&
+            data.showroomSection &&
+            isValidImageSource(data.showroomSection.image)
+              ? data.showroomSection.image
+              : getPlaceholderImage(
+                  IMAGE_SIZES.showroom.width,
+                  IMAGE_SIZES.showroom.height,
+                  'Showroom'
+                );
+          const altText =
+            data && data.showroomSection && data.showroomSection.heading
+              ? data.showroomSection.heading
+              : 'Luxury Showroom';
+          img.src = imageSource;
+          img.alt = altText;
+          img.title = altText;
+          applyImageSizing(img, IMAGE_SIZES.showroom);
+        });
+      }
+
+      console.log('[Showroom] Section updated from saved data');
     } catch (error) {
       console.error('[Showroom] Error loading section:', error);
     }
@@ -313,12 +433,9 @@
   // Function to load and update Gallery section (3 images)
   async function loadGallerySection() {
     try {
-      const result = await getCurrentProductData();
-      const rawData = result?.productData;
-      const currentProduct = result?.productKey || 'sofa';
-      const data = convertProductDataFormat(rawData, currentProduct);
+      const data = await getCurrentProductData();
 
-      if (data && data.gallerySection && data.gallerySection.images) {
+      if (data && data.gallery && data.gallery.images) {
         // Find the gallery section container
         const gallerySection = document.querySelector('section.container.big');
 
@@ -328,15 +445,13 @@
 
           // Update each image with consistent sizing
           galleryImages.forEach((img, index) => {
-            if (data.gallerySection.images[index]) {
-              const imageData = data.gallerySection.images[index];
+            if (data.gallery.images[index]) {
+              const imageData = data.gallery.images[index];
               img.src = imageData.src;
               img.alt = imageData.alt;
               img.title = imageData.alt;
             }
           });
-
-          console.log('[Gallery] Section updated from saved data');
         }
       }
     } catch (error) {
@@ -345,71 +460,63 @@
   }
 
   // Function to load and update Design Disaster section
-  async function loadDesignDisasterSection() {
+  async function loadDesignExpertSection() {
     try {
-      const result = await getCurrentProductData();
-      const rawData = result?.productData;
-      const currentProduct = result?.productKey || 'sofa';
-      const data = convertProductDataFormat(rawData, currentProduct);
+      const data = await getCurrentProductData();
 
-      if (data && data.designDisasterSection) {
-        // Find the design disaster section
-        const sections = document.querySelectorAll('section');
-        let designSection = null;
+      if (!data?.design_expert) return;
 
-        sections.forEach((section) => {
-          if (
-            section.innerHTML.includes('Avoid a design disaster') ||
-            section.innerHTML.includes('avoid-a-design-disaster')
-          ) {
-            designSection = section;
-          }
-        });
+      // Find the design expert section
+      const designSection = [...document.querySelectorAll('section')].find(
+        (section) =>
+          section.innerHTML.includes('Avoid a design disaster') ||
+          section.innerHTML.includes('avoid-a-design-disaster')
+      );
 
-        if (designSection) {
-          // Update heading (convert \n to <br>)
-          const heading = designSection.querySelector('h2.thick-h1');
-          if (heading) {
-            heading.innerHTML = data.designDisasterSection.heading.replace(
-              /\n/g,
-              '<br>'
-            );
-          }
+      if (!designSection) return;
 
-          // Update image with sizing
-          const image = designSection.querySelector(
-            'img[src*="avoid-a-design-disaster"]'
-          );
-          if (image && data.designDisasterSection.image) {
-            image.src = data.designDisasterSection.image;
-            image.alt = 'Interior designer offering fabric choices to a client';
-            applyImageSizing(image, IMAGE_SIZES.designDisaster);
-          }
+      const { heading, image, buttonLink, buttonText } = data.design_expert;
 
-          // Update button
-          const button = designSection.querySelector('a.btn');
-          if (button) {
-            button.href = data.designDisasterSection.buttonLink;
-            button.innerHTML = `${data.designDisasterSection.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
-          }
-        }
-
-        console.log('[DesignDisaster] Section updated from saved data');
+      // Update heading (convert \n to <br>)
+      const headingEl = designSection.querySelector('h2.thick-h1');
+      if (headingEl && heading) {
+        headingEl.innerHTML = heading.replace(/\n/g, '<br>');
       }
+
+      // Update image with sizing (use placeholder if missing)
+      const imageEl = designSection.querySelector(
+        'img[src*="avoid-a-design-disaster"]'
+      );
+      if (imageEl) {
+        const { width, height } = IMAGE_SIZES.designDisaster;
+        const src =
+          image || getPlaceholderImage(width, height, 'Design Expert');
+        imageEl.src = src;
+        imageEl.alt = 'Interior designer offering fabric choices to a client';
+        applyImageSizing(imageEl, IMAGE_SIZES.designDisaster);
+      }
+
+      // Update button
+      const button = designSection.querySelector('a.btn');
+      if (button) {
+        if (buttonLink) button.href = buttonLink;
+        if (buttonText) {
+          button.innerHTML = `${buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
+        }
+      }
+
+      console.log('[DesignExpert] Section updated from data source');
     } catch (error) {
-      console.error('[DesignDisaster] Error loading section:', error);
+      console.error('[DesignExpert] Error loading section:', error);
     }
   }
 
   // Function to load and update Quiz Promo section
   async function loadQuizPromoSection() {
     try {
-      const result = await getCurrentProductData();
-      const rawData = result?.productData;
-      const currentProduct = result?.productKey || 'sofa';
-      const data = convertProductDataFormat(rawData, currentProduct);
+      const data = await getCurrentProductData();
 
-      if (data && data.quizPromoSection) {
+      if (data && data.quiz_promo) {
         // Find the quiz promo section
         const sections = document.querySelectorAll('section');
         let promoSection = null;
@@ -427,13 +534,13 @@
           // Update heading
           const heading = promoSection.querySelector('.thick-h1');
           if (heading) {
-            heading.textContent = data.quizPromoSection.heading;
+            heading.textContent = data.quiz_promo.heading;
           }
 
           // Update features list
           const featuresList = promoSection.querySelector('ul.block-text');
-          if (featuresList && data.quizPromoSection.features) {
-            featuresList.innerHTML = data.quizPromoSection.features
+          if (featuresList && data.quiz_promo.features) {
+            featuresList.innerHTML = data.quiz_promo.features
               .map((feature) => `<li><strong>${feature}</strong></li>`)
               .join('');
           }
@@ -441,26 +548,26 @@
           // Update button
           const button = promoSection.querySelector('a.btn[href*="sofaquiz"]');
           if (button) {
-            button.href = data.quizPromoSection.buttonLink;
-            button.innerHTML = `${data.quizPromoSection.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
+            button.href = data.quiz_promo.buttonLink;
+            button.innerHTML = `${data.quiz_promo.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
           }
 
           // Update slider images with consistent sizing
           const slider = promoSection.querySelector('#wardrobes-slider');
           if (
             slider &&
-            data.quizPromoSection.images &&
-            data.quizPromoSection.images.length > 0
+            data.quiz_promo.images &&
+            data.quiz_promo.images.length > 0
           ) {
-            slider.innerHTML = data.quizPromoSection.images
+            slider.innerHTML = data.quiz_promo.images
               .map(
                 (image, index) => `
                   <li>
-                    <img alt="Luxury sofa ${index + 1}" 
-                         title="Luxury sofa ${index + 1}" 
-                         src="${image}" 
-                         loading="lazy" 
-                         width="${IMAGE_SIZES.quizPromo.width}" 
+                    <img alt="Luxury product ${index + 1}"
+                         title="Luxury product ${index + 1}"
+                         src="${image}"
+                         loading="lazy"
+                         width="${IMAGE_SIZES.quizPromo.width}"
                          height="${IMAGE_SIZES.quizPromo.height}"
                          style="width: 100%; height: ${
                            IMAGE_SIZES.quizPromo.height
@@ -472,7 +579,7 @@
           }
         }
 
-        console.log('[QuizPromo] Section updated from saved data');
+        console.log('[QuizPromo] Section updated from data source');
       }
     } catch (error) {
       console.error('[QuizPromo] Error loading section:', error);
@@ -514,20 +621,86 @@
     document.head.appendChild(style);
   }
 
+  // Function to set default placeholders for all images
+  function setDefaultPlaceholders() {
+    try {
+      // Set banner placeholders
+      const bannerImg = document.querySelector('img.banner-img');
+      if (bannerImg && !isValidImageSource(bannerImg.src)) {
+        bannerImg.src = getPlaceholderImage(
+          IMAGE_SIZES.banner.desktop.width,
+          IMAGE_SIZES.banner.desktop.height,
+          'Hero Banner'
+        );
+      }
+
+      // Set showroom placeholder
+      const showroomImg = document.getElementById('showroomSectionImage');
+      if (showroomImg && !isValidImageSource(showroomImg.src)) {
+        showroomImg.src = getPlaceholderImage(
+          IMAGE_SIZES.showroom.width,
+          IMAGE_SIZES.showroom.height,
+          'Showroom'
+        );
+      }
+
+      // Set gallery placeholders for the three specific images in gallery section
+      const gallerySection = document.querySelector('section.container.big');
+      if (gallerySection) {
+        const galleryImages = gallerySection.querySelectorAll('img');
+        galleryImages.forEach((img, index) => {
+          if (!isValidImageSource(img.src)) {
+            img.src = getPlaceholderImage(
+              IMAGE_SIZES.gallery.width,
+              IMAGE_SIZES.gallery.height,
+              `Gallery ${index + 1}`
+            );
+            img.alt = `Gallery Image ${index + 1}`;
+            img.title = `Gallery Image ${index + 1}`;
+          }
+        });
+      }
+
+      // Set design disaster placeholder
+      const designImg = document.querySelector(
+        'img[src*="avoid-a-design-disaster"]'
+      );
+      if (designImg && !isValidImageSource(designImg.src)) {
+        designImg.src = getPlaceholderImage(
+          IMAGE_SIZES.designDisaster.width,
+          IMAGE_SIZES.designDisaster.height,
+          'Expert CTA'
+        );
+      }
+
+      console.log('[Placeholders] Default placeholders set for missing images');
+    } catch (error) {
+      console.error(
+        '[Placeholders] Error setting default placeholders:',
+        error
+      );
+    }
+  }
+
   // Function to load all dynamic content
   async function loadDynamicContent() {
     addImageConsistencyStyles();
+
+    // Set default placeholders first
+    setDefaultPlaceholders();
+
+    // Then load dynamic content (which may override placeholders)
     await loadBannerSection();
     await loadShowroomSection();
     await loadLuxurySofasSection(); // Load the new Luxury Sofas section
     await loadGallerySection();
-    await loadDesignDisasterSection();
+    await loadDesignExpertSection();
     await loadQuizPromoSection();
   }
 
   // Load on DOM ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       // Wait for API client to be ready
       if (typeof window.apiClient !== 'undefined') {
         loadDynamicContent();
@@ -559,7 +732,7 @@
   });
 
   // Listen for custom product change events
-  window.addEventListener('productChanged', function(e) {
+  window.addEventListener('productChanged', function (e) {
     console.log('[Dynamic Content] Product changed event received:', e.detail);
     loadDynamicContent();
   });

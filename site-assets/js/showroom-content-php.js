@@ -14,14 +14,16 @@
       const url = this.baseUrl + endpoint;
       const config = {
         headers: { 'Content-Type': 'application/json' },
-        ...options
+        ...options,
       };
 
       try {
         const response = await fetch(url, config);
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+          throw new Error(
+            errorData.error || `HTTP error! status: ${response.status}`
+          );
         }
         return await response.json();
       } catch (error) {
@@ -45,6 +47,13 @@
   }
 
   const apiClient = new ApiClient();
+
+  // Function to generate placeholder image URL
+  function getPlaceholderImage(width, height, text = 'No Image') {
+    return `https://placehold.co/${width}x${height}/e5e5e5/666666?text=${encodeURIComponent(
+      text
+    )}`;
+  }
 
   // Image size configurations for each section
   const IMAGE_SIZES = {
@@ -91,7 +100,9 @@
 
         if (bannerSection) {
           // Update main heading
-          const mainHeading = bannerSection.querySelector('.banner-heading.thick-h1');
+          const mainHeading = bannerSection.querySelector(
+            '.banner-heading.thick-h1'
+          );
           if (mainHeading) {
             mainHeading.textContent = data.banner.mainHeading;
           }
@@ -148,7 +159,10 @@
           // Fallback to searching by text content
           const showroomHeadings = document.querySelectorAll('h2');
           showroomHeadings.forEach((heading) => {
-            if (heading.textContent.includes('largest luxury') || heading.textContent.includes('showroom')) {
+            if (
+              heading.textContent.includes('largest luxury') ||
+              heading.textContent.includes('showroom')
+            ) {
               heading.textContent = data.showroom.heading;
             }
           });
@@ -195,9 +209,14 @@
           mainTitle.textContent = data.luxury_content.title;
         } else {
           // Fallback for elements without ID
-          const titles = document.querySelectorAll('p.thick-h1.text-center.black');
+          const titles = document.querySelectorAll(
+            'p.thick-h1.text-center.black'
+          );
           titles.forEach((title) => {
-            if (title.textContent.includes('Luxury') || title.textContent.includes('Redefined')) {
+            if (
+              title.textContent.includes('Luxury') ||
+              title.textContent.includes('Redefined')
+            ) {
               title.textContent = data.luxury_content.title;
             }
           });
@@ -317,7 +336,10 @@
           // Update heading (convert \n to <br>)
           const heading = designSection.querySelector('h2.thick-h1');
           if (heading) {
-            heading.innerHTML = data.design_expert.heading.replace(/\n/g, '<br>');
+            heading.innerHTML = data.design_expert.heading.replace(
+              /\n/g,
+              '<br>'
+            );
           }
 
           // Update image with sizing
@@ -386,27 +408,115 @@
             button.innerHTML = `${data.quiz_promo.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
           }
 
-          // Update slider images with consistent sizing
+          // Update slider images with consistent sizing and placeholder fallback
           const slider = promoSection.querySelector('#wardrobes-slider');
-          if (slider && data.quiz_promo.images && data.quiz_promo.images.length > 0) {
+          if (
+            slider &&
+            data.quiz_promo.images &&
+            data.quiz_promo.images.length > 0
+          ) {
             slider.innerHTML = data.quiz_promo.images
-              .map(
-                (image, index) => `
-                  <li>
-                    <img alt="Luxury product ${index + 1}"
-                         title="Luxury product ${index + 1}"
-                         src="${image}"
-                         loading="lazy"
-                         width="${IMAGE_SIZES.quizPromo.width}"
-                         height="${IMAGE_SIZES.quizPromo.height}"
-                         style="width: 100%; height: ${
-                           IMAGE_SIZES.quizPromo.height
-                         }px; object-fit: cover; object-position: center;">
-                  </li>
-                `
-              )
+              .map((image, index) => {
+                const fallbackImage = getPlaceholderImage(
+                  IMAGE_SIZES.quizPromo.width,
+                  IMAGE_SIZES.quizPromo.height,
+                  `Luxury Sofa ${index + 1}`
+                );
+
+                return `
+                    <li>
+                      <img alt="Luxury product ${index + 1}"
+                           title="Luxury product ${index + 1}"
+                           src="${image || fallbackImage}"
+                           onerror="this.src='${fallbackImage}'"
+                           loading="lazy"
+                           width="${IMAGE_SIZES.quizPromo.width}"
+                           height="${IMAGE_SIZES.quizPromo.height}"
+                           style="width: 100%; height: ${
+                             IMAGE_SIZES.quizPromo.height
+                           }px; object-fit: cover; object-position: center;">
+                    </li>
+                  `;
+              })
               .join('');
+          } else if (slider) {
+            // If no images in data, create placeholder images
+            const placeholderImages = Array.from({ length: 6 }, (_, index) => {
+              const placeholderSrc = getPlaceholderImage(
+                IMAGE_SIZES.quizPromo.width,
+                IMAGE_SIZES.quizPromo.height,
+                `Luxury Sofa ${index + 1}`
+              );
+
+              return `
+                <li>
+                  <img alt="Luxury sofa placeholder ${index + 1}"
+                       title="Luxury sofa placeholder ${index + 1}"
+                       src="${placeholderSrc}"
+                       loading="lazy"
+                       width="${IMAGE_SIZES.quizPromo.width}"
+                       height="${IMAGE_SIZES.quizPromo.height}"
+                       style="width: 100%; height: ${
+                         IMAGE_SIZES.quizPromo.height
+                       }px; object-fit: cover; object-position: center;">
+                </li>
+              `;
+            }).join('');
+
+            slider.innerHTML = placeholderImages;
           }
+
+          // Re-initialize the slider after content update
+          // Use longer delay and ensure proper cleanup
+          setTimeout(() => {
+            try {
+              const $slider = jQuery('#wardrobes-slider');
+
+              // Complete cleanup of existing slider
+              if (typeof jQuery !== 'undefined' && $slider.length) {
+                // Remove existing lightSlider data and events
+                if ($slider.data('lightSlider')) {
+                  $slider.data('lightSlider').destroy();
+                }
+
+                // Clean up any remaining slider wrapper elements
+                $slider.removeClass('lightSlider lsGrab lsGrabbing lSSlide');
+                $slider.removeAttr('style');
+
+                // Remove any existing navigation controls to prevent duplicates
+                $slider.parent().find('.lSAction').remove();
+
+                // Wait for cleanup to complete, then reinitialize
+                setTimeout(() => {
+                  $slider.lightSlider({
+                    item: 1,
+                    loop: true,
+                    controls: true,
+                    slideMargin: 0,
+                    adaptiveHeight: true,
+                    pager: false,
+                    speed: 400,
+                    onSliderLoad: function () {
+                      // Ensure images are properly sized after slider loads
+                      jQuery('#wardrobes-slider img').each(function () {
+                        const img = jQuery(this);
+                        img.css({
+                          width: '100%',
+                          height: '560px',
+                          'object-fit': 'cover',
+                          'object-position': 'center',
+                        });
+                      });
+
+                      console.log('[QuizPromo] Slider re-initialized with working navigation');
+                    },
+                  });
+                }, 50);
+              }
+            } catch (error) {
+              console.error('[QuizPromo] Error re-initializing slider:', error);
+            }
+          }, 200);
         }
 
         console.log('[QuizPromo] Section updated from database');
@@ -416,7 +526,7 @@
     }
   }
 
-  // Function to add global CSS for image consistency
+  // Function to add global CSS for image consistency is gone
   function addImageConsistencyStyles() {
     const style = document.createElement('style');
     style.textContent = `
@@ -477,12 +587,13 @@
   // Listen for potential updates (can be triggered by dashboard changes)
   window.addEventListener('message', function (e) {
     if (e.data && e.data.type === 'content-updated') {
-      console.log('[Dynamic Content] Content update detected, reloading sections...');
+      console.log(
+        '[Dynamic Content] Content update detected, reloading sections...'
+      );
       loadDynamicContent();
     }
   });
 
   // Auto-refresh content every 5 minutes to catch any database changes
   setInterval(loadDynamicContent, 5 * 60 * 1000); // 5 minutes
-
 })();

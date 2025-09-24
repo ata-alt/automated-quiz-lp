@@ -12,7 +12,7 @@ $db = $database->getConnection();
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-switch($method) {
+switch ($method) {
     case 'GET':
         getProducts($db);
         break;
@@ -30,7 +30,8 @@ switch($method) {
         break;
 }
 
-function getProducts($db) {
+function getProducts($db)
+{
     try {
         $query = "SELECT * FROM product_quizzes WHERE is_active = 1 ORDER BY created_at ASC";
         $stmt = $db->prepare($query);
@@ -38,12 +39,13 @@ function getProducts($db) {
 
         $products = $stmt->fetchAll();
         sendResponse(['products' => $products]);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         sendError('Failed to fetch products: ' . $e->getMessage(), 500);
     }
 }
 
-function createProduct($db) {
+function createProduct($db)
+{
     try {
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -74,12 +76,13 @@ function createProduct($db) {
         createDefaultContent($db, $data['product_key'], $data['name']);
 
         sendResponse(['message' => 'Product created successfully', 'product_key' => $data['product_key']], 201);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         sendError('Failed to create product: ' . $e->getMessage(), 500);
     }
 }
 
-function createDefaultContent($db, $productKey, $productName) {
+function createDefaultContent($db, $productKey, $productName)
+{
     $defaultSections = [
         [
             'section_type' => 'banner',
@@ -157,14 +160,13 @@ function createDefaultContent($db, $productKey, $productName) {
     $questionId = $db->lastInsertId();
 
     // Create default options
-    $optionQuery = "INSERT INTO question_options (question_id, option_key, option_text, option_order) VALUES (?, ?, ?, ?)";
+    $optionQuery = "INSERT INTO question_options (question_id, option_key, option_text, option_order) VALUES (?, ?, ?)";
     $optionStmt = $db->prepare($optionQuery);
 
     $defaultOptions = [
         ['a', 'Option A', 1],
         ['b', 'Option B', 2],
         ['c', 'Option C', 3],
-        ['d', 'Option D', 4]
     ];
 
     foreach ($defaultOptions as $option) {
@@ -177,7 +179,8 @@ function createDefaultContent($db, $productKey, $productName) {
     }
 }
 
-function updateProduct($db) {
+function updateProduct($db)
+{
     try {
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -195,12 +198,13 @@ function updateProduct($db) {
         ]);
 
         sendResponse(['message' => 'Product updated successfully']);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         sendError('Failed to update product: ' . $e->getMessage(), 500);
     }
 }
 
-function deleteProduct($db) {
+function deleteProduct($db)
+{
     try {
         $productKey = $_GET['product_key'] ?? '';
 
@@ -217,8 +221,7 @@ function deleteProduct($db) {
         $stmt->execute([$productKey]);
 
         sendResponse(['message' => 'Product deleted successfully']);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         sendError('Failed to delete product: ' . $e->getMessage(), 500);
     }
 }
-?>

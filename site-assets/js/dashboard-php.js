@@ -21,6 +21,9 @@ async function initializeDashboard() {
       selector.value = currentProductKey;
     }
 
+    // Update delete button visibility
+    updateDeleteButtonVisibility(currentProductKey);
+
     // Load content for current product
     await loadCurrentQuiz();
 
@@ -85,6 +88,9 @@ async function switchProductQuiz(productKey) {
 
     document.getElementById('dashboardTitle').textContent = title;
 
+    // Update delete button visibility
+    updateDeleteButtonVisibility(productKey);
+
     // Load content for this product
     await loadCurrentQuiz();
 
@@ -95,56 +101,149 @@ async function switchProductQuiz(productKey) {
   }
 }
 
+// Update delete button visibility
+function updateDeleteButtonVisibility(productKey) {
+  const deleteBtn = document.getElementById('deleteProductBtn');
+  if (deleteBtn) {
+    // Hide delete button for the default 'sofa' product, show for others
+    if (productKey === 'sofa') {
+      deleteBtn.style.display = 'none';
+    } else {
+      deleteBtn.style.display = 'inline-block';
+    }
+  }
+}
+
 // Load current quiz data
 async function loadCurrentQuiz() {
   try {
     const response = await apiClient.getContent(currentProductKey);
     const content = response.content;
 
+    // Check if this is a newly created product
+    const justCreated = localStorage.getItem('justCreatedProduct');
+    const isNewlyCreated = justCreated === currentProductKey;
+
+    // Clear the flag if it matches
+    if (isNewlyCreated) {
+      localStorage.removeItem('justCreatedProduct');
+    }
+
+    // More comprehensive check for new products
+    const isNewProduct =
+      isNewlyCreated ||
+      !content ||
+      Object.keys(content).length === 0 ||
+      (!content.banner &&
+        !content.showroom &&
+        !content.luxury_content &&
+        !content.gallery &&
+        !content.design_expert &&
+        !content.quiz_promo);
+
+    // Get product info for placeholders
+    const productResponse = await apiClient.getProducts();
+    const currentProduct = productResponse.products.find(
+      (p) => p.product_key === currentProductKey
+    );
+    const productName = currentProduct ? currentProduct.name : 'Product';
+
     // Convert API format to dashboard format
-    quizData = {
-      bannerSection: content.banner || {
-        mainHeading: 'Match Your Personality To A Luxury Product.',
-        subHeading: 'Try Our AI Tool',
-        backgroundImage: '',
-        mobileImage: '',
-      },
-      showroomSection: content.showroom || {
-        heading: 'The largest luxury showroom in London',
-        image: '',
-      },
-      luxurySofasSection: content.luxury_content || {
-        title: 'Luxury Products, Redefined',
-        introduction: 'Experience the finest collection.',
-        subtitle: 'Why Visit Our Showroom?',
-        points: [],
-        conclusion: '<strong>Visit Us & Experience Luxury Firsthand</strong>',
-      },
-      gallerySection: content.gallery || { images: [] },
-      designDisasterSection: content.design_expert || {
-        heading: 'Avoid a design disaster.\nTalk to an expert.',
-        image: '',
-        buttonText: 'Book now',
-        buttonLink: '/book-a-showroom-visit.html',
-      },
-      quizPromoSection: content.quiz_promo || {
-        heading: 'Take our lifestyle quiz.',
-        features: [],
-        buttonText: 'Try our Quiz',
-        buttonLink: '#quiz',
-        images: [],
-      },
-      questions: content.questions || [],
-    };
+    if (isNewProduct) {
+      // New product - use completely empty values
+      quizData = {
+        bannerSection: {
+          mainHeading: '',
+          subHeading: '',
+          backgroundImage: '',
+          mobileImage: '',
+        },
+        showroomSection: {
+          heading: '',
+          image: '',
+        },
+        luxurySofasSection: {
+          title: '',
+          introduction: '',
+          subtitle: '',
+          points: [],
+          conclusion: '',
+        },
+        gallerySection: {
+          images: [
+            { src: '', alt: '' },
+            { src: '', alt: '' },
+            { src: '', alt: '' },
+          ],
+        },
+        designDisasterSection: {
+          heading: '',
+          image: '',
+          buttonText: '',
+          buttonLink: '',
+        },
+        quizPromoSection: {
+          heading: '',
+          features: [],
+          buttonText: '',
+          buttonLink: '',
+          images: [],
+        },
+        questions: [],
+        isNewProduct: true,
+        productName: productName,
+      };
+    } else {
+      // Existing product - use saved content or defaults
+      quizData = {
+        bannerSection: content.banner || {
+          mainHeading: `Match Your Personality To A Luxury ${productName}.`,
+          subHeading: 'Try Our AI Tool',
+          backgroundImage: '',
+          mobileImage: '',
+        },
+        showroomSection: content.showroom || {
+          heading: `The largest luxury ${productName.toLowerCase()} showroom in London`,
+          image: '',
+        },
+        luxurySofasSection: content.luxury_content || {
+          title: `Luxury ${productName}, Redefined`,
+          introduction: `Experience the finest ${productName.toLowerCase()} collection.`,
+          subtitle: 'Why Visit Our Showroom?',
+          points: [],
+          conclusion: '<strong>Visit Us & Experience Luxury Firsthand</strong>',
+        },
+        gallerySection: content.gallery || { images: [] },
+        designDisasterSection: content.design_expert || {
+          heading: 'Avoid a design disaster.\nTalk to an expert.',
+          image: '',
+          buttonText: 'Book now',
+          buttonLink: '/book-a-showroom-visit.html',
+        },
+        quizPromoSection: content.quiz_promo || {
+          heading: `Take our lifestyle quiz & find the perfect ${productName.toLowerCase()} match.`,
+          features: [],
+          buttonText: `Try our ${productName} Matching Quiz`,
+          buttonLink: '#quiz',
+          images: [],
+        },
+        questions: content.questions || [],
+        isNewProduct: false,
+        productName: productName,
+      };
+    }
 
     renderQuestions();
 
     // Ensure gallery section is rendered
-    if (!quizData.gallerySection.images || quizData.gallerySection.images.length === 0) {
+    if (
+      !quizData.gallerySection.images ||
+      quizData.gallerySection.images.length === 0
+    ) {
       quizData.gallerySection.images = [
         { src: '', alt: '' },
         { src: '', alt: '' },
-        { src: '', alt: '' }
+        { src: '', alt: '' },
       ];
     }
     renderGalleryItems();
@@ -153,8 +252,8 @@ async function loadCurrentQuiz() {
   } catch (error) {
     console.error('Failed to load quiz data:', error);
     showStatus('Failed to load quiz data: ' + error.message, 'error');
-    // Fall back to empty data
-    initializeSampleData();
+    // Fall back to empty data for new product
+    initializeEmptyData();
   }
 }
 
@@ -212,17 +311,31 @@ async function createNewProductQuiz() {
 
     await apiClient.createProduct(productData);
     await updateProductQuizSelector();
-    await switchProductQuiz(productKey);
 
     closeNewProductModal();
-    showStatus(`${productName} quiz created successfully!`, 'success');
+    showStatus(
+      `${productName} quiz created successfully! Reloading dashboard...`,
+      'success'
+    );
+
+    // Set the new product as current and reload the page
+    await apiClient.setCurrentProduct(productKey);
+
+    // Mark this as a newly created product in localStorage
+    localStorage.setItem('justCreatedProduct', productKey);
+
+    // Add a small delay to ensure the status message is visible
+    setTimeout(() => {
+      // Reload the entire dashboard page to reset all fields
+      window.location.reload();
+    }, 1500);
   } catch (error) {
     console.error('Failed to create product:', error);
     alert('Failed to create product: ' + error.message);
   }
 }
 
-// Initialize with sample data (fallback)
+// Initialize with sample data (fallback for sofa)
 function initializeSampleData() {
   quizData = {
     bannerSection: {
@@ -250,8 +363,8 @@ function initializeSampleData() {
       images: [
         { src: '', alt: 'Gallery Image 1' },
         { src: '', alt: 'Gallery Image 2' },
-        { src: '', alt: 'Gallery Image 3' }
-      ]
+        { src: '', alt: 'Gallery Image 3' },
+      ],
     },
     designDisasterSection: {
       heading: 'Avoid a design disaster.\nTalk to an expert.',
@@ -268,6 +381,54 @@ function initializeSampleData() {
       images: [],
     },
     questions: [],
+    isNewProduct: false,
+  };
+  renderQuestions();
+}
+
+// Initialize with empty data (for new products)
+function initializeEmptyData() {
+  quizData = {
+    bannerSection: {
+      mainHeading: '',
+      subHeading: '',
+      backgroundImage: '',
+      mobileImage: '',
+    },
+    showroomSection: {
+      heading: '',
+      image: '',
+    },
+    luxurySofasSection: {
+      title: '',
+      introduction: '',
+      subtitle: '',
+      points: [],
+      conclusion: '',
+    },
+    gallerySection: {
+      images: [
+        { src: '', alt: '' },
+        { src: '', alt: '' },
+        { src: '', alt: '' },
+      ],
+    },
+    designDisasterSection: {
+      heading: '',
+      image: '',
+      buttonText: '',
+      buttonLink: '',
+    },
+    quizPromoSection: {
+      heading: '',
+      features: [],
+      buttonText: '',
+      buttonLink: '',
+      images: [],
+    },
+    questions: [],
+    isNewProduct: true,
+    productName: 'Product',
   };
   renderQuestions();
 }
@@ -387,22 +548,7 @@ function updateShowroomHeading(text) {
   showStatus('Showroom heading updated', 'success');
 }
 
-function handleShowroomImageUpload(input) {
-  const file = input.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const imageData = e.target.result;
-      quizData.showroomSection.image = imageData;
-      const imageArea = document.getElementById('showroom-image');
-      imageArea.style.backgroundImage = `url('${imageData}')`;
-      imageArea.innerHTML =
-        '<div class="upload-text">📷 Click to change showroom image</div>';
-      showStatus('Showroom image uploaded successfully', 'success');
-    };
-    reader.readAsDataURL(file);
-  }
-}
+
 
 // Design Disaster Section Functions
 function updateDesignDisasterText(field, value) {
@@ -483,17 +629,22 @@ function renderQuizPromoImages() {
   if (!container) return;
 
   container.innerHTML = quizData.quizPromoSection.images
-    .map(
-      (image, index) => `
+    .map((image, index) => {
+      // For new products, ensure images are completely blank
+      const hasImage = image && !quizData.isNewProduct;
+      const backgroundStyle = hasImage
+        ? `background-image: url('${image}')`
+        : '';
+      const uploadIcon = hasImage ? '📷' : '📤';
+
+      return `
         <div style="position: relative;">
-            <div class="image-upload-area ${image ? 'has-image' : ''}"
+            <div class="image-upload-area ${hasImage ? 'has-image' : ''}"
                  id="quizpromo-image-${index}"
-                 style="height: 100px; ${
-                   image ? `background-image: url('${image}')` : ''
-                 }"
+                 style="height: 100px; ${backgroundStyle}"
                  onclick="document.getElementById('quizpromo-file-${index}').click()">
                 <div class="upload-text" style="font-size: 10px;">
-                    ${image ? '📷' : '📤'}
+                    ${uploadIcon}
                 </div>
             </div>
             <input type="file" id="quizpromo-file-${index}"
@@ -503,8 +654,8 @@ function renderQuizPromoImages() {
                     onclick="removeQuizPromoImage(${index})"
                     style="position: absolute; top: 5px; right: 5px; padding: 2px 6px; font-size: 12px;">×</button>
         </div>
-    `
-    )
+        `;
+    })
     .join('');
 }
 
@@ -548,26 +699,31 @@ function renderGalleryItems() {
     const container = document.getElementById(`gallery-item-${index}`);
     if (!container) return;
 
+    // For new products, ensure images are completely blank
+    const hasImage = item.src && !quizData.isNewProduct;
+    const backgroundStyle = hasImage
+      ? `background-image: url('${item.src}')`
+      : '';
+    const uploadText = hasImage ? '📷 Change image' : '📤 Upload image';
+
     container.innerHTML = `
             <div style="border: 1px solid #ddd; padding: 10px; border-radius: 8px; background: white;">
                 <h4 style="color: #9c27b0; margin: 0 0 10px 0;">Image ${
                   index + 1
                 }</h4>
-                <div class="image-upload-area ${item.src ? 'has-image' : ''}"
+                <div class="image-upload-area ${hasImage ? 'has-image' : ''}"
                      id="gallery-image-${index}"
-                     style="height: 150px; margin-bottom: 10px; ${
-                       item.src ? `background-image: url('${item.src}')` : ''
-                     }"
+                     style="height: 150px; margin-bottom: 10px; ${backgroundStyle}"
                      onclick="document.getElementById('gallery-file-${index}').click()">
                     <div class="upload-text">
-                        ${item.src ? '📷 Change image' : '📤 Upload image'}
+                        ${uploadText}
                     </div>
                 </div>
                 <input type="file" id="gallery-file-${index}"
                        style="display: none;" accept="image/*"
                        onchange="handleGalleryImageUpload(${index}, this)">
                 <input type="text" placeholder="Image description/alt text"
-                       value="${item.alt || ''}"
+                       value="${quizData.isNewProduct ? '' : item.alt || ''}"
                        onchange="updateGalleryAlt(${index}, this.value)"
                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
             </div>
@@ -599,41 +755,70 @@ function renderQuestions() {
   // Update banner section UI
   const bannerMainHeading = document.getElementById('bannerMainHeading');
   if (bannerMainHeading && quizData.bannerSection) {
-    bannerMainHeading.value =
-      quizData.bannerSection.mainHeading ||
-      'Match Your Personality To A Luxury Product.';
-    document.getElementById('bannerSubHeading').value =
-      quizData.bannerSection.subHeading || 'Try Our AI Tool';
+    // For new products, ensure completely blank fields
+    bannerMainHeading.value = quizData.bannerSection.mainHeading || '';
 
-    if (quizData.bannerSection.backgroundImage) {
-      const desktopImage = document.getElementById('banner-desktop-image');
-      desktopImage.style.backgroundImage = `url('${quizData.bannerSection.backgroundImage}')`;
-      desktopImage.style.backgroundSize = 'cover';
-      desktopImage.innerHTML =
-        '<div class="upload-text">📷 Change Desktop Banner</div>';
+    const bannerSubHeading = document.getElementById('bannerSubHeading');
+    if (bannerSubHeading) {
+      bannerSubHeading.value = quizData.bannerSection.subHeading || '';
     }
 
-    if (quizData.bannerSection.mobileImage) {
+    // Only display images if they actually exist and it's not a new product
+    if (quizData.bannerSection.backgroundImage && !quizData.isNewProduct) {
+      const desktopImage = document.getElementById('banner-desktop-image');
+      if (desktopImage) {
+        desktopImage.style.backgroundImage = `url('${quizData.bannerSection.backgroundImage}')`;
+        desktopImage.style.backgroundSize = 'cover';
+        desktopImage.innerHTML =
+          '<div class="upload-text">📷 Change Desktop Banner</div>';
+      }
+    } else {
+      // Ensure upload area is clean for new products
+      const desktopImage = document.getElementById('banner-desktop-image');
+      if (desktopImage) {
+        desktopImage.style.backgroundImage = '';
+        desktopImage.innerHTML =
+          '<div class="upload-text">📤 Upload Desktop Banner</div>';
+      }
+    }
+
+    if (quizData.bannerSection.mobileImage && !quizData.isNewProduct) {
       const mobileImage = document.getElementById('banner-mobile-image');
-      mobileImage.style.backgroundImage = `url('${quizData.bannerSection.mobileImage}')`;
-      mobileImage.style.backgroundSize = 'cover';
-      mobileImage.innerHTML =
-        '<div class="upload-text">📱 Change Mobile Banner</div>';
+      if (mobileImage) {
+        mobileImage.style.backgroundImage = `url('${quizData.bannerSection.mobileImage}')`;
+        mobileImage.style.backgroundSize = 'cover';
+        mobileImage.innerHTML =
+          '<div class="upload-text">📱 Change Mobile Banner</div>';
+      }
+    } else {
+      // Ensure upload area is clean for new products
+      const mobileImage = document.getElementById('banner-mobile-image');
+      if (mobileImage) {
+        mobileImage.style.backgroundImage = '';
+        mobileImage.innerHTML =
+          '<div class="upload-text">📱 Upload Mobile Banner</div>';
+      }
     }
   }
 
   // Update showroom section UI
   const showroomHeading = document.getElementById('showroomHeading');
   if (showroomHeading && quizData.showroomSection) {
-    showroomHeading.value =
-      quizData.showroomSection.heading ||
-      'The largest luxury showroom in London';
+    // For new products, ensure completely blank fields
+    showroomHeading.value = quizData.showroomSection.heading || '';
 
     const showroomImage = document.getElementById('showroom-image');
-    if (showroomImage && quizData.showroomSection.image) {
-      showroomImage.style.backgroundImage = `url('${quizData.showroomSection.image}')`;
-      showroomImage.innerHTML =
-        '<div class="upload-text">📷 Click to change showroom image</div>';
+    if (showroomImage) {
+      if (quizData.showroomSection.image && !quizData.isNewProduct) {
+        showroomImage.style.backgroundImage = `url('${quizData.showroomSection.image}')`;
+        showroomImage.innerHTML =
+          '<div class="upload-text">📷 Click to change showroom image</div>';
+      } else {
+        // Ensure upload area is clean for new products
+        showroomImage.style.backgroundImage = '';
+        showroomImage.innerHTML =
+          '<div class="upload-text">📤 Click to upload showroom image</div>';
+      }
     }
   }
 
@@ -641,8 +826,8 @@ function renderQuestions() {
   if (quizData.luxurySofasSection) {
     const luxurySofasTitle = document.getElementById('luxurySofasTitle');
     if (luxurySofasTitle) {
-      luxurySofasTitle.value =
-        quizData.luxurySofasSection.title || 'Luxury Products, Redefined';
+      // For new products, ensure completely blank fields
+      luxurySofasTitle.value = quizData.luxurySofasSection.title || '';
     }
 
     const luxurySofasIntro = document.getElementById('luxurySofasIntro');
@@ -652,8 +837,7 @@ function renderQuestions() {
 
     const luxurySofasSubtitle = document.getElementById('luxurySofasSubtitle');
     if (luxurySofasSubtitle) {
-      luxurySofasSubtitle.value =
-        quizData.luxurySofasSection.subtitle || 'Why Visit Our Showroom?';
+      luxurySofasSubtitle.value = quizData.luxurySofasSection.subtitle || '';
     }
 
     const luxurySofasConclusion = document.getElementById(
@@ -677,32 +861,57 @@ function renderQuestions() {
     'designDisasterHeading'
   );
   if (designDisasterHeading && quizData.designDisasterSection) {
-    designDisasterHeading.value =
-      quizData.designDisasterSection.heading ||
-      'Avoid a design disaster.\nTalk to an expert.';
-    document.getElementById('designDisasterButtonText').value =
-      quizData.designDisasterSection.buttonText || 'Book now';
-    document.getElementById('designDisasterButtonLink').value =
-      quizData.designDisasterSection.buttonLink ||
-      '/book-a-showroom-visit.html';
+    // For new products, ensure completely blank fields
+    designDisasterHeading.value = quizData.designDisasterSection.heading || '';
 
-    if (quizData.designDisasterSection.image) {
-      const designImage = document.getElementById('design-disaster-image');
-      designImage.style.backgroundImage = `url('${quizData.designDisasterSection.image}')`;
-      designImage.style.backgroundSize = 'cover';
-      designImage.innerHTML = '<div class="upload-text">📷 Change Image</div>';
+    const designDisasterButtonText = document.getElementById(
+      'designDisasterButtonText'
+    );
+    if (designDisasterButtonText) {
+      designDisasterButtonText.value =
+        quizData.designDisasterSection.buttonText || '';
+    }
+
+    const designDisasterButtonLink = document.getElementById(
+      'designDisasterButtonLink'
+    );
+    if (designDisasterButtonLink) {
+      designDisasterButtonLink.value =
+        quizData.designDisasterSection.buttonLink || '';
+    }
+
+    const designImage = document.getElementById('design-disaster-image');
+    if (designImage) {
+      if (quizData.designDisasterSection.image && !quizData.isNewProduct) {
+        designImage.style.backgroundImage = `url('${quizData.designDisasterSection.image}')`;
+        designImage.style.backgroundSize = 'cover';
+        designImage.innerHTML =
+          '<div class="upload-text">📷 Change Image</div>';
+      } else {
+        // Ensure upload area is clean for new products
+        designImage.style.backgroundImage = '';
+        designImage.innerHTML =
+          '<div class="upload-text">📤 Upload Image</div>';
+      }
     }
   }
 
   // Update Quiz Promo section UI
   const quizPromoHeading = document.getElementById('quizPromoHeading');
   if (quizPromoHeading && quizData.quizPromoSection) {
-    quizPromoHeading.value =
-      quizData.quizPromoSection.heading || 'Take our lifestyle quiz.';
-    document.getElementById('quizPromoButtonText').value =
-      quizData.quizPromoSection.buttonText || 'Try our Quiz';
-    document.getElementById('quizPromoButtonLink').value =
-      quizData.quizPromoSection.buttonLink || '#quiz';
+    // For new products, ensure completely blank fields
+    quizPromoHeading.value = quizData.quizPromoSection.heading || '';
+
+    const quizPromoButtonText = document.getElementById('quizPromoButtonText');
+    if (quizPromoButtonText) {
+      quizPromoButtonText.value = quizData.quizPromoSection.buttonText || '';
+    }
+
+    const quizPromoButtonLink = document.getElementById('quizPromoButtonLink');
+    if (quizPromoButtonLink) {
+      quizPromoButtonLink.value = quizData.quizPromoSection.buttonLink || '';
+    }
+
     renderQuizPromoFeatures();
     renderQuizPromoImages();
   }
@@ -810,7 +1019,6 @@ function addNewQuestion() {
       { id: 'a', text: 'Option A', image: '' },
       { id: 'b', text: 'Option B', image: '' },
       { id: 'c', text: 'Option C', image: '' },
-      { id: 'd', text: 'Option D', image: '' },
     ],
   });
   renderQuestions();
@@ -818,7 +1026,9 @@ function addNewQuestion() {
 
   // Scroll to the newly added question
   setTimeout(() => {
-    const questionCards = document.querySelectorAll('#questionsContainer .question-card');
+    const questionCards = document.querySelectorAll(
+      '#questionsContainer .question-card'
+    );
     if (questionCards.length > 0) {
       const lastQuestion = questionCards[questionCards.length - 1];
       lastQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -859,6 +1069,77 @@ function removeOption(qIndex, oIndex) {
     });
     renderQuestions();
     showStatus('Option removed', 'success');
+  }
+}
+
+// Product deletion functions
+async function confirmDeleteProduct() {
+  try {
+    if (currentProductKey === 'sofa') {
+      showStatus('Cannot delete the default sofa product', 'error');
+      return;
+    }
+
+    // Get current product details
+    const response = await apiClient.getProducts();
+    const product = response.products.find((p) => p.product_key === currentProductKey);
+
+    if (!product) {
+      showStatus('Product not found', 'error');
+      return;
+    }
+
+    const productName = `${product.emoji} ${product.name}`;
+
+    // Show confirmation dialog
+    const confirmed = confirm(
+      `Are you sure you want to delete "${productName}" quiz?\n\n` +
+      `This will permanently delete:\n` +
+      `• All quiz questions and content\n` +
+      `• All images and settings\n` +
+      `• This action cannot be undone\n\n` +
+      `Type YES to confirm deletion.`
+    );
+
+    if (confirmed) {
+      const userInput = prompt(
+        `To confirm deletion of "${productName}" quiz, please type: YES`
+      );
+
+      if (userInput === 'YES') {
+        await deleteProduct(currentProductKey);
+      } else if (userInput !== null) {
+        showStatus('Deletion cancelled - incorrect confirmation text', 'error');
+      }
+    }
+  } catch (error) {
+    console.error('Failed to confirm product deletion:', error);
+    showStatus('Failed to confirm product deletion: ' + error.message, 'error');
+  }
+}
+
+async function deleteProduct(productKey) {
+  try {
+    // Show loading message
+    showStatus('Deleting product...', 'info');
+
+    // Call the API to delete the product
+    await apiClient.deleteProduct(productKey);
+
+    // Update the product selector
+    await updateProductQuizSelector();
+
+    // Switch to the sofa product (default)
+    const selector = document.getElementById('productQuizSelector');
+    if (selector) {
+      selector.value = 'sofa';
+      await switchProductQuiz('sofa');
+    }
+
+    showStatus('Product deleted successfully', 'success');
+  } catch (error) {
+    console.error('Failed to delete product:', error);
+    showStatus('Failed to delete product: ' + error.message, 'error');
   }
 }
 
@@ -932,36 +1213,38 @@ function closeModal() {
 
 function previewQuiz() {
   // Save current data first to ensure preview shows latest changes
-  saveQuiz().then(() => {
-    // Set the current product in the API client for the preview
-    window.apiClient.setCurrentProduct(currentProductKey);
+  saveQuiz()
+    .then(() => {
+      // Set the current product in the API client for the preview
+      window.apiClient.setCurrentProduct(currentProductKey);
 
-    // Construct the correct URL for index.php
-    // Current URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/Dashboard.php
-    // Target URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/index.php
-    const currentUrl = window.location.href;
-    console.log('Current URL:', currentUrl);
+      // Construct the correct URL for index.php
+      // Current URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/Dashboard.php
+      // Target URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/index.php
+      const currentUrl = window.location.href;
+      console.log('Current URL:', currentUrl);
 
-    // Split the URL to get the base path
-    const urlParts = currentUrl.split('/');
-    const fileName = urlParts[urlParts.length - 1];
-    console.log('Current file:', fileName);
+      // Split the URL to get the base path
+      const urlParts = currentUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+      console.log('Current file:', fileName);
 
-    // Replace the filename with index.php
-    const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-    const previewUrl = `${baseUrl}/index.php?preview=1&t=${Date.now()}`;
+      // Replace the filename with index.php
+      const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
+      const previewUrl = `${baseUrl}/index.php?preview=1&t=${Date.now()}`;
 
-    console.log('Base URL:', baseUrl);
-    console.log('Opening preview URL:', previewUrl);
+      console.log('Base URL:', baseUrl);
+      console.log('Opening preview URL:', previewUrl);
 
-    // Open in new tab
-    window.open(previewUrl, '_blank');
+      // Open in new tab
+      window.open(previewUrl, '_blank');
 
-    showStatus('Opening preview in new tab...', 'success');
-  }).catch((error) => {
-    console.error('Failed to save before preview:', error);
-    showStatus('Failed to save data before preview', 'error');
-  });
+      showStatus('Opening preview in new tab...', 'success');
+    })
+    .catch((error) => {
+      console.error('Failed to save before preview:', error);
+      showStatus('Failed to save data before preview', 'error');
+    });
 }
 
 function generateQuizCode() {
@@ -972,7 +1255,13 @@ function showStatus(message, type) {
   const statusEl = document.getElementById('statusMessage');
 
   // Add icon based on status type
-  const icon = type === 'success' ? '✓' : '✗';
+  let icon;
+  switch(type) {
+    case 'success': icon = '✓'; break;
+    case 'error': icon = '✗'; break;
+    case 'info': icon = 'ℹ'; break;
+    default: icon = '●'; break;
+  }
   statusEl.innerHTML = `<strong>${icon}</strong> ${message}`;
 
   statusEl.className = `status-message status-${type}`;
@@ -1083,10 +1372,7 @@ async function saveQuizPromoSection() {
 // Save individual question
 async function saveQuestion(questionIndex) {
   try {
-    await apiClient.saveQuestionsOnly(
-      currentProductKey,
-      quizData.questions
-    );
+    await apiClient.saveQuestionsOnly(currentProductKey, quizData.questions);
 
     showStatus(`Question ${questionIndex + 1} saved successfully!`, 'success');
   } catch (error) {
@@ -1106,8 +1392,8 @@ window.onload = function () {
         images: [
           { src: '', alt: '' },
           { src: '', alt: '' },
-          { src: '', alt: '' }
-        ]
+          { src: '', alt: '' },
+        ],
       };
       renderGalleryItems();
     }

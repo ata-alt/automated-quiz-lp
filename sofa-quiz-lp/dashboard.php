@@ -45,11 +45,12 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <h1 id="dashboardTitle">🛋️ Sofa Quiz Content Management Dashboard</h1>
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
                         <label for="productQuizSelector" style="margin-right: 8px; font-weight: bold;">Current Quiz:</label>
                         <select id="productQuizSelector" onchange="switchProductQuiz(this.value)" style="color: black;">
                             <option style="color: black;" value="sofa">🛋️ Sofa Quiz</option>
                         </select>
+                        <button class="btn btn-danger" onclick="confirmDeleteProduct()" id="deleteProductBtn" style="padding: 8px 15px; display: none;">🗑️ Delete</button>
                     </div>
                     <button class="btn btn-success" onclick="openNewProductQuizModal()">+ Create New Product Quiz</button>
                 </div>
@@ -63,10 +64,6 @@
                     <span class="tab-icon">🎨</span>
                     <span class="tab-text">Hero Banner</span>
                 </button>
-                <button class="tab-btn" onclick="showTab('showroom')" data-tab="showroom">
-                    <span class="tab-icon">📸</span>
-                    <span class="tab-text">Showroom</span>
-                </button>
                 <button class="tab-btn" onclick="showTab('content')" data-tab="content">
                     <span class="tab-icon">✨</span>
                     <span class="tab-text">Luxury Content</span>
@@ -74,10 +71,6 @@
                 <button class="tab-btn" onclick="showTab('gallery')" data-tab="gallery">
                     <span class="tab-icon">🖼️</span>
                     <span class="tab-text">Gallery</span>
-                </button>
-                <button class="tab-btn" onclick="showTab('cta')" data-tab="cta">
-                    <span class="tab-icon">💡</span>
-                    <span class="tab-text">Expert CTA</span>
                 </button>
                 <button class="tab-btn" onclick="showTab('promo')" data-tab="promo">
                     <span class="tab-icon">🎯</span>
@@ -105,243 +98,159 @@
             <!-- Banner Tab Content -->
             <div class="tab-content active" id="banner-tab">
                 <div class="question-card" style="background: #fff3e0; border: 2px solid #ff6f00;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: #ff6f00; margin: 0;">🎨 Hero Banner Section</h2>
-                <button class="btn btn-success" onclick="saveBannerSection()" style="padding: 8px 20px;">💾 Save Banner</button>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Heading:</label>
-                    <input type="text"
-                        id="bannerMainHeading"
-                        class="question-input"
-                        value="Match Your Personality To A Luxury Sofa."
-                        onchange="updateBannerText('mainHeading', this.value)"
-                        placeholder="Enter main heading...">
-
-                    <label style="font-weight: bold; display: block; margin: 15px 0 10px 0;">Sub Heading:</label>
-                    <input type="text"
-                        id="bannerSubHeading"
-                        class="question-input"
-                        value="Try Our AI Tool"
-                        onchange="updateBannerText('subHeading', this.value)"
-                        placeholder="Enter sub heading...">
-                </div>
-                <div>
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Desktop Background Image:</label>
-                    <div class="image-upload-area"
-                        id="banner-desktop-image"
-                        style="height: 120px; margin-bottom: 15px;"
-                        onclick="document.getElementById('banner-desktop-file').click()">
-                        <div class="upload-text">📤 Upload Desktop Banner</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #ff6f00; margin: 0;">🎨 Hero Banner Section</h2>
+                        <button class="btn btn-success" onclick="saveBannerSection()" style="padding: 8px 20px;">💾 Save Banner</button>
                     </div>
-                    <input type="file" id="banner-desktop-file"
-                        style="display: none;" accept="image/*"
-                        onchange="handleBannerImageUpload('desktop', this)">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Heading:</label>
+                            <input type="text"
+                                id="bannerMainHeading"
+                                class="question-input"
+                                value=""
+                                onchange="updateBannerText('mainHeading', this.value)"
+                                placeholder="Type your main heading here...">
 
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Mobile Background Image:</label>
-                    <div class="image-upload-area"
-                        id="banner-mobile-image"
-                        style="height: 120px;"
-                        onclick="document.getElementById('banner-mobile-file').click()">
-                        <div class="upload-text">📱 Upload Mobile Banner</div>
-                    </div>
-                    <input type="file" id="banner-mobile-file"
-                        style="display: none;" accept="image/*"
-                        onchange="handleBannerImageUpload('mobile', this)">
-                </div>
-            </div>
-                </div>
-            </div>
+                            <label style="font-weight: bold; display: block; margin: 15px 0 10px 0;">Sub Heading:</label>
+                            <input type="text"
+                                id="bannerSubHeading"
+                                class="question-input"
+                                value=""
+                                onchange="updateBannerText('subHeading', this.value)"
+                                placeholder="Type your sub heading here...">
+                        </div>
+                        <div>
+                            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Desktop Background Image:</label>
+                            <div class="image-upload-area"
+                                id="banner-desktop-image"
+                                style="height: 120px; margin-bottom: 15px;"
+                                onclick="document.getElementById('banner-desktop-file').click()">
+                                <div class="upload-text">📤 Upload Desktop Banner</div>
+                            </div>
+                            <input type="file" id="banner-desktop-file"
+                                style="display: none;" accept="image/*"
+                                onchange="handleBannerImageUpload('desktop', this)">
 
-            <!-- Showroom Tab Content -->
-            <div class="tab-content" id="showroom-tab">
-                <div class="question-card" style="background: #e8f4f8; border: 2px solid #2196F3;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: #2196F3; margin: 0;">📸 Showroom Section</h2>
-                <button class="btn btn-success" onclick="saveShowroomSection()" style="padding: 8px 20px;">💾 Save Showroom</button>
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading:</label>
-                <input type="text"
-                    id="showroomHeading"
-                    class="question-input"
-                    value="The largest luxury sofa showroom in London"
-                    onchange="updateShowroomHeading(this.value)"
-                    placeholder="Enter showroom section heading...">
-            </div>
-            <div>
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Showroom Image:</label>
-                <div class="image-upload-area"
-                    id="showroom-image"
-                    style="max-width: 600px; height: 300px; background-size: contain; background-repeat: no-repeat;"
-                    onclick="document.getElementById('showroom-image-file').click()">
-                    <div class="upload-text">
-                        📤 Click to upload showroom image
+                            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Mobile Background Image:</label>
+                            <div class="image-upload-area"
+                                id="banner-mobile-image"
+                                style="height: 120px;"
+                                onclick="document.getElementById('banner-mobile-file').click()">
+                                <div class="upload-text">📱 Upload Mobile Banner</div>
+                            </div>
+                            <input type="file" id="banner-mobile-file"
+                                style="display: none;" accept="image/*"
+                                onchange="handleBannerImageUpload('mobile', this)">
+                        </div>
                     </div>
-                </div>
-                <input type="file"
-                    id="showroom-image-file"
-                    style="display: none;"
-                    accept="image/*"
-                    onchange="handleShowroomImageUpload(this)">
-            </div>
                 </div>
             </div>
 
             <!-- Luxury Content Tab Content -->
             <div class="tab-content" id="content-tab">
                 <div class="question-card" style="background: #f0e6ff; border: 2px solid #6b46c1;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: #6b46c1; margin: 0;">✨ Luxury Sofas Content Section</h2>
-                <button class="btn btn-success" onclick="saveLuxurySofasSection()" style="padding: 8px 20px;">💾 Save Content</button>
-            </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #6b46c1; margin: 0;">✨ Luxury Sofas Content Section</h2>
+                        <button class="btn btn-success" onclick="saveLuxurySofasSection()" style="padding: 8px 20px;">💾 Save Content</button>
+                    </div>
 
-            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Title:</label>
-            <input type="text"
-                id="luxurySofasTitle"
-                class="question-input"
-                value="Luxury Sofas, Redefined"
-                onchange="updateLuxurySofasContent('title', this.value)"
-                placeholder="Enter main title...">
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Title:</label>
+                    <input type="text"
+                        id="luxurySofasTitle"
+                        class="question-input"
+                        value=""
+                        onchange="updateLuxurySofasContent('title', this.value)"
+                        placeholder="Type your main title here...">
 
-            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Introduction Paragraph:</label>
-            <textarea id="luxurySofasIntro"
-                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-height: 100px; margin-bottom: 15px;"
-                onchange="updateLuxurySofasContent('introduction', this.value)"
-                placeholder="Enter introduction paragraph...">A sofa is never just a sofa. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell sofas; we curate spaces of sophistication, tailored to those who appreciate life's finer details.</textarea>
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Introduction Paragraph:</label>
+                    <textarea id="luxurySofasIntro"
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-height: 100px; margin-bottom: 15px;"
+                        onchange="updateLuxurySofasContent('introduction', this.value)"
+                        placeholder="Enter introduction paragraph describing your luxury products..."></textarea>
 
-            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Subtitle:</label>
-            <input type="text"
-                id="luxurySofasSubtitle"
-                class="question-input"
-                value="Why Visit Our Showroom?"
-                onchange="updateLuxurySofasContent('subtitle', this.value)"
-                placeholder="Enter section subtitle...">
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Subtitle:</label>
+                    <input type="text"
+                        id="luxurySofasSubtitle"
+                        class="question-input"
+                        value=""
+                        onchange="updateLuxurySofasContent('subtitle', this.value)"
+                        placeholder="Type your section subtitle here...">
 
-            <div style="margin-bottom: 20px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Showroom Points:</label>
-                <div id="luxurySofasPoints"></div>
-                <button class="btn btn-primary" onclick="addLuxurySofasPoint()" style="margin-top: 10px;">+ Add Point</button>
-            </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Showroom Points:</label>
+                        <div id="luxurySofasPoints"></div>
+                        <button class="btn btn-primary" onclick="addLuxurySofasPoint()" style="margin-top: 10px;">+ Add Point</button>
+                    </div>
 
-            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Conclusion Paragraph:</label>
-            <textarea id="luxurySofasConclusion"
-                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-height: 80px;"
-                onchange="updateLuxurySofasContent('conclusion', this.value)"
-                placeholder="Enter conclusion paragraph..."><strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the sofa you never knew you needed.</textarea>
+                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Conclusion Paragraph:</label>
+                    <textarea id="luxurySofasConclusion"
+                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-height: 80px;"
+                        onchange="updateLuxurySofasContent('conclusion', this.value)"
+                        placeholder="Type your conclusion paragraph here..."></textarea>
                 </div>
             </div>
 
             <!-- Gallery Tab Content -->
             <div class="tab-content" id="gallery-tab">
                 <div class="question-card" style="background: #f3e5f5; border: 2px solid #9c27b0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: #9c27b0; margin: 0;">🖼️ Gallery Section (3 Images)</h2>
-                <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
-            </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-                <div id="gallery-item-0"></div>
-                <div id="gallery-item-1"></div>
-                <div id="gallery-item-2"></div>
-            </div>
-                </div>
-            </div>
-
-            <!-- CTA Tab Content -->
-            <div class="tab-content" id="cta-tab">
-                <div class="question-card" style="background: #e3f2fd; border: 2px solid #1976d2;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: #1976d2; margin: 0;">💡 Design Expert CTA Section</h2>
-                <button class="btn btn-success" onclick="saveDesignCTASection()" style="padding: 8px 20px;">💾 Save CTA</button>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div>
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading (use \n for line break):</label>
-                    <textarea id="designDisasterHeading"
-                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px; min-height: 80px;"
-                        onchange="updateDesignDisasterText('heading', this.value)"
-                        placeholder="Enter heading...">Avoid a design disaster.
-Talk to an expert.</textarea>
-
-                    <label style="font-weight: bold; display: block; margin: 15px 0 10px 0;">Button Text:</label>
-                    <input type="text"
-                        id="designDisasterButtonText"
-                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;"
-                        value="Book now"
-                        onchange="updateDesignDisasterText('buttonText', this.value)"
-                        placeholder="Enter button text...">
-
-                    <label style="font-weight: bold; display: block; margin: 15px 0 10px 0;">Button Link:</label>
-                    <input type="text"
-                        id="designDisasterButtonLink"
-                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;"
-                        value="/book-a-showroom-visit.html"
-                        onchange="updateDesignDisasterText('buttonLink', this.value)"
-                        placeholder="Enter button link...">
-                </div>
-                <div>
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Image:</label>
-                    <div class="image-upload-area"
-                        id="design-disaster-image"
-                        style="height: 250px;"
-                        onclick="document.getElementById('design-disaster-file').click()">
-                        <div class="upload-text">📤 Upload Image</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #9c27b0; margin: 0;">🖼️ Gallery Section (3 Images)</h2>
+                        <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
                     </div>
-                    <input type="file" id="design-disaster-file"
-                        style="display: none;" accept="image/*"
-                        onchange="handleDesignDisasterImageUpload(this)">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                        <div id="gallery-item-0"></div>
+                        <div id="gallery-item-1"></div>
+                        <div id="gallery-item-2"></div>
+                    </div>
                 </div>
             </div>
-                </div>
-            </div>
-
             <!-- Promo Tab Content -->
             <div class="tab-content" id="promo-tab">
                 <div class="question-card" style="background: #fff8e1; border: 2px solid #ff9800;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: #ff9800; margin: 0;">🎯 Quiz Promo Section</h2>
-                <button class="btn btn-success" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading:</label>
-                <input type="text"
-                    id="quizPromoHeading"
-                    class="question-input"
-                    value="Take our lifestyle quiz & find the perfect sofa match."
-                    onchange="updateQuizPromoHeading(this.value)"
-                    placeholder="Enter promo section heading...">
-            </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #ff9800; margin: 0;">🎯 Quiz Promo Section</h2>
+                        <button class="btn btn-success" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading:</label>
+                        <input type="text"
+                            id="quizPromoHeading"
+                            class="question-input"
+                            value=""
+                            onchange="updateQuizPromoHeading(this.value)"
+                            placeholder="Type your section heading here...">
+                    </div>
 
-            <div style="margin-bottom: 20px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Features List:</label>
-                <div id="quizPromoFeatures"></div>
-                <button class="btn btn-primary" onclick="addQuizPromoFeature()" style="margin-top: 10px;">+ Add Feature</button>
-            </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Features List:</label>
+                        <div id="quizPromoFeatures"></div>
+                        <button class="btn btn-primary" onclick="addQuizPromoFeature()" style="margin-top: 10px;">+ Add Feature</button>
+                    </div>
 
-            <div style="margin-bottom: 20px;">
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Button Settings:</label>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <input type="text"
-                        id="quizPromoButtonText"
-                        placeholder="Button Text"
-                        value="Try our Sofa Matching Quiz"
-                        onchange="updateQuizPromoButton('text', this.value)"
-                        style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                    <input type="text"
-                        id="quizPromoButtonLink"
-                        placeholder="Button Link"
-                        value="#sofaquiz"
-                        onchange="updateQuizPromoButton('link', this.value)"
-                        style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                </div>
-            </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Button Settings:</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <input type="text"
+                                id="quizPromoButtonText"
+                                placeholder="Try our Matching Quiz"
+                                value=""
+                                onchange="updateQuizPromoButton('text', this.value)"
+                                style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                            <input type="text"
+                                id="quizPromoButtonLink"
+                                placeholder="#quiz"
+                                value=""
+                                onchange="updateQuizPromoButton('link', this.value)"
+                                style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                    </div>
 
-            <div>
-                <label style="font-weight: bold; display: block; margin-bottom: 10px;">Slider Images:</label>
-                <div id="quizPromoImages" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;"></div>
-                <button class="btn btn-primary" onclick="addQuizPromoImage()" style="margin-top: 10px;">+ Add Image</button>
-            </div>
+                    <div>
+                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Slider Images:</label>
+                        <div id="quizPromoImages" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;"></div>
+                        <button class="btn btn-primary" onclick="addQuizPromoImage()" style="margin-top: 10px;">+ Add Image</button>
+                    </div>
                 </div>
             </div>
 
@@ -582,21 +491,15 @@ Talk to an expert.</textarea>
         actionsContainer.innerHTML = '';
 
         // Add specific actions based on tab
-        switch(tabName) {
+        switch (tabName) {
             case 'banner':
                 actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveBannerSection()">💾 Save Banner</button>';
-                break;
-            case 'showroom':
-                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveShowroomSection()">💾 Save Showroom</button>';
                 break;
             case 'content':
                 actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveLuxurySofasSection()">💾 Save Content</button>';
                 break;
             case 'gallery':
                 actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveGallerySection()">💾 Save Gallery</button>';
-                break;
-            case 'cta':
-                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveDesignCTASection()">💾 Save CTA</button>';
                 break;
             case 'promo':
                 actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveQuizPromoSection()">💾 Save Promo</button>';

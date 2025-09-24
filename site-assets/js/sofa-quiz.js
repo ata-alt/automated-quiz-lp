@@ -9,7 +9,7 @@
       // Wait for API client to be available (with timeout)
       let attempts = 0;
       while (typeof window.apiClient === 'undefined' && attempts < 50) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
         attempts++;
       }
 
@@ -19,14 +19,25 @@
         console.log('[Quiz] Loading questions for product:', currentProduct);
         const response = await window.apiClient.getContent(currentProduct);
 
-        if (response && response.content && response.content.questions && response.content.questions.length > 0) {
-          console.log('[Quiz] Successfully loaded questions from database:', response.content.questions.length, 'questions');
+        if (
+          response &&
+          response.content &&
+          response.content.questions &&
+          response.content.questions.length > 0
+        ) {
+          console.log(
+            '[Quiz] Successfully loaded questions from database:',
+            response.content.questions.length,
+            'questions'
+          );
           return response.content.questions;
         } else {
           console.warn('[Quiz] No questions found in database, using defaults');
         }
       } else {
-        console.warn('[Quiz] API client not available after timeout, using defaults');
+        console.warn(
+          '[Quiz] API client not available after timeout, using defaults'
+        );
       }
     } catch (error) {
       console.error('[Quiz] Error loading data from database:', error);
@@ -233,18 +244,24 @@
       }
 
       // Show loading state
-      quiz.innerHTML = '<div class="loading-state"><h3>Loading quiz...</h3></div>';
+      quiz.innerHTML =
+        '<div class="loading-state"><h3>Loading quiz...</h3></div>';
 
       try {
         // Load questions dynamically
         this.questions = await loadQuizData();
 
         if (!this.questions || this.questions.length === 0) {
-          quiz.innerHTML = '<div class="error-state"><h3>No quiz questions available</h3></div>';
+          quiz.innerHTML =
+            '<div class="error-state"><h3>No quiz questions available</h3></div>';
           return;
         }
 
-        console.log('[Quiz] Quiz initialized with', this.questions.length, 'questions');
+        console.log(
+          '[Quiz] Quiz initialized with',
+          this.questions.length,
+          'questions'
+        );
 
         // Reset to first question
         this.current = 0;
@@ -253,7 +270,8 @@
         this.renderQuestion(true); // Pass true to indicate this is the initial render
       } catch (error) {
         console.error('[Quiz] Failed to initialize quiz:', error);
-        quiz.innerHTML = '<div class="error-state"><h3>Failed to load quiz</h3></div>';
+        quiz.innerHTML =
+          '<div class="error-state"><h3>Failed to load quiz</h3></div>';
       }
     },
 
@@ -278,7 +296,8 @@
         const optionsHTML = q.options
           .map(function (opt) {
             // Handle both base64 and URL images
-            let imageUrl = opt.image || '../site-assets/images/sofa-quiz/placeholder.jpg';
+            let imageUrl =
+              opt.image || '../site-assets/images/sofa-quiz/placeholder.jpg';
 
             // Fix absolute paths from database to relative paths for HTML location
             if (imageUrl.startsWith('/site-assets/')) {
@@ -286,11 +305,11 @@
             }
 
             return (
-              '<button class="option-button" onclick="styleQuiz.handleAnswer(\'' +
+              '<button class="option-button" onclick="styleQuiz.handleAnswer.call(this, \'' +
               q.id +
               "', '" +
               opt.id +
-              '\')">' +
+              '\', event)">' +
               '<img src="' +
               imageUrl +
               '" alt="' +
@@ -338,20 +357,33 @@
       }, 300);
     },
 
-    handleAnswer: function (questionId, optionId) {
-      const index = this.answers.findIndex((a) => a.questionId == questionId);
+    handleAnswer: function (questionId, optionId, evt) {
+      // Flip all option buttons
+      const allButtons = document.querySelectorAll('.option-button');
+      allButtons.forEach(button => {
+        button.classList.add('flip-all');
+      });
+
+      // Mark the clicked button
+      this.classList.add('clicked');
+
+      const quiz = styleQuiz; // Reference to the quiz object
+      const index = quiz.answers.findIndex((a) => a.questionId == questionId);
       if (index > -1) {
-        this.answers[index].optionId = optionId;
+        quiz.answers[index].optionId = optionId;
       } else {
-        this.answers.push({ questionId: questionId, optionId: optionId });
+        quiz.answers.push({ questionId: questionId, optionId: optionId });
       }
 
-      if (this.current < this.questions.length - 1) {
-        this.current++;
-        this.renderQuestion(false);
-      } else {
-        this.renderResult();
-      }
+      // Wait for the flip animation to complete before moving to next question
+      setTimeout(() => {
+        if (quiz.current < quiz.questions.length - 1) {
+          quiz.current++;
+          quiz.renderQuestion(false);
+        } else {
+          quiz.renderResult();
+        }
+      }, 600); // Match the flip animation duration
     },
 
     goBack: function () {
@@ -549,7 +581,7 @@
 
   // Initialize quiz when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', async function() {
+    document.addEventListener('DOMContentLoaded', async function () {
       console.log('[Quiz] DOM loaded, initializing quiz...');
       if (window.styleQuiz && typeof window.styleQuiz.init === 'function') {
         await window.styleQuiz.init();
