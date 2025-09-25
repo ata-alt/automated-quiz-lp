@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS automated_quiz;
 USE automated_quiz;
 
 -- Table for storing different product quizzes
-CREATE TABLE product_quizzes (
+CREATE TABLE automated_product_quizzes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_key VARCHAR(50) UNIQUE NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE product_quizzes (
 );
 
 -- Table for storing quiz content sections
-CREATE TABLE quiz_content (
+CREATE TABLE automated_quiz_content (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_key VARCHAR(50) NOT NULL,
     section_type ENUM('banner', 'showroom', 'luxury_content', 'gallery', 'design_expert', 'quiz_promo') NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE quiz_content (
 );
 
 -- Table for storing quiz questions
-CREATE TABLE quiz_questions (
+CREATE TABLE automated_quiz_questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_key VARCHAR(50) NOT NULL,
     question_order INT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE quiz_questions (
 );
 
 -- Table for storing question options
-CREATE TABLE question_options (
+CREATE TABLE automated_question_options (
     id INT AUTO_INCREMENT PRIMARY KEY,
     question_id INT NOT NULL,
     option_key VARCHAR(10) NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE question_options (
 );
 
 -- Table for storing current active product
-CREATE TABLE system_settings (
+CREATE TABLE automated_system_settings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     setting_key VARCHAR(50) UNIQUE NOT NULL,
     setting_value TEXT,
@@ -63,15 +63,15 @@ CREATE TABLE system_settings (
 );
 
 -- Insert default sofa quiz
-INSERT INTO product_quizzes (product_key, name, emoji, description)
+INSERT INTO automated_product_quizzes (product_key, name, emoji, description)
 VALUES ('sofa', 'Sofa', '🛋️', 'Luxury sofa matching quiz');
 
 -- Insert default current product setting
-INSERT INTO system_settings (setting_key, setting_value)
+INSERT INTO automated_system_settings (setting_key, setting_value)
 VALUES ('current_product', 'sofa');
 
 -- Insert default sofa content sections
-INSERT INTO quiz_content (product_key, section_type, content_data) VALUES
+INSERT INTO automated_quiz_content (product_key, section_type, content_data) VALUES
 ('sofa', 'banner', JSON_OBJECT(
     'mainHeading', 'Match Your Personality To A Luxury Sofa.',
     'subHeading', 'Try Our AI Tool',
@@ -114,12 +114,11 @@ INSERT INTO quiz_content (product_key, section_type, content_data) VALUES
 ));
 
 -- Insert default sofa question
-INSERT INTO quiz_questions (product_key, question_order, question_text)
+INSERT INTO automated_quiz_questions (product_key, question_order, question_text)
 VALUES ('sofa', 1, 'What best describes your household?');
 
 -- Insert default options for the question
-INSERT INTO question_options (question_id, option_key, option_text, image_url, option_order) VALUES
+INSERT INTO automated_question_options (question_id, option_key, option_text, image_url, option_order) VALUES
 (1, 'a', 'Young kids—energetic, messy, and always moving', '/site-assets/images/sofa-quiz/young-kids-energetic-messy-and-always-moving.jpg', 1),
 (1, 'b', 'Teenagers or young adults still at home', '/site-assets/images/sofa-quiz/teenagers-or-young-adults-still-at-home.jpg', 2),
-(1, 'c', 'Just the two of us—calm and design-focused', '/site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg', 3),
-(1, 'd', 'Grown-up home—quiet, elegant, mostly adults', '/site-assets/images/sofa-quiz/grown-up-home.jpg', 4);
+(1, 'c', 'Just the two of us—calm and design-focused', '/site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg', 3)

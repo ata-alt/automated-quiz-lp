@@ -12,7 +12,7 @@ $db = $database->getConnection();
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-switch($method) {
+switch ($method) {
     case 'GET':
         getSettings($db);
         break;
@@ -25,13 +25,14 @@ switch($method) {
         break;
 }
 
-function getSettings($db) {
+function getSettings($db)
+{
     try {
         $settingKey = $_GET['key'] ?? '';
 
         if ($settingKey) {
             // Get specific setting
-            $query = "SELECT setting_value FROM system_settings WHERE setting_key = ?";
+            $query = "SELECT setting_value FROM automated_system_settings WHERE setting_key = ?";
             $stmt = $db->prepare($query);
             $stmt->execute([$settingKey]);
 
@@ -43,7 +44,7 @@ function getSettings($db) {
             }
         } else {
             // Get all settings
-            $query = "SELECT setting_key, setting_value FROM system_settings";
+            $query = "SELECT setting_key, setting_value FROM automated_system_settings";
             $stmt = $db->prepare($query);
             $stmt->execute();
 
@@ -54,12 +55,13 @@ function getSettings($db) {
 
             sendResponse(['settings' => $settings]);
         }
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         sendError('Failed to fetch settings: ' . $e->getMessage(), 500);
     }
 }
 
-function updateSettings($db) {
+function updateSettings($db)
+{
     try {
         $data = json_decode(file_get_contents("php://input"), true);
 
@@ -68,7 +70,7 @@ function updateSettings($db) {
         }
 
         $query = "
-            INSERT INTO system_settings (setting_key, setting_value)
+            INSERT INTO automated_system_settings (setting_key, setting_value)
             VALUES (?, ?)
             ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)
         ";
@@ -76,8 +78,7 @@ function updateSettings($db) {
         $stmt->execute([$data['key'], $data['value']]);
 
         sendResponse(['message' => 'Setting updated successfully']);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         sendError('Failed to update setting: ' . $e->getMessage(), 500);
     }
 }
-?>

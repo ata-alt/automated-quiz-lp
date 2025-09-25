@@ -33,7 +33,7 @@ switch ($method) {
 function getProducts($db)
 {
     try {
-        $query = "SELECT * FROM product_quizzes WHERE is_active = 1 ORDER BY created_at ASC";
+        $query = "SELECT * FROM automated_product_quizzes WHERE is_active = 1 ORDER BY created_at ASC";
         $stmt = $db->prepare($query);
         $stmt->execute();
 
@@ -54,7 +54,7 @@ function createProduct($db)
         }
 
         // Check if product already exists
-        $checkQuery = "SELECT id FROM product_quizzes WHERE product_key = ?";
+        $checkQuery = "SELECT id FROM automated_product_quizzes WHERE product_key = ?";
         $checkStmt = $db->prepare($checkQuery);
         $checkStmt->execute([$data['product_key']]);
 
@@ -63,7 +63,7 @@ function createProduct($db)
         }
 
         // Insert new product
-        $query = "INSERT INTO product_quizzes (product_key, name, emoji, description) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO automated_product_quizzes (product_key, name, emoji, description) VALUES (?, ?, ?, ?)";
         $stmt = $db->prepare($query);
         $stmt->execute([
             $data['product_key'],
@@ -148,7 +148,7 @@ function createDefaultContent($db, $productKey, $productName)
         ]
     ];
 
-    $query = "INSERT INTO quiz_content (product_key, section_type, content_data) VALUES (?, ?, ?)";
+    $query = "INSERT INTO automated_quiz_content (product_key, section_type, content_data) VALUES (?, ?, ?)";
     $stmt = $db->prepare($query);
 
     foreach ($defaultSections as $section) {
@@ -160,7 +160,7 @@ function createDefaultContent($db, $productKey, $productName)
     }
 
     // Create default question
-    $questionQuery = "INSERT INTO quiz_questions (product_key, question_order, question_text) VALUES (?, 1, ?)";
+    $questionQuery = "INSERT INTO automated_quiz_questions (product_key, question_order, question_text) VALUES (?, 1, ?)";
     $questionStmt = $db->prepare($questionQuery);
     $questionStmt->execute([
         $productKey,
@@ -170,7 +170,7 @@ function createDefaultContent($db, $productKey, $productName)
     $questionId = $db->lastInsertId();
 
     // Create default options
-    $optionQuery = "INSERT INTO question_options (question_id, option_key, option_text, option_order) VALUES (?, ?, ?, ?)";
+    $optionQuery = "INSERT INTO automated_question_options (question_id, option_key, option_text, option_order) VALUES (?, ?, ?, ?)";
     $optionStmt = $db->prepare($optionQuery);
 
     $defaultOptions = [
@@ -198,7 +198,7 @@ function updateProduct($db)
             sendError('Product key is required');
         }
 
-        $query = "UPDATE product_quizzes SET name = ?, emoji = ?, description = ? WHERE product_key = ?";
+        $query = "UPDATE automated_product_quizzes SET name = ?, emoji = ?, description = ? WHERE product_key = ?";
         $stmt = $db->prepare($query);
         $stmt->execute([
             $data['name'] ?? '',
@@ -230,7 +230,7 @@ function deleteProduct($db)
         $db->beginTransaction();
 
         // First, get all question IDs for this product to delete their options
-        $questionQuery = "SELECT id FROM quiz_questions WHERE product_key = ?";
+        $questionQuery = "SELECT id FROM automated_quiz_questions WHERE product_key = ?";
         $questionStmt = $db->prepare($questionQuery);
         $questionStmt->execute([$productKey]);
         $questionIds = $questionStmt->fetchAll(PDO::FETCH_COLUMN);
@@ -238,23 +238,23 @@ function deleteProduct($db)
         // Delete question options for all questions of this product
         if (!empty($questionIds)) {
             $placeholders = str_repeat('?,', count($questionIds) - 1) . '?';
-            $optionQuery = "DELETE FROM question_options WHERE question_id IN ($placeholders)";
+            $optionQuery = "DELETE FROM automated_question_options WHERE question_id IN ($placeholders)";
             $optionStmt = $db->prepare($optionQuery);
             $optionStmt->execute($questionIds);
         }
 
         // Delete all quiz questions for this product
-        $deleteQuestionsQuery = "DELETE FROM quiz_questions WHERE product_key = ?";
+        $deleteQuestionsQuery = "DELETE FROM automated_quiz_questions WHERE product_key = ?";
         $deleteQuestionsStmt = $db->prepare($deleteQuestionsQuery);
         $deleteQuestionsStmt->execute([$productKey]);
 
         // Delete all quiz content for this product
-        $deleteContentQuery = "DELETE FROM quiz_content WHERE product_key = ?";
+        $deleteContentQuery = "DELETE FROM automated_quiz_content WHERE product_key = ?";
         $deleteContentStmt = $db->prepare($deleteContentQuery);
         $deleteContentStmt->execute([$productKey]);
 
         // Finally, delete the product itself
-        $deleteProductQuery = "DELETE FROM product_quizzes WHERE product_key = ?";
+        $deleteProductQuery = "DELETE FROM automated_product_quizzes WHERE product_key = ?";
         $deleteProductStmt = $db->prepare($deleteProductQuery);
         $deleteProductStmt->execute([$productKey]);
 

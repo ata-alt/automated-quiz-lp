@@ -1,5 +1,5 @@
 -- Create quiz_results table for storing user quiz submissions
-CREATE TABLE IF NOT EXISTS quiz_results (
+CREATE TABLE IF NOT EXISTS automated_quiz_results (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,

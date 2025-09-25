@@ -12,7 +12,7 @@ $db = $database->getConnection();
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-switch($method) {
+switch ($method) {
     case 'GET':
         getContent($db);
         break;
@@ -25,12 +25,13 @@ switch($method) {
         break;
 }
 
-function getContent($db) {
+function getContent($db)
+{
     try {
         $productKey = $_GET['product_key'] ?? 'sofa';
 
         // Get all content sections for the product
-        $query = "SELECT section_type, content_data FROM quiz_content WHERE product_key = ?";
+        $query = "SELECT section_type, content_data FROM automated_quiz_content WHERE product_key = ?";
         $stmt = $db->prepare($query);
         $stmt->execute([$productKey]);
 
@@ -45,8 +46,8 @@ function getContent($db) {
         $questionsQuery = "
             SELECT q.id, q.question_order, q.question_text,
                    o.option_key, o.option_text, o.image_url, o.option_order
-            FROM quiz_questions q
-            LEFT JOIN question_options o ON q.id = o.question_id
+            FROM automated_quiz_questions q
+            LEFT JOIN automated_question_options o ON q.id = o.question_id
             WHERE q.product_key = ?
             ORDER BY q.question_order, o.option_order
         ";
@@ -79,12 +80,13 @@ function getContent($db) {
         $content['questions'] = array_values($questions);
 
         sendResponse(['content' => $content]);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         sendError('Failed to fetch content: ' . $e->getMessage(), 500);
     }
 }
 
-function saveContent($db) {
+function saveContent($db)
+{
     try {
         $data = json_decode(file_get_contents("php://input"), true);
         $productKey = $data['product_key'] ?? 'sofa';
@@ -95,7 +97,7 @@ function saveContent($db) {
         if (isset($data['sections'])) {
             foreach ($data['sections'] as $sectionType => $sectionData) {
                 $query = "
-                    INSERT INTO quiz_content (product_key, section_type, content_data)
+                    INSERT INTO automated_quiz_content (product_key, section_type, content_data)
                     VALUES (?, ?, ?)
                     ON DUPLICATE KEY UPDATE content_data = VALUES(content_data)
                 ";
@@ -112,21 +114,21 @@ function saveContent($db) {
         if (isset($data['questions'])) {
             // Delete existing questions and options for this product
             $deleteOptionsQuery = "
-                DELETE o FROM question_options o
-                INNER JOIN quiz_questions q ON o.question_id = q.id
+                DELETE o FROM automated_question_options o
+                INNER JOIN automated_quiz_questions q ON o.question_id = q.id
                 WHERE q.product_key = ?
             ";
             $deleteOptionsStmt = $db->prepare($deleteOptionsQuery);
             $deleteOptionsStmt->execute([$productKey]);
 
-            $deleteQuestionsQuery = "DELETE FROM quiz_questions WHERE product_key = ?";
+            $deleteQuestionsQuery = "DELETE FROM automated_quiz_questions WHERE product_key = ?";
             $deleteQuestionsStmt = $db->prepare($deleteQuestionsQuery);
             $deleteQuestionsStmt->execute([$productKey]);
 
             // Insert new questions
             foreach ($data['questions'] as $index => $question) {
                 $questionQuery = "
-                    INSERT INTO quiz_questions (product_key, question_order, question_text)
+                    INSERT INTO automated_quiz_questions (product_key, question_order, question_text)
                     VALUES (?, ?, ?)
                 ";
                 $questionStmt = $db->prepare($questionQuery);
@@ -142,7 +144,7 @@ function saveContent($db) {
                 if (isset($question['options'])) {
                     foreach ($question['options'] as $optionIndex => $option) {
                         $optionQuery = "
-                            INSERT INTO question_options (question_id, option_key, option_text, image_url, option_order)
+                            INSERT INTO automated_question_options (question_id, option_key, option_text, image_url, option_order)
                             VALUES (?, ?, ?, ?, ?)
                         ";
                         $optionStmt = $db->prepare($optionQuery);
@@ -160,9 +162,8 @@ function saveContent($db) {
 
         $db->commit();
         sendResponse(['message' => 'Content saved successfully']);
-    } catch(Exception $e) {
+    } catch (Exception $e) {
         $db->rollBack();
         sendError('Failed to save content: ' . $e->getMessage(), 500);
     }
 }
-?>

@@ -51,7 +51,7 @@ function storeQuizResult($db)
         }
 
         // Prepare SQL statement
-        $query = "INSERT INTO quiz_results (name, email, phone, product_key, quiz_answers)
+        $query = "INSERT INTO automated_quiz_results (name, email, phone, product_key, quiz_answers)
                   VALUES (:name, :email, :phone, :product_key, :quiz_answers)";
 
         $stmt = $db->prepare($query);
@@ -74,7 +74,6 @@ function storeQuizResult($db)
         } else {
             sendError("Failed to store quiz result", 500);
         }
-
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
         sendError("Database error occurred", 500);
@@ -94,7 +93,7 @@ function getQuizResults($db)
 
         // Build query
         $query = "SELECT id, name, email, phone, product_key, quiz_answers, created_at
-                  FROM quiz_results";
+                  FROM automated_quiz_results";
         $params = [];
 
         if ($product_key) {
@@ -122,7 +121,7 @@ function getQuizResults($db)
         }
 
         // Get total count
-        $countQuery = "SELECT COUNT(*) as total FROM quiz_results";
+        $countQuery = "SELECT COUNT(*) as total FROM automated_quiz_results";
         if ($product_key) {
             $countQuery .= " WHERE product_key = :product_key";
         }
@@ -143,7 +142,6 @@ function getQuizResults($db)
                 'total' => intval($total)
             ]
         ]);
-
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
         sendError("Database error occurred", 500);
