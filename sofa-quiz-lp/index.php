@@ -58,7 +58,7 @@
     <link href="../site-assets/css/style-quiz-widget.css?v=6" rel="stylesheet">
     <script src="../api/api-client.js"></script>
     <script src="../site-assets/js/frame.sofa-quiz.js?v=1"></script>
-    <script src="../site-assets/js/sofa-quiz.js" defer></script>
+    <script src="../site-assets/js/sofa-quiz.js?v=2" defer></script>
     <script src="../site-assets/js/showroom-content.js" defer></script>
     <style>
         .main {

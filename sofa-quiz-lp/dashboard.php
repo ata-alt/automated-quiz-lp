@@ -33,6 +33,306 @@
             z-index: 1000;
             position: relative;
         }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .results-table th {
+            background: #f8fafc;
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+            color: #374151;
+        }
+
+        .results-table td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+
+        .results-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pagination-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .pagination-btn.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Enhanced Modal Styling */
+        .modal {
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            animation: slideIn 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            color: white;
+            padding: 24px 32px;
+            border-bottom: none;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-body {
+            padding: 32px;
+            max-height: 60vh;
+            overflow-y: auto;
+            background: #fafbff;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            color: white;
+            font-size: 28px;
+            font-weight: 300;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.2s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .user-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #2563eb;
+        }
+
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .user-info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .user-info-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+        }
+
+        .user-info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .answers-section {
+            margin-top: 8px;
+        }
+
+        .answers-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .answers-header h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .answers-count {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .answer-card {
+            background: white;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+
+        .answer-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .answer-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .answer-question {
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-number {
+            background: #2563eb;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .answer-content {
+            padding: 20px;
+        }
+
+        .answer-text {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            margin: 0;
+            border-left: 4px solid #2563eb;
+        }
+
+        .no-answers {
+            text-align: center;
+            padding: 48px 24px;
+            color: #6b7280;
+        }
+
+        .no-answers-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Custom scrollbar for modal body */
+        .modal-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-body::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .modal-body::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
 </head>
 
@@ -79,6 +379,10 @@
                 <button class="tab-btn" onclick="showTab('questions')" data-tab="questions">
                     <span class="tab-icon">❓</span>
                     <span class="tab-text">Questions</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('results')" data-tab="results">
+                    <span class="tab-icon">📊</span>
+                    <span class="tab-text">Quiz Results</span>
                 </button>
             </div>
             <div class="actions-bar">
@@ -270,6 +574,54 @@
                 </div>
             </div>
 
+            <!-- Quiz Results Tab Content -->
+            <div class="tab-content" id="results-tab">
+                <div class="question-card" style="background: #f0f4ff; border: 2px solid #2563eb;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 id="resultsTabTitle" style="color: #2563eb; margin: 0;">📊 Quiz Results</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="refreshResults()" style="padding: 8px 20px;">🔄 Refresh</button>
+                            <button class="btn btn-success" onclick="exportResults()" style="padding: 8px 20px;">📥 Export CSV</button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
+                        <div>
+                            <label style="font-weight: bold; margin-right: 8px;">Filter by Product:</label>
+                            <select id="productFilter" onchange="filterResults()" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">All Products</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-weight: bold; margin-right: 8px;">Results per page:</label>
+                            <select id="resultsPerPage" onchange="changeResultsPerPage()" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="10">10</option>
+                                <option value="25" selected>25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                        <div>
+                            <span id="resultsCount" style="color: #666; font-weight: bold;"></span>
+                        </div>
+                    </div>
+
+                    <!-- Results Table -->
+                    <div id="resultsContainer" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <div id="loadingResults" style="text-align: center; padding: 40px;">
+                            <div style="display: inline-block; animation: spin 1s linear infinite; font-size: 24px;">⏳</div>
+                            <p>Loading quiz results...</p>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div id="paginationContainer" style="display: flex; justify-content: center; margin-top: 20px; gap: 10px;">
+                        <!-- Pagination buttons will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
         </div> <!-- End tab-content-container -->
 
     </div>
@@ -277,9 +629,11 @@
     <!-- Modal for JSON Export/Import -->
     <div id="jsonModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">×</span>
-            <h2 id="modalTitle">Quiz Data</h2>
-            <div id="modalBody"></div>
+            <div class="modal-header">
+                <span class="close" onclick="closeModal()">×</span>
+                <h2 id="modalTitle">Quiz Data</h2>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
@@ -395,6 +749,7 @@
 <script src="../api/api-client-fallback.js"></script>
 <script src="../site-assets/js/dashboard-php.js"></script>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
+<script src="../site-assets/js/quiz-results.js" defer></script>
 
 <script>
     // Emoji Picker Functions
@@ -506,6 +861,9 @@
                 break;
             case 'questions':
                 actionsContainer.innerHTML = '<button class="btn btn-primary" onclick="addNewQuestion()">➕ Add Question</button>';
+                break;
+            case 'results':
+                actionsContainer.innerHTML = '<button class="btn btn-primary" onclick="refreshResults()">🔄 Refresh</button>';
                 break;
         }
     }

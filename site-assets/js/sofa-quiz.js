@@ -434,8 +434,123 @@
   // Make styleQuiz globally available
   window.styleQuiz = styleQuiz;
 
-  // Form submission handler
-  window.submitDetails = function (e) {
+  // Form submission handler - stores quiz results to database
+  window.submitDetails = async function (e) {
+    e.preventDefault();
+
+    const form = document.querySelector('#sofaquiz');
+    if (!form) {
+      console.error('[Quiz] Form not found');
+      return;
+    }
+
+    const name = form.querySelector("input[name='fname']").value;
+    const email = form.querySelector("input[name='email']").value;
+    const phone = form.querySelector("input[name='phone']").value;
+
+    if (!form.querySelector("input[name='gdpr']").checked) {
+      alert('Please agree to the privacy policy to continue.');
+      return;
+    }
+
+    const submitBtn = form.querySelector("input[type='submit']");
+    const originalBtnValue = submitBtn.value;
+    submitBtn.value = 'Sending...';
+    submitBtn.disabled = true;
+
+    // Prepare quiz answers for database storage
+    const quizAnswers = [];
+    styleQuiz.answers.forEach(function (a) {
+      const q = styleQuiz.questions.find(function (q) {
+        return q.id == a.questionId;
+      });
+
+      if (!q) {
+        console.warn('[Quiz] Question not found for answer:', a);
+        return;
+      }
+
+      const selectedOption = q.options.find(function (opt) {
+        return opt.id === a.optionId;
+      });
+
+      quizAnswers.push({
+        questionId: a.questionId,
+        questionText: q.text,
+        optionId: a.optionId,
+        optionText: selectedOption ? selectedOption.text : 'Unknown'
+      });
+    });
+
+    // Get current product key if available
+    let currentProduct = null;
+    if (typeof window.apiClient !== 'undefined') {
+      try {
+        currentProduct = await window.apiClient.getCurrentProduct();
+        console.log('[Quiz] Current product:', currentProduct);
+      } catch (error) {
+        console.warn('[Quiz] Could not get current product:', error);
+      }
+    }
+
+    const quizData = {
+      name: name,
+      email: email,
+      phone: phone,
+      product_key: currentProduct,
+      answers: quizAnswers
+    };
+
+    // Store quiz result in database
+    fetch('../api/quiz-results.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(quizData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('[Quiz] Quiz result stored successfully with ID:', data.result_id);
+
+        // Show success message
+        const result = document.getElementById('result-form');
+        result.innerHTML =
+          "<h2 style='color:#0f172a;'>Thank you, " +
+          name +
+          '! Your quiz results have been saved.</h2>';
+
+        // Track event
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          formID: 'sofaquiz',
+          event: 'formsubmit',
+          email: email,
+          quizResultId: data.result_id
+        });
+
+        if (typeof zaraz !== 'undefined') {
+          zaraz.track('sofaquiz', {
+            formID: 'sofaquiz',
+            quizResultId: data.result_id
+          });
+        }
+      } else {
+        throw new Error(data.message || 'Failed to store quiz result');
+      }
+    })
+    .catch(error => {
+      console.error('[Quiz] Error storing quiz result:', error);
+      alert('Something went wrong. Please try again later.');
+      submitBtn.value = originalBtnValue;
+      submitBtn.disabled = false;
+    });
+  };
+
+  // COMMENTED OUT - Original submitDetails function that sends to HubSpot
+  /*
+  window.submitDetails_OLD = function (e) {
     e.preventDefault();
 
     const form = document.querySelector('#sofaquiz');
@@ -574,6 +689,7 @@
         });
     }
   };
+  */
 
   // Listen for custom events to update quiz when admin makes changes
   window.addEventListener('quizDataUpdated', function (e) {
