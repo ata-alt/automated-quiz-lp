@@ -24,6 +24,13 @@ async function initializeDashboard() {
     // Update delete button visibility
     updateDeleteButtonVisibility(currentProductKey);
 
+    // Get product data to update tab titles
+    const response = await apiClient.getProducts();
+    const product = response.products.find((p) => p.product_key === currentProductKey);
+
+    // Update tab titles with current product
+    updateTabTitles(product);
+
     // Load content for current product
     await loadCurrentQuiz();
 
@@ -91,6 +98,9 @@ async function switchProductQuiz(productKey) {
     // Update delete button visibility
     updateDeleteButtonVisibility(productKey);
 
+    // Update tab titles with product name
+    updateTabTitles(product);
+
     // Load content for this product
     await loadCurrentQuiz();
 
@@ -111,6 +121,37 @@ function updateDeleteButtonVisibility(productKey) {
     } else {
       deleteBtn.style.display = 'inline-block';
     }
+  }
+}
+
+// Update tab titles with current product name
+function updateTabTitles(product) {
+  let productName = 'Sofa';
+
+  // Get product name, default to 'Sofa' if not found or is the default sofa product
+  if (product && product.product_key !== 'sofa') {
+    productName = product.name;
+  }
+
+  // Update each tab title
+  const bannerTitle = document.getElementById('bannerTabTitle');
+  if (bannerTitle) {
+    bannerTitle.textContent = `🎨 ${productName} Hero Banner`;
+  }
+
+  const contentTitle = document.getElementById('contentTabTitle');
+  if (contentTitle) {
+    contentTitle.textContent = `✨ ${productName} Luxury Content`;
+  }
+
+  const galleryTitle = document.getElementById('galleryTabTitle');
+  if (galleryTitle) {
+    galleryTitle.textContent = `🖼️ ${productName} Gallery (3 Images)`;
+  }
+
+  const promoTitle = document.getElementById('promoTabTitle');
+  if (promoTitle) {
+    promoTitle.textContent = `🎯 ${productName} Quiz Promo`;
   }
 }
 

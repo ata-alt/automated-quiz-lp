@@ -170,25 +170,42 @@
 
 @media only screen and (max-width: 768px) {
   .quiz-block {
-    padding: 32px 24px;
-    margin: 24px 16px;
+    padding: 32px 16px;
+    margin: 16px;
+    left: 0;
+    margin-left: 0;
+    margin-right: 0;
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+  }
+
+  .quiz-block .container {
+    padding: 0 16px;
   }
 
   .options-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    padding: 0 16px;
   }
 
   .quiz-block .option-button {
-    padding: 16px;
+    padding: 16px 12px;
+    font-size: 14px;
   }
 
   .quiz-block .option-button img {
-    height: 150px;
+    height: 140px;
+    margin-bottom: 12px;
   }
 
   .quiz-block h3 {
     font-size: 24px;
+    margin-bottom: 32px;
+  }
+
+  .quiz-block .option-button .spacing-v {
+    font-size: 15px;
   }
 }
 
@@ -210,14 +227,49 @@
 
 @media only screen and (max-width: 480px) {
   .quiz-block {
-    padding: 24px 16px;
+    padding: 20px 12px;
+    margin: 12px;
+    width: calc(100% - 24px);
+    max-width: calc(100% - 24px);
+  }
+
+  .quiz-block .container {
+    padding: 0 8px;
+  }
+
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 8px;
+  }
+
+  .quiz-block .option-button {
+    padding: 14px 10px;
+    font-size: 14px;
+  }
+
+  .quiz-block .option-button img {
+    height: 160px;
   }
 
   .quiz-block h3 {
-    font-size: 22px;
+    font-size: 20px;
+    margin-bottom: 24px;
+    line-height: 1.3;
+  }
+
+  .quiz-block .option-button .spacing-v {
+    font-size: 14px;
   }
 
   .quiz-block input[type="submit"] {
     max-width: 100%;
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+
+  .quiz-block .nav-buttons button {
+    padding: 10px 20px;
+    font-size: 13px;
   }
 }

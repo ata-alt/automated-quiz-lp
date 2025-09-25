@@ -97,11 +97,20 @@
   }
 
   const apiClient = new ApiClient();
+
+  // Store current product name globally for placeholder text
+  let currentProductName = 'Sofa';
+
   // Function to generate placeholder image URL
   function getPlaceholderImage(width, height, text = 'No Image') {
     return `https://placehold.co/${width}x${height}/e5e5e5/666666?text=${encodeURIComponent(
       text
     )}`;
+  }
+
+  // Function to capitalize first letter of product name
+  function capitalizeProduct(product) {
+    return product.charAt(0).toUpperCase() + product.slice(1).toLowerCase();
   }
   // Image size configurations for each section
   const IMAGE_SIZES = {
@@ -129,6 +138,7 @@
   async function getCurrentProductData() {
     try {
       const currentProduct = await apiClient.getCurrentProduct();
+      currentProductName = capitalizeProduct(currentProduct);
       const response = await apiClient.getContent(currentProduct);
       return response.content;
     } catch (error) {
@@ -162,26 +172,33 @@
           }
 
           // Update background images
-          if (data.banner.backgroundImage || data.banner.mobileImage) {
-            const picture = bannerSection.querySelector('picture');
-            if (picture) {
-              // Update mobile image source
-              if (data.banner.mobileImage) {
-                const source = picture.querySelector('source');
-                if (source) {
-                  source.srcset = data.banner.mobileImage;
-                }
-              }
+          const picture = bannerSection.querySelector('picture');
+          if (picture) {
+            // Update mobile image source
+            const source = picture.querySelector('source');
+            if (source) {
+              const mobileImage = data.banner.mobileImage ||
+                getPlaceholderImage(
+                  IMAGE_SIZES.banner.mobile.width,
+                  IMAGE_SIZES.banner.mobile.height,
+                  `${currentProductName} Hero Banner`
+                );
+              source.srcset = mobileImage;
+            }
 
-              // Update desktop image with sizing
-              if (data.banner.backgroundImage) {
-                const img = picture.querySelector('img.banner-img');
-                if (img) {
-                  img.srcset = data.banner.backgroundImage;
-                  img.src = data.banner.backgroundImage;
-                  applyImageSizing(img, IMAGE_SIZES.banner.desktop);
-                }
-              }
+            // Update desktop image with sizing
+            const img = picture.querySelector('img.banner-img');
+            if (img) {
+              const desktopImage = data.banner.backgroundImage ||
+                getPlaceholderImage(
+                  IMAGE_SIZES.banner.desktop.width,
+                  IMAGE_SIZES.banner.desktop.height,
+                  `${currentProductName} Hero Banner`
+                );
+              img.srcset = desktopImage;
+              img.src = desktopImage;
+              img.alt = `${currentProductName} Hero Banner`;
+              applyImageSizing(img, IMAGE_SIZES.banner.desktop);
             }
           }
         }
@@ -347,13 +364,33 @@
           galleryImages.forEach((img, index) => {
             if (data.gallery.images[index]) {
               const imageData = data.gallery.images[index];
-              img.src = imageData.src;
+              img.src = imageData.src || getPlaceholderImage(IMAGE_SIZES.gallery.width, IMAGE_SIZES.gallery.height, `${currentProductName} Gallery`);
               img.alt = imageData.alt;
               img.title = imageData.alt;
+              applyImageSizing(img, IMAGE_SIZES.gallery);
+            } else {
+              // Use placeholder if no image data available
+              img.src = getPlaceholderImage(IMAGE_SIZES.gallery.width, IMAGE_SIZES.gallery.height, `${currentProductName} Gallery`);
+              img.alt = `${currentProductName} gallery placeholder image`;
+              img.title = `${currentProductName} gallery placeholder image`;
+              applyImageSizing(img, IMAGE_SIZES.gallery);
             }
           });
 
           console.log('[Gallery] Section updated from data source');
+        }
+      } else {
+        // If no gallery data is available, set placeholder images
+        const gallerySection = document.querySelector('section.container.big');
+        if (gallerySection) {
+          const galleryImages = gallerySection.querySelectorAll('img');
+          galleryImages.forEach((img) => {
+            img.src = getPlaceholderImage(IMAGE_SIZES.gallery.width, IMAGE_SIZES.gallery.height, `${currentProductName} Gallery`);
+            img.alt = `${currentProductName} gallery placeholder image`;
+            img.title = `${currentProductName} gallery placeholder image`;
+            applyImageSizing(img, IMAGE_SIZES.gallery);
+          });
+          console.log('[Gallery] Section updated with placeholder images');
         }
       }
     } catch (error) {
@@ -397,7 +434,7 @@
             const { width, height } = IMAGE_SIZES.designDisaster;
             image.src =
               data.design_expert.image ||
-              getPlaceholderImage(width, height, 'Design Expert Image');
+              getPlaceholderImage(width, height, `${currentProductName} Design Expert`);
             image.alt = 'Interior designer offering fabric choices to a client';
             applyImageSizing(image, IMAGE_SIZES.designDisaster);
           }
@@ -470,13 +507,13 @@
                 const fallbackImage = getPlaceholderImage(
                   IMAGE_SIZES.quizPromo.width,
                   IMAGE_SIZES.quizPromo.height,
-                  `Luxury Sofa ${index + 1}`
+                  `${currentProductName} ${index + 1}`
                 );
 
                 return `
                     <li>
-                      <img alt="Luxury product ${index + 1}"
-                           title="Luxury product ${index + 1}"
+                      <img alt="Luxury ${currentProductName} ${index + 1}"
+                           title="Luxury ${currentProductName} ${index + 1}"
                            src="${image || fallbackImage}"
                            onerror="this.src='${fallbackImage}'"
                            loading="lazy"
@@ -495,13 +532,13 @@
               const placeholderSrc = getPlaceholderImage(
                 IMAGE_SIZES.quizPromo.width,
                 IMAGE_SIZES.quizPromo.height,
-                `Luxury Sofa ${index + 1}`
+                `${currentProductName} ${index + 1}`
               );
 
               return `
                 <li>
-                  <img alt="Luxury sofa placeholder ${index + 1}"
-                       title="Luxury sofa placeholder ${index + 1}"
+                  <img alt="${currentProductName} placeholder ${index + 1}"
+                       title="${currentProductName} placeholder ${index + 1}"
                        src="${placeholderSrc}"
                        loading="lazy"
                        width="${IMAGE_SIZES.quizPromo.width}"

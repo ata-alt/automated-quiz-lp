@@ -99,7 +99,7 @@
             <div class="tab-content active" id="banner-tab">
                 <div class="question-card" style="background: #fff3e0; border: 2px solid #ff6f00;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #ff6f00; margin: 0;">🎨 Hero Banner Section</h2>
+                        <h2 id="bannerTabTitle" style="color: #ff6f00; margin: 0;">🎨 Sofa Hero Banner</h2>
                         <button class="btn btn-success" onclick="saveBannerSection()" style="padding: 8px 20px;">💾 Save Banner</button>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
@@ -151,7 +151,7 @@
             <div class="tab-content" id="content-tab">
                 <div class="question-card" style="background: #f0e6ff; border: 2px solid #6b46c1;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #6b46c1; margin: 0;">✨ Luxury Sofas Content Section</h2>
+                        <h2 id="contentTabTitle" style="color: #6b46c1; margin: 0;">✨ Sofa Luxury Content</h2>
                         <button class="btn btn-success" onclick="saveLuxurySofasSection()" style="padding: 8px 20px;">💾 Save Content</button>
                     </div>
 
@@ -195,7 +195,7 @@
             <div class="tab-content" id="gallery-tab">
                 <div class="question-card" style="background: #f3e5f5; border: 2px solid #9c27b0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #9c27b0; margin: 0;">🖼️ Gallery Section (3 Images)</h2>
+                        <h2 id="galleryTabTitle" style="color: #9c27b0; margin: 0;">🖼️ Sofa Gallery (3 Images)</h2>
                         <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
@@ -209,7 +209,7 @@
             <div class="tab-content" id="promo-tab">
                 <div class="question-card" style="background: #fff8e1; border: 2px solid #ff9800;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #ff9800; margin: 0;">🎯 Quiz Promo Section</h2>
+                        <h2 id="promoTabTitle" style="color: #ff9800; margin: 0;">🎯 Sofa Quiz Promo</h2>
                         <button class="btn btn-success" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
                     </div>
                     <div style="margin-bottom: 20px;">

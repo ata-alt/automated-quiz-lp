@@ -1,6 +1,13 @@
 (function () {
   'use strict';
 
+  // Function to generate placeholder image URL
+  function getPlaceholderImage(width, height, text = 'No Image') {
+    return `https://placehold.co/${width}x${height}/e5e5e5/666666?text=${encodeURIComponent(
+      text
+    )}`;
+  }
+
   // Function to load quiz data from database or use defaults
   const loadQuizData = async function () {
     try {
@@ -49,145 +56,127 @@
     return [
       {
         id: 1,
-        text: 'What best describes your household?',
+        text: 'Question 1',
         options: [
           {
             id: 'a',
-            text: 'Young kids—energetic, messy, and always moving',
-            image:
-              '../site-assets/images/sofa-quiz/young-kids-energetic-messy-and-always-moving.jpg',
+            text: 'Option A',
+            image: null,
           },
           {
             id: 'b',
-            text: 'Teenagers or young adults still at home',
-            image:
-              '../site-assets/images/sofa-quiz/teenagers-or-young-adults-still-at-home.jpg',
+            text: 'Option B',
+            image: null,
           },
           {
             id: 'c',
-            text: 'Just the two of us—calm and design-focused',
-            image:
-              '../site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg',
+            text: 'Option C',
+            image: null,
           },
         ],
       },
       {
         id: 2,
-        text: "What's your design style at home?",
+        text: 'Question 2',
         options: [
           {
             id: 'a',
-            text: 'Minimalist—clean, sleek, no clutter',
-            image:
-              '../site-assets/images/sofa-quiz/minimalist-clean-sleek-no-clutter.jpg',
+            text: 'Option A',
+            image: null,
           },
           {
             id: 'b',
-            text: 'Comfort-first—we live on the sofa',
-            image:
-              '../site-assets/images/sofa-quiz/comfort-first-we-live-on-the-sofa.jpg',
+            text: 'Option B',
+            image: null,
           },
           {
             id: 'c',
-            text: 'Practical—tough furniture, daily use',
-            image:
-              '../site-assets/images/sofa-quiz/practical-tough-furniture-daily-use.jpg',
+            text: 'Option C',
+            image: null,
           },
         ],
       },
       {
         id: 3,
-        text: 'Preferred sofa materials?',
+        text: 'Question 3',
         options: [
           {
             id: 'a',
-            text: 'Easy-clean fabrics or microfibres',
-            image:
-              '../site-assets/images/sofa-quiz/easy-clean-fabrics-or-microfibres.jpg',
+            text: 'Option A',
+            image: null,
           },
           {
             id: 'b',
-            text: 'Treated leather—durable and refined',
-            image:
-              '../site-assets/images/sofa-quiz/treated-leather-durable-and-refined.jpg',
+            text: 'Option B',
+            image: null,
           },
           {
             id: 'c',
-            text: 'Aniline leather—aged, rich, full of character',
-            image:
-              '../site-assets/images/sofa-quiz/aniline-leather-aged-rich-full-of-character.jpg',
+            text: 'Option C',
+            image: null,
           },
         ],
       },
       {
         id: 4,
-        text: "Who's using the sofa?",
+        text: 'Question 4',
         options: [
           {
             id: 'a',
-            text: "Everyone's about the same build",
-            image:
-              '../site-assets/images/sofa-quiz/everyones-about-the-same-build.jpg',
+            text: 'Option A',
+            image: null,
           },
           {
             id: 'b',
-            text: 'Big mix—short, tall, light, heavy',
-            image:
-              '../site-assets/images/sofa-quiz/big-mix-short-tall-light-heavy.jpg',
+            text: 'Option B',
+            image: null,
           },
           {
             id: 'c',
-            text: 'We like structure and firm support',
-            image:
-              '../site-assets/images/sofa-quiz/we-like-structure-and-firm-support.jpg',
+            text: 'Option C',
+            image: null,
           },
         ],
       },
       {
         id: 5,
-        text: 'How is the space used during the week?',
+        text: 'Question 5',
         options: [
           {
             id: 'a',
-            text: "Looks over lounging—it's rarely used",
-            image:
-              '../site-assets/images/sofa-quiz/looks-over-lounging-its-rarely-used.jpg',
+            text: 'Option A',
+            image: null,
           },
           {
             id: 'b',
-            text: 'Controlled chaos—tech, homework, snacks',
-            image:
-              '../site-assets/images/sofa-quiz/controlled-chaos-tech-homework-snacks.jpg',
+            text: 'Option B',
+            image: null,
           },
           {
             id: 'c',
-            text: 'Hosting friends—drinks, movies, conversation',
-            image:
-              '../site-assets/images/sofa-quiz/hosting-friends-drinks-movies-conversation.jpg',
+            text: 'Option C',
+            image: null,
           },
         ],
       },
       {
         id: 6,
-        text: 'What best describes your home?',
+        text: 'Question 6',
         options: [
           {
             id: 'a',
-            text: 'Modern or architect-designed house',
-            image:
-              '../site-assets/images/sofa-quiz/modern-or-architect-designed-house.jpg',
+            text: 'Option A',
+            image: null,
           },
           {
             id: 'b',
-            text: 'Detached house in the suburbs—spacious',
-            image:
-              '../site-assets/images/sofa-quiz/detached-house-in-the-suburbs-spacious-family-focused.jpg',
+            text: 'Option B',
+            image: null,
           },
           {
             id: 'c',
-            text: 'Apartment—stylish but space-conscious',
-            image:
-              '../site-assets/images/sofa-quiz/apartment-stylish-but-space-conscious.jpg',
+            text: 'Option C',
+            image: null,
           },
         ],
       },
@@ -198,6 +187,7 @@
     current: 0,
     answers: [],
     questions: [], // Will be populated on init
+    currentProductName: 'Sofa', // Will be updated on init
 
     init: async function () {
       console.log('[Quiz] Initializing quiz...');
@@ -213,6 +203,24 @@
         '<div class="loading-state"><h3>Loading quiz...</h3></div>';
 
       try {
+        // Get current product name for placeholder images
+        if (typeof window.apiClient !== 'undefined') {
+          try {
+            const currentProduct = await window.apiClient.getCurrentProduct();
+            const response = await window.apiClient.getProducts();
+            const product = response.products.find(
+              (p) => p.product_key === currentProduct
+            );
+            if (product) {
+              this.currentProductName = product.name || 'Sofa';
+            }
+          } catch (error) {
+            console.warn(
+              '[Quiz] Could not get current product name, using default'
+            );
+          }
+        }
+
         // Load questions dynamically
         this.questions = await loadQuizData();
 
@@ -261,8 +269,16 @@
         const optionsHTML = q.options
           .map(function (opt) {
             // Handle both base64 and URL images
-            let imageUrl =
-              opt.image || '../site-assets/images/sofa-quiz/placeholder.jpg';
+            let imageUrl = opt.image;
+
+            // If no image, generate dynamic placeholder with current product name
+            if (!imageUrl) {
+              imageUrl = getPlaceholderImage(
+                400,
+                300,
+                styleQuiz.currentProductName + ' Quiz Img'
+              );
+            }
 
             // Fix absolute paths from database to relative paths for HTML location
             if (imageUrl.startsWith('/site-assets/')) {
@@ -279,7 +295,13 @@
               imageUrl +
               '" alt="' +
               opt.text +
-              '" onerror="this.src=\'../site-assets/images/sofa-quiz/placeholder.jpg\'" />' +
+              '" onerror="this.src=\'' +
+              getPlaceholderImage(
+                400,
+                300,
+                styleQuiz.currentProductName + ' Quiz Img'
+              ) +
+              '\'" />' +
               '<div class="spacing-v block-text" style="margin: 0px;">' +
               opt.text +
               '</div>' +
@@ -386,6 +408,26 @@
       this.current = 0;
       this.answers = [];
       await this.init();
+    },
+
+    // Method to update product name for placeholder images
+    updateProductName: async function () {
+      if (typeof window.apiClient !== 'undefined') {
+        try {
+          const currentProduct = await window.apiClient.getCurrentProduct();
+          const response = await window.apiClient.getProducts();
+          const product = response.products.find(
+            (p) => p.product_key === currentProduct
+          );
+          if (product) {
+            this.currentProductName = product.name || 'Sofa';
+          }
+        } catch (error) {
+          console.warn(
+            '[Quiz] Could not get current product name, using default'
+          );
+        }
+      }
     },
   };
 
