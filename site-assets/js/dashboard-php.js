@@ -66,7 +66,7 @@ async function updateProductQuizSelector() {
         // Skip sofa as it's already added
         const option = document.createElement('option');
         option.value = product.product_key;
-        option.textContent = `${product.emoji} ${product.name} Quiz`;
+        option.textContent = `${product.name} Quiz`;
         selector.appendChild(option);
       }
     });
@@ -90,7 +90,7 @@ async function switchProductQuiz(productKey) {
 
     let title = '🛋️ Sofa Quiz Content Management Dashboard';
     if (product && productKey !== 'sofa') {
-      title = `${product.emoji} ${product.name} Quiz Content Management Dashboard`;
+      title = `${product.name} Quiz Content Management Dashboard`;
     }
 
     document.getElementById('dashboardTitle').textContent = title;
@@ -319,7 +319,6 @@ async function saveQuiz() {
 async function createNewProductQuiz() {
   try {
     const productName = document.getElementById('productName').value.trim();
-    const productEmoji = document.getElementById('productEmoji').value.trim();
     const productDescription = document
       .getElementById('productDescription')
       .value.trim();
@@ -335,7 +334,6 @@ async function createNewProductQuiz() {
     const productData = {
       product_key: productKey,
       name: productName,
-      emoji: productEmoji || '📦',
       description: productDescription,
     };
 
@@ -1157,7 +1155,7 @@ async function confirmDeleteProduct() {
       return;
     }
 
-    const productName = `${product.emoji} ${product.name}`;
+    const productName = `${product.name}`;
 
     // Show confirmation dialog
     const confirmed = confirm(
@@ -1216,7 +1214,6 @@ function openNewProductQuizModal() {
   document.getElementById('newProductModal').style.display = 'block';
   // Clear previous values
   document.getElementById('productName').value = '';
-  document.getElementById('productEmoji').value = '';
   document.getElementById('productDescription').value = '';
 }
 
