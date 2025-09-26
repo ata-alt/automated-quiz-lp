@@ -26,7 +26,9 @@ async function initializeDashboard() {
 
     // Get product data to update tab titles
     const response = await apiClient.getProducts();
-    const product = response.products.find((p) => p.product_key === currentProductKey);
+    const product = response.products.find(
+      (p) => p.product_key === currentProductKey
+    );
 
     // Update tab titles with current product
     updateTabTitles(product);
@@ -146,7 +148,7 @@ function updateTabTitles(product) {
 
   const galleryTitle = document.getElementById('galleryTabTitle');
   if (galleryTitle) {
-    galleryTitle.textContent = `🖼️ ${productName} Gallery (3 Images)`;
+    galleryTitle.textContent = `🖼️ ${productName} Gallery (4 Images)`;
   }
 
   const promoTitle = document.getElementById('promoTabTitle');
@@ -166,8 +168,12 @@ async function loadCurrentQuiz() {
 
     // Check if this is a new product with default template content
     // New products should show empty fields in dashboard even if they have template content in DB
-    const hasTemplateContent = content && content.banner &&
-      content.banner.mainHeading?.includes('Match Your Personality To A Luxury');
+    const hasTemplateContent =
+      content &&
+      content.banner &&
+      content.banner.mainHeading?.includes(
+        'Match Your Personality To A Luxury'
+      );
 
     const isNewProduct = currentProductKey !== 'sofa' && hasTemplateContent;
 
@@ -201,9 +207,10 @@ async function loadCurrentQuiz() {
         },
         gallerySection: {
           images: [
-            { src: '', alt: '' },
-            { src: '', alt: '' },
-            { src: '', alt: '' },
+            { src: '', alt: '', title: '', subtitle: '', link: '' },
+            { src: '', alt: '', title: '', subtitle: '', link: '' },
+            { src: '', alt: '', title: '', subtitle: '', link: '' },
+            { src: '', alt: '', title: '', subtitle: '', link: '' },
           ],
         },
         designDisasterSection: {
@@ -265,16 +272,14 @@ async function loadCurrentQuiz() {
 
     renderQuestions();
 
-    // Ensure gallery section is rendered
-    if (
-      !quizData.gallerySection.images ||
-      quizData.gallerySection.images.length === 0
-    ) {
-      quizData.gallerySection.images = [
-        { src: '', alt: '' },
-        { src: '', alt: '' },
-        { src: '', alt: '' },
-      ];
+    // Ensure gallery section is rendered with 4 image slots
+    if (!quizData.gallerySection.images) {
+      quizData.gallerySection.images = [];
+    }
+
+    // Ensure we always have exactly 4 image slots with all fields
+    while (quizData.gallerySection.images.length < 4) {
+      quizData.gallerySection.images.push({ src: '', alt: '', title: '', subtitle: '', link: '' });
     }
     renderGalleryItems();
 
@@ -386,9 +391,10 @@ function initializeSampleData() {
     },
     gallerySection: {
       images: [
-        { src: '', alt: 'Gallery Image 1' },
-        { src: '', alt: 'Gallery Image 2' },
-        { src: '', alt: 'Gallery Image 3' },
+        { src: '', alt: 'Gallery Image 1', title: '', subtitle: '', link: '' },
+        { src: '', alt: 'Gallery Image 2', title: '', subtitle: '', link: '' },
+        { src: '', alt: 'Gallery Image 3', title: '', subtitle: '', link: '' },
+        { src: '', alt: 'Gallery Image 4', title: '', subtitle: '', link: '' },
       ],
     },
     designDisasterSection: {
@@ -433,9 +439,10 @@ function initializeEmptyData() {
     },
     gallerySection: {
       images: [
-        { src: '', alt: '' },
-        { src: '', alt: '' },
-        { src: '', alt: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
       ],
     },
     designDisasterSection: {
@@ -568,11 +575,17 @@ async function handleBannerImageUpload(type, input) {
         }
         showStatus(`Banner ${type} image uploaded successfully`, 'success');
       } else {
-        showStatus(`Failed to upload ${type} banner image: ` + response.message, 'error');
+        showStatus(
+          `Failed to upload ${type} banner image: ` + response.message,
+          'error'
+        );
       }
     } catch (error) {
       console.error('Banner image upload error:', error);
-      showStatus(`Error uploading ${type} banner image: ` + error.message, 'error');
+      showStatus(
+        `Error uploading ${type} banner image: ` + error.message,
+        'error'
+      );
     }
   }
 }
@@ -582,7 +595,33 @@ function updateShowroomHeading(text) {
   showStatus('Showroom heading updated', 'success');
 }
 
+async function handleShowroomImageUpload(input) {
+  const file = input.files[0];
+  if (file) {
+    try {
+      showStatus('Uploading showroom image...', 'info');
+      const response = await apiClient.uploadImage(file);
 
+      if (response.status === 'success') {
+        const imageUrl = response.data.url;
+        quizData.showroomSection.image = imageUrl;
+        const imageArea = document.getElementById('showroom-image');
+        imageArea.style.backgroundImage = `url('${imageUrl}')`;
+        imageArea.innerHTML =
+          '<div class="upload-text">📷 Click to change showroom image</div>';
+        showStatus('Showroom image uploaded successfully', 'success');
+      } else {
+        showStatus(
+          'Failed to upload showroom image: ' + response.message,
+          'error'
+        );
+      }
+    } catch (error) {
+      console.error('Showroom image upload error:', error);
+      showStatus('Error uploading showroom image: ' + error.message, 'error');
+    }
+  }
+}
 
 // Design Disaster Section Functions
 function updateDesignDisasterText(field, value) {
@@ -606,11 +645,17 @@ async function handleDesignDisasterImageUpload(input) {
         imageArea.innerHTML = '<div class="upload-text">📷 Change Image</div>';
         showStatus('Design section image uploaded successfully', 'success');
       } else {
-        showStatus('Failed to upload design section image: ' + response.message, 'error');
+        showStatus(
+          'Failed to upload design section image: ' + response.message,
+          'error'
+        );
       }
     } catch (error) {
       console.error('Design section image upload error:', error);
-      showStatus('Error uploading design section image: ' + error.message, 'error');
+      showStatus(
+        'Error uploading design section image: ' + error.message,
+        'error'
+      );
     }
   }
 }
@@ -720,7 +765,10 @@ async function handleQuizPromoImageUpload(index, input) {
         renderQuizPromoImages();
         showStatus('Promo image uploaded successfully', 'success');
       } else {
-        showStatus('Failed to upload promo image: ' + response.message, 'error');
+        showStatus(
+          'Failed to upload promo image: ' + response.message,
+          'error'
+        );
       }
     } catch (error) {
       console.error('Quiz promo image upload error:', error);
@@ -739,9 +787,10 @@ function removeQuizPromoImage(index) {
 function renderGalleryItems() {
   if (!quizData.gallerySection.images) {
     quizData.gallerySection.images = [
-      { src: '', alt: '' },
-      { src: '', alt: '' },
-      { src: '', alt: '' },
+      { src: '', alt: '', title: '', subtitle: '', link: '' },
+      { src: '', alt: '', title: '', subtitle: '', link: '' },
+      { src: '', alt: '', title: '', subtitle: '', link: '' },
+      { src: '', alt: '', title: '', subtitle: '', link: '' },
     ];
   }
 
@@ -778,6 +827,15 @@ function renderGalleryItems() {
                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
             </div>
         `;
+
+    // Also populate the title, subtitle, and link inputs
+    const titleInput = document.getElementById(`gallery-title-${index}`);
+    const subtitleInput = document.getElementById(`gallery-subtitle-${index}`);
+    const linkInput = document.getElementById(`gallery-link-${index}`);
+
+    if (titleInput) titleInput.value = item.title || '';
+    if (subtitleInput) subtitleInput.value = item.subtitle || '';
+    if (linkInput) linkInput.value = item.link || '';
   });
 }
 
@@ -794,7 +852,10 @@ async function handleGalleryImageUpload(index, input) {
         renderGalleryItems();
         showStatus('Gallery image uploaded successfully', 'success');
       } else {
-        showStatus('Failed to upload gallery image: ' + response.message, 'error');
+        showStatus(
+          'Failed to upload gallery image: ' + response.message,
+          'error'
+        );
       }
     } catch (error) {
       console.error('Gallery image upload error:', error);
@@ -806,6 +867,27 @@ async function handleGalleryImageUpload(index, input) {
 function updateGalleryAlt(index, value) {
   quizData.gallerySection.images[index].alt = value;
   showStatus('Image description updated', 'success');
+}
+
+// Gallery Text Update Functions
+function updateGalleryText(index, field, value) {
+  if (!quizData.gallerySection) {
+    quizData.gallerySection = {
+      images: [
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' }
+      ]
+    };
+  }
+
+  if (!quizData.gallerySection.images[index]) {
+    quizData.gallerySection.images[index] = { src: '', alt: '', title: '', subtitle: '', link: '' };
+  }
+
+  quizData.gallerySection.images[index][field] = value;
+  showStatus(`Gallery item ${index + 1} ${field} updated`, 'success');
 }
 
 // Question management functions
@@ -1054,7 +1136,10 @@ async function handleImageUpload(qIndex, oIndex, input) {
   const file = input.files[0];
   if (file) {
     try {
-      showStatus(`Uploading question ${qIndex + 1} option ${oIndex + 1} image...`, 'info');
+      showStatus(
+        `Uploading question ${qIndex + 1} option ${oIndex + 1} image...`,
+        'info'
+      );
       const response = await apiClient.uploadImage(file);
 
       if (response.status === 'success') {
@@ -1067,7 +1152,10 @@ async function handleImageUpload(qIndex, oIndex, input) {
           '<div class="upload-text">📷 Click to change image</div>';
         showStatus('Question image uploaded successfully', 'success');
       } else {
-        showStatus('Failed to upload question image: ' + response.message, 'error');
+        showStatus(
+          'Failed to upload question image: ' + response.message,
+          'error'
+        );
       }
     } catch (error) {
       console.error('Question image upload error:', error);
@@ -1148,7 +1236,9 @@ async function confirmDeleteProduct() {
 
     // Get current product details
     const response = await apiClient.getProducts();
-    const product = response.products.find((p) => p.product_key === currentProductKey);
+    const product = response.products.find(
+      (p) => p.product_key === currentProductKey
+    );
 
     if (!product) {
       showStatus('Product not found', 'error');
@@ -1160,11 +1250,11 @@ async function confirmDeleteProduct() {
     // Show confirmation dialog
     const confirmed = confirm(
       `Are you sure you want to delete "${productName}" quiz?\n\n` +
-      `This will permanently delete:\n` +
-      `• All quiz questions and content\n` +
-      `• All images and settings\n` +
-      `• This action cannot be undone\n\n` +
-      `Type YES to confirm deletion.`
+        `This will permanently delete:\n` +
+        `• All quiz questions and content\n` +
+        `• All images and settings\n` +
+        `• This action cannot be undone\n\n` +
+        `Type YES to confirm deletion.`
     );
 
     if (confirmed) {
@@ -1321,11 +1411,19 @@ function showStatus(message, type) {
 
   // Add icon based on status type
   let icon;
-  switch(type) {
-    case 'success': icon = '✓'; break;
-    case 'error': icon = '✗'; break;
-    case 'info': icon = 'ℹ'; break;
-    default: icon = '●'; break;
+  switch (type) {
+    case 'success':
+      icon = '✓';
+      break;
+    case 'error':
+      icon = '✗';
+      break;
+    case 'info':
+      icon = 'ℹ';
+      break;
+    default:
+      icon = '●';
+      break;
   }
   statusEl.innerHTML = `<strong>${icon}</strong> ${message}`;
 
@@ -1450,18 +1548,20 @@ async function saveQuestion(questionIndex) {
 window.onload = function () {
   initializeDashboard();
 
-  // Initialize gallery section if it doesn't exist
+  // Initialize gallery section with 4 image slots
   setTimeout(() => {
-    if (!quizData.gallerySection || !quizData.gallerySection.images) {
-      quizData.gallerySection = {
-        images: [
-          { src: '', alt: '' },
-          { src: '', alt: '' },
-          { src: '', alt: '' },
-        ],
-      };
-      renderGalleryItems();
+    if (!quizData.gallerySection) {
+      quizData.gallerySection = { images: [] };
     }
+    if (!quizData.gallerySection.images) {
+      quizData.gallerySection.images = [];
+    }
+
+    // Ensure we always have exactly 4 image slots with all fields
+    while (quizData.gallerySection.images.length < 4) {
+      quizData.gallerySection.images.push({ src: '', alt: '', title: '', subtitle: '', link: '' });
+    }
+    renderGalleryItems();
   }, 500);
 };
 

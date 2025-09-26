@@ -515,13 +515,73 @@
             <div class="tab-content" id="gallery-tab">
                 <div class="question-card" style="background: #f3e5f5; border: 2px solid #9c27b0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="galleryTabTitle" style="color: #9c27b0; margin: 0;">Sofa Gallery (3 Images)</h2>
+                        <h2 id="galleryTabTitle" style="color: #9c27b0; margin: 0;">Sofa Gallery (Nike Featured Style)</h2>
                         <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
-                        <div id="gallery-item-0"></div>
-                        <div id="gallery-item-1"></div>
-                        <div id="gallery-item-2"></div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <!-- Gallery Item 1 -->
+                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 1</h4>
+                            <div id="gallery-item-0"></div>
+                            <div style="margin-top: 15px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
+                                <input type="text" id="gallery-title-0" class="question-input" placeholder="Enter title (e.g., Modern Sectionals)" onchange="updateGalleryText(0, 'title', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
+                                <input type="text" id="gallery-subtitle-0" class="question-input" placeholder="Enter subtitle (e.g., Luxury Living)" onchange="updateGalleryText(0, 'subtitle', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
+                                <input type="text" id="gallery-link-0" class="question-input" placeholder="Enter link URL (e.g., /shop/sectionals)" onchange="updateGalleryText(0, 'link', this.value)">
+                            </div>
+                        </div>
+
+                        <!-- Gallery Item 2 -->
+                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 2</h4>
+                            <div id="gallery-item-1"></div>
+                            <div style="margin-top: 15px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
+                                <input type="text" id="gallery-title-1" class="question-input" placeholder="Enter title (e.g., Leather Collection)" onchange="updateGalleryText(1, 'title', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
+                                <input type="text" id="gallery-subtitle-1" class="question-input" placeholder="Enter subtitle (e.g., Premium Quality)" onchange="updateGalleryText(1, 'subtitle', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
+                                <input type="text" id="gallery-link-1" class="question-input" placeholder="Enter link URL (e.g., /shop/leather)" onchange="updateGalleryText(1, 'link', this.value)">
+                            </div>
+                        </div>
+
+                        <!-- Gallery Item 3 -->
+                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 3</h4>
+                            <div id="gallery-item-2"></div>
+                            <div style="margin-top: 15px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
+                                <input type="text" id="gallery-title-2" class="question-input" placeholder="Enter title (e.g., Fabric Sofas)" onchange="updateGalleryText(2, 'title', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
+                                <input type="text" id="gallery-subtitle-2" class="question-input" placeholder="Enter subtitle (e.g., Designer Choice)" onchange="updateGalleryText(2, 'subtitle', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
+                                <input type="text" id="gallery-link-2" class="question-input" placeholder="Enter link URL (e.g., /shop/fabric)" onchange="updateGalleryText(2, 'link', this.value)">
+                            </div>
+                        </div>
+
+                        <!-- Gallery Item 4 -->
+                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
+                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 4</h4>
+                            <div id="gallery-item-3"></div>
+                            <div style="margin-top: 15px;">
+                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
+                                <input type="text" id="gallery-title-3" class="question-input" placeholder="Enter title (e.g., Custom Designs)" onchange="updateGalleryText(3, 'title', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
+                                <input type="text" id="gallery-subtitle-3" class="question-input" placeholder="Enter subtitle (e.g., Bespoke Luxury)" onchange="updateGalleryText(3, 'subtitle', this.value)">
+
+                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
+                                <input type="text" id="gallery-link-3" class="question-input" placeholder="Enter link URL (e.g., /shop/custom)" onchange="updateGalleryText(3, 'link', this.value)">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

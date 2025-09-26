@@ -389,6 +389,27 @@
             }
           });
 
+          // Update gallery titles and subtitles
+          data.gallery.images.forEach((imageData, index) => {
+            // Update title element
+            const titleElement = document.getElementById(`gallery-title-${index}`);
+            if (titleElement && imageData.title) {
+              titleElement.textContent = imageData.title;
+            }
+
+            // Update subtitle element
+            const subtitleElement = document.getElementById(`gallery-subtitle-${index}`);
+            if (subtitleElement && imageData.subtitle) {
+              subtitleElement.textContent = imageData.subtitle;
+            }
+
+            // Update link element
+            const linkElement = document.getElementById(`gallery-link-${index}-btn`);
+            if (linkElement && imageData.link) {
+              linkElement.href = imageData.link;
+            }
+          });
+
           console.log('[Gallery] Section updated from data source');
         }
       } else {

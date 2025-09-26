@@ -68,6 +68,10 @@ function initializeSampleData() {
           src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
           alt: 'Designer fabric luxury sofa',
         },
+        {
+          src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
+          alt: 'Designer fabric luxury sofa',
+        },
       ],
     },
     designDisasterSection: {
@@ -490,6 +494,15 @@ function renderGalleryItems() {
                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
             </div>
         `;
+
+    // Also populate the title, subtitle, and link inputs
+    const titleInput = document.getElementById(`gallery-title-${index}`);
+    const subtitleInput = document.getElementById(`gallery-subtitle-${index}`);
+    const linkInput = document.getElementById(`gallery-link-${index}`);
+
+    if (titleInput) titleInput.value = item.title || '';
+    if (subtitleInput) subtitleInput.value = item.subtitle || '';
+    if (linkInput) linkInput.value = item.link || '';
   });
 }
 
@@ -510,6 +523,27 @@ function handleGalleryImageUpload(index, input) {
 function updateGalleryAlt(index, value) {
   quizData.gallerySection.images[index].alt = value;
   showStatus('Image description updated', 'success');
+}
+
+// Gallery Text Update Functions
+function updateGalleryText(index, field, value) {
+  if (!quizData.gallerySection) {
+    quizData.gallerySection = {
+      images: [
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+        { src: '', alt: '', title: '', subtitle: '', link: '' }
+      ]
+    };
+  }
+
+  if (!quizData.gallerySection.images[index]) {
+    quizData.gallerySection.images[index] = { src: '', alt: '', title: '', subtitle: '', link: '' };
+  }
+
+  quizData.gallerySection.images[index][field] = value;
+  showStatus(`Gallery item ${index + 1} ${field} updated`, 'success');
 }
 
 // Quiz Promo Section Functions
@@ -847,6 +881,10 @@ function loadCurrentQuiz() {
             src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
             alt: 'Designer fabric luxury sofa',
           },
+          {
+            src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
+            alt: 'Designer fabric luxury sofa',
+          },
         ],
       };
     }
@@ -1000,6 +1038,10 @@ function createNewProductQuiz() {
         {
           image: '',
           description: `Elegant ${productName.toLowerCase()} design`,
+        },
+        {
+          image: '',
+          description: `Designer ${productName.toLowerCase()} collection`,
         },
         {
           image: '',

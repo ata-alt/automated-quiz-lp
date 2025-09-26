@@ -54,12 +54,12 @@
 
     <meta name="popup" content="0">
     <meta name="robots" content="noindex, nofollow">
-    <link href="../site-assets/css/luxurylp.css?v=7" rel="stylesheet">
+    <link href="../site-assets/css/luxurylp.css?v=9" rel="stylesheet">
     <link href="../site-assets/css/style-quiz-widget.css?v=6" rel="stylesheet">
     <script src="../api/api-client.js"></script>
     <script src="../site-assets/js/frame.sofa-quiz.js?v=1"></script>
     <script src="../site-assets/js/sofa-quiz.js?v=2" defer></script>
-    <script src="../site-assets/js/showroom-content.js?v=2" defer></script>
+    <script src="../site-assets/js/showroom-content.js?v=3" defer></script>
     <style>
         .main {
             margin-top: 0px;
@@ -462,12 +462,35 @@
             <div class="row">
                 <div class="col col-12 col-4-mid nopadding">
                     <img alt="Luxury sectional sofa in modern living room" title="Luxury sectional sofa in modern living room" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-03.jpg" loading="lazy" height="400" width="952" />
+                    <div class="gallery-content">
+                        <div class="gallery-subtitle" id="gallery-subtitle-0"></div>
+                        <div class="gallery-title" id="gallery-title-0"></div>
+                        <a href="/furniture/seating/sofas/#sort=popular|category=Corner%20Sofas" class="gallery-btn" id="gallery-link-0-btn">Shop</a>
+                    </div>
                 </div>
                 <div class="col col-12 col-4-mid nopadding">
                     <img alt="Elegant leather luxury sofa" title="Elegant leather luxury sofa" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-8.jpg" loading="lazy" height="400" width="952" />
+                    <div class="gallery-content">
+                        <div class="gallery-subtitle" id="gallery-subtitle-1"></div>
+                        <div class="gallery-title" id="gallery-title-1"></div>
+                        <a href="/furniture/seating/sofas/#sort=popular|category=Leather%20Sofas" class="gallery-btn" id="gallery-link-1-btn">Shop</a>
+                    </div>
                 </div>
                 <div class="col col-12 col-4-mid nopadding">
                     <img alt="Designer fabric luxury sofa" title="Designer fabric luxury sofa" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg" loading="lazy" height="400" width="952" />
+                    <div class="gallery-content">
+                        <div class="gallery-subtitle" id="gallery-subtitle-2"></div>
+                        <div class="gallery-title" id="gallery-title-2"></div>
+                        <a href="/furniture/seating/sofas/#sort=popular|category=Fabric%20Sofas" class="gallery-btn" id="gallery-link-2-btn">Shop</a>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid nopadding">
+                    <img alt="Designer fabric luxury sofa" title="Designer fabric luxury sofa" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg" loading="lazy" height="400" width="952" />
+                    <div class="gallery-content">
+                        <div class="gallery-subtitle" id="gallery-subtitle-3"></div>
+                        <div class="gallery-title" id="gallery-title-3"></div>
+                        <a href="/shop/custom" class="gallery-btn" id="gallery-link-3-btn">Shop</a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -820,7 +843,7 @@
         </dialog>
     </div>
     <!-- Zaraz consent Pop up ends here -->
-    <script src="../site-assets/js/showroom-content-fallback.js?v=2"></script>
+    <script src="../site-assets/js/showroom-content-fallback.js?v=3"></script>
     <script>
         // Dynamic Title Management
         (function() {
