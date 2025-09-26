@@ -119,9 +119,9 @@
       mobile: { width: 500, height: 660 },
     },
     showroom: { width: 1110, height: 500 },
-    gallery: { width: 952, height: 517 },
+    gallery: { width: 952, height: 400 },
     designDisaster: { width: 433, height: 308 },
-    quizPromo: { width: 800, height: 560 },
+    quizPromo: { width: 800, height: 400 },
   };
 
   // Helper function to apply consistent image sizing
@@ -177,7 +177,8 @@
             // Update mobile image source
             const source = picture.querySelector('source');
             if (source) {
-              const mobileImage = data.banner.mobileImage ||
+              const mobileImage =
+                data.banner.mobileImage ||
                 getPlaceholderImage(
                   IMAGE_SIZES.banner.mobile.width,
                   IMAGE_SIZES.banner.mobile.height,
@@ -189,7 +190,8 @@
             // Update desktop image with sizing
             const img = picture.querySelector('img.banner-img');
             if (img) {
-              const desktopImage = data.banner.backgroundImage ||
+              const desktopImage =
+                data.banner.backgroundImage ||
                 getPlaceholderImage(
                   IMAGE_SIZES.banner.desktop.width,
                   IMAGE_SIZES.banner.desktop.height,
@@ -364,13 +366,23 @@
           galleryImages.forEach((img, index) => {
             if (data.gallery.images[index]) {
               const imageData = data.gallery.images[index];
-              img.src = imageData.src || getPlaceholderImage(IMAGE_SIZES.gallery.width, IMAGE_SIZES.gallery.height, `${currentProductName} Gallery`);
+              img.src =
+                imageData.src ||
+                getPlaceholderImage(
+                  IMAGE_SIZES.gallery.width,
+                  IMAGE_SIZES.gallery.height,
+                  `${currentProductName} Gallery`
+                );
               img.alt = imageData.alt;
               img.title = imageData.alt;
               applyImageSizing(img, IMAGE_SIZES.gallery);
             } else {
               // Use placeholder if no image data available
-              img.src = getPlaceholderImage(IMAGE_SIZES.gallery.width, IMAGE_SIZES.gallery.height, `${currentProductName} Gallery`);
+              img.src = getPlaceholderImage(
+                IMAGE_SIZES.gallery.width,
+                IMAGE_SIZES.gallery.height,
+                `${currentProductName} Gallery`
+              );
               img.alt = `${currentProductName} gallery placeholder image`;
               img.title = `${currentProductName} gallery placeholder image`;
               applyImageSizing(img, IMAGE_SIZES.gallery);
@@ -385,7 +397,11 @@
         if (gallerySection) {
           const galleryImages = gallerySection.querySelectorAll('img');
           galleryImages.forEach((img) => {
-            img.src = getPlaceholderImage(IMAGE_SIZES.gallery.width, IMAGE_SIZES.gallery.height, `${currentProductName} Gallery`);
+            img.src = getPlaceholderImage(
+              IMAGE_SIZES.gallery.width,
+              IMAGE_SIZES.gallery.height,
+              `${currentProductName} Gallery`
+            );
             img.alt = `${currentProductName} gallery placeholder image`;
             img.title = `${currentProductName} gallery placeholder image`;
             applyImageSizing(img, IMAGE_SIZES.gallery);
@@ -434,7 +450,11 @@
             const { width, height } = IMAGE_SIZES.designDisaster;
             image.src =
               data.design_expert.image ||
-              getPlaceholderImage(width, height, `${currentProductName} Design Expert`);
+              getPlaceholderImage(
+                width,
+                height,
+                `${currentProductName} Design Expert`
+              );
             image.alt = 'Interior designer offering fabric choices to a client';
             applyImageSizing(image, IMAGE_SIZES.designDisaster);
           }
@@ -589,13 +609,15 @@
                         const img = jQuery(this);
                         img.css({
                           width: '100%',
-                          height: '560px',
+                          height: '400px',
                           'object-fit': 'cover',
                           'object-position': 'center',
                         });
                       });
 
-                      console.log('[QuizPromo] Slider re-initialized with working navigation');
+                      console.log(
+                        '[QuizPromo] Slider re-initialized with working navigation'
+                      );
                     },
                   });
                 }, 50);
@@ -627,7 +649,7 @@
 
       #wardrobes-slider img {
         width: 100%;
-        height: 560px;
+        height: 400px;
         object-fit: cover;
       }
 
@@ -656,7 +678,6 @@
       await loadShowroomSection();
       await loadLuxuryContentSection();
       await loadGallerySection();
-      await loadDesignExpertSection();
       await loadQuizPromoSection();
       console.log('[Dynamic Content] All sections loaded successfully');
     } catch (error) {

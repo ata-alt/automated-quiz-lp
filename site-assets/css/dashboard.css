@@ -69,23 +69,62 @@ body {
   line-height: 1.1;
 }
 
+/* Modern Product Quiz Selector */
 #productQuizSelector {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  padding: 10px 16px;
-  border-radius: 8px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  color: var( --light-gray);
+  border: 2px solid var(--border-color);
+  padding: 12px 20px 12px 16px;
+  border-radius: 12px;
   font-size: 14px;
-  font-weight: 500;
-  min-width: 200px;
+  font-weight: 600;
+  min-width: 220px;
   cursor: pointer;
-  backdrop-filter: blur(10px);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  position: relative;
 }
 
+#productQuizSelector:hover {
+  color: var(--dark-gray);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  transform: translateY(-1px);
+}
 
 #productQuizSelector:focus {
+  color: var(--dark-gray);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 87, 67, 0.1), var(--shadow-md);
+  background: #ffffff;
+}
+
+#productQuizSelector option {
+  color: var(--dark-gray);
+  background: white;
+  padding: 12px 16px;
+  font-weight: 500;
+}
+
+/* Quiz Selector Container */
+.quiz-selector-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quiz-selector-label {
+  font-weight: 600;
+  color: white;
+  font-size: 14px;
+  white-space: nowrap;
 }
 
 /* Status Messages */
@@ -593,7 +632,20 @@ textarea {
   }
 
   #productQuizSelector {
-    min-width: 150px;
+    min-width: 180px;
+    font-size: 13px;
+    padding: 10px 18px 10px 14px;
+    background-size: 14px;
+    background-position: right 10px center;
+  }
+
+  .quiz-selector-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .quiz-selector-label {
     font-size: 12px;
   }
 

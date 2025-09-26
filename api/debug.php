@@ -37,7 +37,7 @@ try {
             $debug['database_test'] = 'SUCCESS - Database connected and responding';
 
             // Check if tables exist
-            $tables = ['product_quizzes', 'quiz_content', 'quiz_questions', 'question_options', 'system_settings'];
+            $tables = ['automated_product_quizzes', 'automated_quiz_content', 'automated_quiz_results', 'automated_quiz_questions', 'automated_question_options', 'automated_system_settings'];
             $existing_tables = [];
 
             foreach ($tables as $table) {
@@ -57,7 +57,6 @@ try {
     } else {
         $debug['database_test'] = 'ERROR - Could not connect to database';
     }
-
 } catch (Exception $e) {
     $debug['database_test'] = 'ERROR - ' . $e->getMessage();
 }
@@ -75,4 +74,3 @@ try {
 }
 
 echo json_encode($debug, JSON_PRETTY_PRINT);
-?>

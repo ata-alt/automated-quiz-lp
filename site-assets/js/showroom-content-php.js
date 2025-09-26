@@ -70,9 +70,9 @@
       mobile: { width: 500, height: 660 },
     },
     showroom: { width: 1110, height: 500 },
-    gallery: { width: 952, height: 517 },
+    gallery: { width: 952, height: 400 },
     designDisaster: { width: 433, height: 308 },
-    quizPromo: { width: 800, height: 560 },
+    quizPromo: { width: 800, height: 400 },
   };
 
   // Helper function to apply consistent image sizing
@@ -128,7 +128,8 @@
             // Update mobile image source
             const source = picture.querySelector('source');
             if (source) {
-              const mobileImage = data.banner.mobileImage ||
+              const mobileImage =
+                data.banner.mobileImage ||
                 getPlaceholderImage(
                   IMAGE_SIZES.banner.mobile.width,
                   IMAGE_SIZES.banner.mobile.height,
@@ -140,7 +141,8 @@
             // Update desktop image with sizing
             const img = picture.querySelector('img.banner-img');
             if (img) {
-              const desktopImage = data.banner.backgroundImage ||
+              const desktopImage =
+                data.banner.backgroundImage ||
                 getPlaceholderImage(
                   IMAGE_SIZES.banner.desktop.width,
                   IMAGE_SIZES.banner.desktop.height,
@@ -552,7 +554,7 @@
                         const img = jQuery(this);
                         img.css({
                           width: '100%',
-                          height: '560px',
+                          height: '400px',
                           'object-fit': 'cover',
                           'object-position': 'center',
                         });
@@ -592,7 +594,7 @@
 
       #wardrobes-slider img {
         width: 100%;
-        height: 560px;
+        height: 400px;
         object-fit: cover;
       }
 
@@ -621,7 +623,6 @@
       await loadShowroomSection();
       await loadLuxuryContentSection();
       await loadGallerySection();
-      await loadDesignExpertSection();
       await loadQuizPromoSection();
       console.log('[Dynamic Content] All sections loaded successfully');
     } catch (error) {

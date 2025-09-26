@@ -5,9 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Admin Dashboard</title>
-    <link rel="stylesheet" href="../site-assets/css/dashboard.css?v=2">
+    <link rel="stylesheet" href="../site-assets/css/dashboard.css?v=3">
     <style>
-
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -338,10 +337,10 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
                 <h1 id="dashboardTitle">Sofa Quiz Content Management Dashboard</h1>
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <label for="productQuizSelector" style="margin-right: 8px; font-weight: bold;">Current Quiz:</label>
-                        <select id="productQuizSelector" onchange="switchProductQuiz(this.value)" style="color: black;">
-                            <option style="color: black;" value="sofa">Sofa Quiz</option>
+                    <div class="quiz-selector-container">
+                        <label for="productQuizSelector" class="quiz-selector-label">Current Quiz:</label>
+                        <select id="productQuizSelector" onchange="switchProductQuiz(this.value)">
+                            <option value="sofa">Sofa Quiz</option>
                         </select>
                         <button class="btn btn-danger" onclick="confirmDeleteProduct()" id="deleteProductBtn" style="padding: 8px 15px; display: none;">Delete</button>
                     </div>
@@ -686,7 +685,6 @@
 <script src="../site-assets/js/quiz-results.js" defer></script>
 
 <script>
-
     // Tab Management Functions
     function showTab(tabName) {
         // Hide all tab contents

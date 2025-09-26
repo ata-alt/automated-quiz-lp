@@ -54,12 +54,12 @@
 
     <meta name="popup" content="0">
     <meta name="robots" content="noindex, nofollow">
-    <link href="../site-assets/css/luxurylp.css" rel="stylesheet">
+    <link href="../site-assets/css/luxurylp.css?v=7" rel="stylesheet">
     <link href="../site-assets/css/style-quiz-widget.css?v=6" rel="stylesheet">
     <script src="../api/api-client.js"></script>
     <script src="../site-assets/js/frame.sofa-quiz.js?v=1"></script>
     <script src="../site-assets/js/sofa-quiz.js?v=2" defer></script>
-    <script src="../site-assets/js/showroom-content.js" defer></script>
+    <script src="../site-assets/js/showroom-content.js?v=2" defer></script>
     <style>
         .main {
             margin-top: 0px;
@@ -69,6 +69,22 @@
             .thick-h3 {
                 margin-top: 10px;
             }
+        }
+
+        /* Stack form fields vertically */
+        #result-form .row {
+            max-width: 500px;
+            margin: 0 auto;
+            flex-direction: column;
+        }
+
+        #result-form .col-4-mid {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        #result-form .field-block {
+            width: 100%;
         }
     </style>
     <script type="application/ld+json">
@@ -332,7 +348,7 @@
                                     <div class="row">
                                         <div class="col col-12 col-4-mid">
                                             <div class="field-block">
-                                                <input type="text" name="fname" placeholder="First Name" class="input-text input-lg" pattern=".{2,255}" required title="2 to 255 characters">
+                                                <input type="text" name="fname" placeholder="Full Name" class="input-text input-lg" pattern=".{2,255}" required title="2 to 255 characters">
                                             </div>
                                         </div>
                                         <div class="col col-12 col-4-mid">
@@ -440,28 +456,317 @@
                 </div>
             </div>
         </section>
+        <div class="spacing-v"></div>
+        <div class="spacing-v"></div>
         <section class="container big">
             <div class="row">
                 <div class="col col-12 col-4-mid nopadding">
-                    <img alt="Luxury sectional sofa in modern living room" title="Luxury sectional sofa in modern living room" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-03.jpg" loading="lazy" height="517" width="952" />
+                    <img alt="Luxury sectional sofa in modern living room" title="Luxury sectional sofa in modern living room" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-03.jpg" loading="lazy" height="400" width="952" />
                 </div>
                 <div class="col col-12 col-4-mid nopadding">
-                    <img alt="Elegant leather luxury sofa" title="Elegant leather luxury sofa" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-8.jpg" loading="lazy" height="517" width="952" />
+                    <img alt="Elegant leather luxury sofa" title="Elegant leather luxury sofa" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-8.jpg" loading="lazy" height="400" width="952" />
                 </div>
                 <div class="col col-12 col-4-mid nopadding">
-                    <img alt="Designer fabric luxury sofa" title="Designer fabric luxury sofa" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg" loading="lazy" height="517" width="952" />
+                    <img alt="Designer fabric luxury sofa" title="Designer fabric luxury sofa" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg" loading="lazy" height="400" width="952" />
                 </div>
             </div>
         </section>
         <div class="spacing-v"></div>
-
+        <section style="padding: 1%;">
+            <div class="container flex" style="flex-wrap: wrap;">
+                <div class="col col-12 col-4-mid text-center" style="padding:0">
+                    <img src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/avoid-a-design-disaster.jpg" alt="Interior designer offering fabric choices to a client" height="308px" width="433px" style="vertical-align:middle;height:100%">
+                </div>
+                <div class="col col-12 col-8-mid" style="background: #F9F9F9; padding: 3% 6%">
+                    <h2 class="thick-h1 black">Avoid a design disaster.<br>Talk to an expert.</h2>
+                    <p><a class="btn btn-white thick-h3 black" href="/book-a-showroom-visit.html" target="blank">Book now <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                </div>
+            </div>
+        </section>
         <div class="spacing-v"></div>
+        <section class="container grey-mist-bg spacing-2">
+            <div class="row">
+                <div class="col col-12">
+                    <h2 class="text-center thick-h1 black">FAQs</h2>
+                </div>
+                <div class="col col-12">
+                    <div data-accordion-group>
+                        <div class="js-accordion-sort-filter" data-accordion>
+                            <div data-control class="font-uppercase"><span class="font-bold black">Can you source sofas that we have seen elsewhere?</span></div>
+                            <div data-content class="font-bold">
+                                <ul>
+                                    <li>With over 700 top notch brands on our books, finding a luxury sofa is easy.</li>
+                                    <li>If you have something specific in mind, feel free to ask our expert team about it.</li>
+                                    <li>New brands will only be curated by FCI if they meet our stringent criteria.</li>
+                                </ul>
 
-
+                            </div>
+                        </div>
+                        <div class="js-accordion-sort-filter" data-accordion>
+                            <div data-control class="font-uppercase"><span class="font-bold black">How do you guarantee the quality of your sofas?</span></div>
+                            <div data-content class="font-bold">
+                                <ul>
+                                    <li>Our products are sourced from renowned Italian and European manufacturers.</li>
+                                    <li>Every piece is skillfully constructed by expert craftsmen.</li>
+                                    <li>Outstanding warranties are in place to back up all manufacturing standards.</li>
+                                    <li>Many of our offerings come with customisation options to suit your needs.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="js-accordion-sort-filter" data-accordion>
+                            <div data-control class="font-uppercase"><span class="font-bold black">How do I know I'm getting the best price?</span></div>
+                            <div data-content class="font-bold">
+                                <ul>
+                                    <li>We offer a competitive price range to suit different budgets.</li>
+                                    <li>Trade discounts are available for industry professionals.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="js-accordion-sort-filter" data-accordion>
+                            <div data-control class="font-uppercase"><span class="font-bold black">Why should I buy from you? I've never heard of FCI before?</span></div>
+                            <div data-content class="font-bold">
+                                <ul>
+                                    <li>Founded in 1985, we are experienced contenders in the international market.</li>
+                                    <li>We offer everything you need from luxury furniture to fine design.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="js-accordion-sort-filter" data-accordion>
+                            <div data-control class="font-uppercase"><span class="font-bold black">Can you get my sofas quicker than other suppliers?</span></div>
+                            <div data-content class="font-bold">
+                                <ul>
+                                    <li>Delivery timeframes are dependent on international shipping availability.</li>
+                                    <li>We have ex-display sofa options that can be delivered immediately.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="js-accordion-sort-filter" data-accordion>
+                            <div data-control class="font-uppercase"><span class="font-bold black">Why should I visit your showroom?</span></div>
+                            <div data-content class="font-bold">
+                                <ul>
+                                    <li>Occupying a newly-refurbished, 30,000 sq ft space, it’s the largest in London.</li>
+                                    <li>Our showroom has been the recipient of numerous awards.</li>
+                                    <li>We offer free parking and are open seven days a week.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="js-accordion-sort-filter" data-accordion>
+                            <div data-control class="font-uppercase"><span class="font-bold black">Do you offer a free design service?</span></div>
+                            <div data-content class="font-bold">
+                                <ul>
+                                    <li>At FCI London, your first design consultation is free.</li>
+                                    <li>Our talented team will help you with your floor plans and furniture choices.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="spacing-v"></div>
+        <section class="container">
+            <div class="row">
+                <div class="col col-12 text-center">
+                    <h1 class="thick-h1 black">What we do</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="Interior Design Service" title="Interior Design Service" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/interior-designer-service-1.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/interior-design-service/linksway-northwood-london-project.html">Interior Design Service <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="FCI London Kitchens Showroom" title="FCI London Kitchens Showroom" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/showroom.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/about-us/map-and-directions.html">Showroom <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="FCI London Brands" title="FCI London Brands" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/luxury-brands-1.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/brands/">Brands <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="Ex-Display Furniture at FCI London" title="Ex-Display Furniture at FCI London" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/fci-clearance-1.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/brands/ex-display/">Ex-Display Furniture <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="Corner Sofas at FCI London" title="Corner Sofas at FCI London" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/luxurylp-corner-sofas.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/furniture/seating/sofas/#sort=popular|category=Corner%20Sofas">Corner Sofas <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="Leather Sofas at FCI London" title="Leather Sofas at FCI London" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/luxurylp-leather-sofas.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/furniture/seating/sofas/#sort=popular|category=Leather%20Sofas">Leather Sofas <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="Fabric Sofas at FCI London" title="Fabric Sofas at FCI London" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/luxurylp-fabric-sofas.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/furniture/seating/sofas/#sort=popular|category=Fabric%20Sofas">Fabric Sofas <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="Luxury Sofas at FCI London" title="Luxury Sofas at FCI London" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/luxurylp-luxury-sofas.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/furniture/seating/sofas/#sort=popular|category=Luxury%20Sofas">Luxury Sofas <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+                <div class="col col-12 col-4-mid">
+                    <div class="text-center">
+                        <img alt="Recliner Sofas at FCI London" title="Recliner Sofas at FCI London" src="../cdn-cgi/image/quality=75,f=auto/site-assets/images/luxury/luxurylp-recliner-sofas.jpg" loading="lazy" width="400" height="486">
+                    </div>
+                    <div class="spacing-v">
+                        <p><a class="btn btn-white thick-h4 black full-width" href="/furniture/seating/sofas/#sort=popular|category=Recliner%20Sofas">Recliner Sofas <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="spacing-v"></div>
+        <section style="padding:20px 20px 50px 20px; background-color: #F9F9F9;">
+            <div class="container">
+                <div class="spacing-v"></div>
+                <p class="thick-h1 text-center black">Get In Touch</p>
+                <div class="row flex" style="flex-wrap: wrap;">
+                    <div class="col col-12 col-4-mid spacing-2">
+                        <div class="cta-inr-box white-bg">
+                            <i class="fa-solid fa-video fa-4x spacing-v black"></i>
+                            <p class="thick-h3 black">Book A Video Chat</p>
+                            <p class="block-text">Book a zoom consultation and we’ll advise you on furniture, space planning, wardrobes and more.</p>
+                            <p><a class="btn btn-white thick-h4 black full-width" href="/book-a-showroom-visit.html" target="_blank">Book A Consultation <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                        </div>
+                    </div>
+                    <div class="col col-12 col-4-mid spacing-2">
+                        <div class="cta-inr-box white-bg">
+                            <i class="fa-regular fa-calendar-check fa-4x spacing-v black"></i>
+                            <p class="thick-h3 black">Book A Showroom Visit</p>
+                            <p class="block-text">Let our experts guide you through our 30,000 sq. ft. showroom with over 700 luxury brands under 1 roof.</p>
+                            <p><a class="btn btn-white thick-h4 black full-width" href="/book-a-showroom-visit.html" target="_blank">Book A Showroom Visit <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                        </div>
+                    </div>
+                    <div class="col col-12 col-4-mid spacing-2">
+                        <div class="cta-inr-box white-bg">
+                            <i class="fa-brands fa-whatsapp fa-4x spacing-v black"></i>
+                            <p class="thick-h3 black">Whatsapp</p>
+                            <p class="block-text">Email, call or book a virtual video chat with our sales team. Ask questions with no obligations.</p>
+                            <p><a class="btn btn-white thick-h4 black full-width" href="/get-in-touch.html" target="_blank">Chat To Us Now <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="spacing-v"></div>
+            </div>
+        </section>
+        <div class="spacing-v"></div>
+        <section style="padding:20px 20px 50px 20px; background-color: #F9F9F9;">
+            <div class="container">
+                <div class="spacing-v"></div>
+                <p class="thick-h1 text-center black">About Us</p>
+                <div class="row flex" style="flex-wrap: wrap;">
+                    <div class="col col-12 col-4-mid spacing-2">
+                        <div class="cta-inr-box white-bg">
+                            <p><img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/wardrobes-lp/experience.png" alt="35 Years’ Experience" height="33" width="32" loading="lazy"></p>
+                            <p class="thick-h3 black">35 Years’ Experience</p>
+                            <p class="block-text">We have over 35 years' experience in designing luxury interiors and sourcing the best furniture on the market from premium brands across Europe and beyond.</p>
+                        </div>
+                    </div>
+                    <div class="col col-12 col-4-mid spacing-2">
+                        <div class="cta-inr-box white-bg">
+                            <p><img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/wardrobes-lp/design.png" alt="Integrated Design Service" height="32" width="32" loading="lazy"></p>
+                            <p class="thick-h3 black">Integrated Design Service</p>
+                            <p class="block-text">A fully integrated design service including 3D &amp; technical drawings, logistics management &amp; furniture sourcing, including from brands that we don’t already stock.</p>
+                        </div>
+                    </div>
+                    <div class="col col-12 col-4-mid spacing-2">
+                        <div class="cta-inr-box white-bg">
+                            <p><img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/wardrobes-lp/advice.png" alt="Expert Advice" height="32" width="32" loading="lazy"></p>
+                            <p class="thick-h3 black">Expert Advice</p>
+                            <p class="block-text">Our team of experts will guide your project from discovery, to purchase, to delivery and installation. We will find the solution, no matter how complex your request.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="spacing-v"></div>
+            </div>
+        </section>
+        <section class="container spacing-4-v text-center">
+            <p class="block-text black">
+                <strong>Most Popular on FCI London:</strong>
+                <a href="/trending/fitted-wardrobes-furniture.html" target="_blank">Fitted Wardrobes</a> |
+                <a href="/trending/luxury-rugs-store-london.html" target="_blank">Luxury Designer Rugs</a> |
+                <a href="/trending/luxury-designer-sofas-london.html" target="_blank">Luxury Sofas</a> |
+                <a href="/trending/luxury-furniture-store-london.html" target="_blank">Luxury Furniture Store</a> |
+                <a href="/trending/luxury-interior-designer-london.html" target="_blank">Luxury Interior Designers</a> |
+                <a href="/trending/luxury-bedroom-furniture-london.html" target="_blank">Luxury Bedroom Furniture</a> |
+                <a href="/trending/luxury-modern-chairs-london.html" target="_blank">Luxury Modern Chairs</a> |
+                <a href="/trending/luxury-coffee-tables-london.html" target="_blank">Luxury Coffee Tables</a> |
+                <a href="/trending/luxury-modern-kitchens-london.html" target="_blank">Luxury Designer Kitchens</a> |
+                <a href="/trending/modern-tv-units-london.html" target="_blank">Luxury TV Units</a> |
+                <a href="/trending/luxury-dining-tables-london.html" target="_blank">Luxury Dining Tables</a> |
+                <a href="/trending/luxury-storage-furniture-london.html" target="_blank">Luxury Storage Solutions</a> |
+                <a href="/trending/designer-sideboards-london.html" target="_blank">Luxury Sideboards</a> |
+                <a href="/trending/luxury-bar-stools-london.html" target="_blank">Luxury Stools &amp; Bar Stools</a>
+            </p>
+            <p class="thick-h3 black"><strong>Transparency isn’t a policy. It’s a principle.<br>
+                    Have a peek at what our clients really have to say.</strong></p>
+            <a href="https://www.google.com/search?gs_ssp=eJzj4tZP1zcsScm2zE7PMmC0UjWoMLEwNzM0MjJMNUkyMjc3MLQyqEhJTTJOSkwyMU1MTjU3STbz4kpLzlTIyc9Lyc8DAEUUEsI&q=fci+london&rlz=1C1CHZL_enIN860IN860&oq=fcilo&gs_lcrp=EgZjaHJvbWUqDwgBEC4YChivARjHARiABDIGCAAQRRg8Mg8IARAuGAoYrwEYxwEYgAQyBggCEEUYOTIJCAMQABgKGIAEMgYIBBBFGDwyBggFEEUYPDIGCAYQRRg8MgYIBxBFGDzSAQgyNTQxajBqOagCALACAA&sourceid=chrome&ie=UTF-8#lrd=0x48761221e4b27701:0xdeb3bab45ace74c6,1,,,,1" target="_blank" rel="noreferrer nofollow">
+                <img class="googlereviews" src="../site-assets/images/google-reviews-logo.png" alt="Google Reviews Logo" width="250" height="116" loading="lazy"></a>
+        </section>
     </main>
     <!-- Start FOOTER -->
     <footer class="footer border-color">
-
+        <div class="container">
+            <div class="row footer-wrap-block">
+                <div class="footer-link-block col col-4-mid spacing-v">
+                    <a class="border-none" href="/">
+                        <img src="/cdn-cgi/image/quality=75,f=auto/site-assets/img/logos/logo-horizontal-text.png" alt="FCI Logo" width="224" height="65" loading="lazy">
+                    </a>
+                </div> <!-- ./col -->
+                <div class="col col-4-mid spacing-v font-size-xl text-center">
+                    <a href="/about-us.html">About Us</a> /
+                    <a href="/delivery-policy.html">Delivery &amp; Returns</a> /
+                    <a href="/terms-and-conditions.html">Terms</a> /
+                    <a href="/privacy-policy.html">Privacy</a> /
+                    <a href="/cookie-policy.html">Cookie Policy</a> /
+                    <a href="/code-ethics.html">Ethics</a> /
+                    <a href="/awards.html">Awards</a> /
+                    <a href="/blog/">Blog</a> /
+                    <a href="/about-us/meet-our-team.html">Team</a>
+                    <div>&copy; FCI London</div>
+                </div> <!-- ./col -->
+                <div class="col col-4-mid spacing-v footer-social-block text-center">
+                    <a href="https://x.com/fcilondonuk" target="_blank" rel="noreferrer nofollow" class="spacing-h"><span class="icon-twitter"></span></a>
+                    <a href="https://www.pinterest.co.uk/fcilondon/" target="_blank" rel="noreferrer nofollow" class="spacing-h"><span class="icon-pinterest-p"></span></a>
+                    <a href="https://www.facebook.com/fcilondon" rel="noreferrer nofollow" target="_blank" class="spacing-h"><span class="icon-facebook"></span></a>
+                    <a href="https://www.youtube.com/channel/UCemNep4IZeCjDXqubl3jcXw/videos" rel="noreferrer nofollow" target="_blank" class="spacing-h"><span class="icon-youtube-play"></span></a>
+                    <a href="https://www.instagram.com/fcilondon/" target="_blank" rel="noreferrer nofollow" class="spacing-h"><span class="icon-instagram1"></span></a>
+                </div> <!-- ./col -->
+            </div> <!-- /.row -->
+        </div> <!-- /.container -->
+        <a href="/get-in-touch.html" target="_blank" class="whatsapp-chat">
+            <img src="/cdn-cgi/image/quality=75,f=auto/site-assets/images/whatsapp-chat.png" width="55" height="55" loading="lazy" alt="Chat us on Whatsapp">
+        </a>
     </footer>
     <!-- End FOOTER -->
     <!-- Zaraz consent popup -->
@@ -515,7 +820,7 @@
         </dialog>
     </div>
     <!-- Zaraz consent Pop up ends here -->
-    <script src="../site-assets/js/showroom-content-fallback.js"></script>
+    <script src="../site-assets/js/showroom-content-fallback.js?v=2"></script>
     <script>
         // Dynamic Title Management
         (function() {
