@@ -8,7 +8,7 @@ let quizData = {
 function initializeSampleData() {
   quizData = {
     bannerSection: {
-      mainHeading: 'Match Your Personality To A Luxury Sofa.',
+      mainHeading: 'Match Your Personality To A Luxury Product.',
       subHeading: 'Try Our AI Tool',
       backgroundImage:
         '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/gallotti-and-radice-banner-1.jpg',
@@ -16,19 +16,19 @@ function initializeSampleData() {
         '../cdn-cgi/image/quality=60,f=auto/site-assets/images/luxury/luxury-banner-1-mobile.jpg',
     },
     showroomSection: {
-      heading: 'The largest luxury sofa showroom in London',
+      heading: 'The largest luxury default showroom in London',
       image: '../cdn-cgi/image/quality=75,f=auto/site-assets/shoroomlndn.jpg',
     },
-    luxurySofasSection: {
-      title: 'Luxury Sofas, Redefined',
+    luxuryDefaultsSection: {
+      title: 'Luxury Defaults, Redefined',
       introduction:
-        "A sofa is never just a sofa. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell sofas; we curate spaces of sophistication, tailored to those who appreciate life's finer details.",
+        "A product is never just a product. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell products; we curate spaces of sophistication, tailored to those who appreciate life's finer details.",
       subtitle: 'Why Visit Our Showroom?',
       points: [
         {
           title: '1. The Largest Collection in London',
           description:
-            "Why settle for standard when you can have the exceptional? Our showroom houses an unparalleled selection of luxury sofas, from timeless classics to contemporary masterpieces, all meticulously crafted by the world's finest artisans.",
+            "Why settle for standard when you can have the exceptional? Our showroom houses an unparalleled selection of luxury products, from timeless classics to contemporary masterpieces, all meticulously crafted by the world's finest artisans.",
         },
         {
           title: '2. Bespoke, Just for You',
@@ -38,7 +38,7 @@ function initializeSampleData() {
         {
           title: '3. The Touch Test',
           description:
-            "A sofa should never be chosen from a screen. It's about how it feels—the depth of the cushioning, the smoothness of the upholstery, the perfect balance of support and indulgence. Our showroom invites you to experience craftsmanship in its truest form.",
+            "A product should never be chosen from a screen. It's about how it feels—the depth of the cushioning, the smoothness of the upholstery, the perfect balance of support and indulgence. Our showroom invites you to experience craftsmanship in its truest form.",
         },
         {
           title: '4. Design Expertise, on Demand',
@@ -48,29 +48,29 @@ function initializeSampleData() {
         {
           title: '5. Instant Gratification',
           description:
-            "Impatience is a virtue when it comes to interiors. With many of our luxury sofas available for immediate delivery, there's no need to wait months for perfection to arrive.",
+            "Impatience is a virtue when it comes to interiors. With many of our luxury products available for immediate delivery, there's no need to wait months for perfection to arrive.",
         },
       ],
       conclusion:
-        '<strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the sofa you never knew you needed.',
+        '<strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the default you never knew you needed.',
     },
     gallerySection: {
       images: [
         {
           src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-03.jpg',
-          alt: 'Luxury sectional sofa in modern living room',
+          alt: 'Luxury sectional default in modern living room',
         },
         {
-          src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-8.jpg',
-          alt: 'Elegant leather luxury sofa',
-        },
-        {
-          src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
-          alt: 'Designer fabric luxury sofa',
+          src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-defaults-8.jpg',
+          alt: 'Elegant leather luxury default',
         },
         {
           src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
-          alt: 'Designer fabric luxury sofa',
+          alt: 'Designer fabric luxury default',
+        },
+        {
+          src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
+          alt: 'Designer fabric luxury default',
         },
       ],
     },
@@ -82,26 +82,26 @@ function initializeSampleData() {
       buttonLink: '/book-a-showroom-visit.html',
     },
     quizPromoSection: {
-      heading: 'Take our lifestyle quiz & find the perfect sofa match.',
+      heading: 'Take our lifestyle quiz & find the perfect default match.',
       features: [
         'AI Matching algorithm',
-        'Searches over 2000 Luxury Sofas',
+        'Searches over 2000 Luxury Defaults',
         'Results Within 10 Minutes',
         'Only Branded Italian Design',
         'Exclusive Branded Italian Designs',
         'Free Consultation Available',
       ],
-      buttonText: 'Try our Sofa Matching Quiz',
-      buttonLink: '#sofaquiz',
+      buttonText: 'Try our Default Matching Quiz',
+      buttonLink: '#productquiz',
       images: [
         '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-furniture-design-1.jpg',
         '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-furniture-design-2.jpg',
         '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-furniture-design-3.jpg',
-        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-1.jpg',
-        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-2.jpg',
-        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-3.jpg',
-        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-4.jpg',
-        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-5.jpg',
+        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-defaults-1.jpg',
+        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-defaults-2.jpg',
+        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-defaults-3.jpg',
+        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-defaults-4.jpg',
+        '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-defaults-5.jpg',
       ],
     },
     questions: [
@@ -113,19 +113,19 @@ function initializeSampleData() {
             id: 'a',
             text: 'Young kids—energetic, messy, and always moving',
             image:
-              '/site-assets/images/sofa-quiz/young-kids-energetic-messy-and-always-moving.jpg',
+              '/site-assets/images/default-quiz/young-kids-energetic-messy-and-always-moving.jpg',
           },
           {
             id: 'b',
             text: 'Teenagers or young adults still at home',
             image:
-              '/site-assets/images/sofa-quiz/teenagers-or-young-adults-still-at-home.jpg',
+              '/site-assets/images/default-quiz/teenagers-or-young-adults-still-at-home.jpg',
           },
           {
             id: 'c',
             text: 'Just the two of us—calm and design-focused',
             image:
-              '/site-assets/images/sofa-quiz/just-the-two-of-us-calm-and-design-focused.jpg',
+              '/site-assets/images/default-quiz/just-the-two-of-us-calm-and-design-focused.jpg',
           },
         ],
       },
@@ -134,25 +134,25 @@ function initializeSampleData() {
   renderQuestions();
 }
 
-// Luxury Sofas Section Functions
-function updateLuxurySofasContent(field, value) {
-  if (!quizData.luxurySofasSection) {
-    quizData.luxurySofasSection = {};
+// Luxury Defaults Section Functions
+function updateLuxuryDefaultsContent(field, value) {
+  if (!quizData.luxuryDefaultsSection) {
+    quizData.luxuryDefaultsSection = {};
   }
-  quizData.luxurySofasSection[field] = value;
-  showStatus(`Luxury Sofas ${field} updated`, 'success');
+  quizData.luxuryDefaultsSection[field] = value;
+  showStatus(`Luxury Defaults ${field} updated`, 'success');
 }
 
-function renderLuxurySofasPoints() {
-  const container = document.getElementById('luxurySofasPoints');
+function renderLuxuryDefaultsPoints() {
+  const container = document.getElementById('luxuryDefaultsPoints');
   if (
     !container ||
-    !quizData.luxurySofasSection ||
-    !quizData.luxurySofasSection.points
+    !quizData.luxuryDefaultsSection ||
+    !quizData.luxuryDefaultsSection.points
   )
     return;
 
-  container.innerHTML = quizData.luxurySofasSection.points
+  container.innerHTML = quizData.luxuryDefaultsSection.points
     .map(
       (point, index) => `
         <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-bottom: 10px; background: #f9f9f9;">
@@ -160,15 +160,15 @@ function renderLuxurySofasPoints() {
                 <div style="flex: 1; margin-right: 10px;">
                     <input type="text"
                            value="${point.title}"
-                           onchange="updateLuxurySofasPoint(${index}, 'title', this.value)"
+                           onchange="updateLuxuryDefaultsPoint(${index}, 'title', this.value)"
                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px; font-weight: bold;"
                            placeholder="Point title...">
                     <textarea
-                           onchange="updateLuxurySofasPoint(${index}, 'description', this.value)"
+                           onchange="updateLuxuryDefaultsPoint(${index}, 'description', this.value)"
                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; min-height: 60px;"
                            placeholder="Point description...">${point.description}</textarea>
                 </div>
-                <button class="btn btn-danger" onclick="removeLuxurySofasPoint(${index})" style="padding: 5px 10px;">×</button>
+                <button class="btn btn-danger" onclick="removeLuxuryDefaultsPoint(${index})" style="padding: 5px 10px;">×</button>
             </div>
         </div>
     `
@@ -176,37 +176,37 @@ function renderLuxurySofasPoints() {
     .join('');
 }
 
-function addLuxurySofasPoint() {
-  if (!quizData.luxurySofasSection) {
-    quizData.luxurySofasSection = { points: [] };
+function addLuxuryDefaultsPoint() {
+  if (!quizData.luxuryDefaultsSection) {
+    quizData.luxuryDefaultsSection = { points: [] };
   }
-  if (!quizData.luxurySofasSection.points) {
-    quizData.luxurySofasSection.points = [];
+  if (!quizData.luxuryDefaultsSection.points) {
+    quizData.luxuryDefaultsSection.points = [];
   }
-  const newNumber = quizData.luxurySofasSection.points.length + 1;
-  quizData.luxurySofasSection.points.push({
+  const newNumber = quizData.luxuryDefaultsSection.points.length + 1;
+  quizData.luxuryDefaultsSection.points.push({
     title: `${newNumber}. New Point`,
     description: 'Enter point description here...',
   });
-  renderLuxurySofasPoints();
+  renderLuxuryDefaultsPoints();
   showStatus('Point added', 'success');
 }
 
-function updateLuxurySofasPoint(index, field, value) {
-  quizData.luxurySofasSection.points[index][field] = value;
+function updateLuxuryDefaultsPoint(index, field, value) {
+  quizData.luxuryDefaultsSection.points[index][field] = value;
   showStatus('Point updated', 'success');
 }
 
-function removeLuxurySofasPoint(index) {
-  quizData.luxurySofasSection.points.splice(index, 1);
+function removeLuxuryDefaultsPoint(index) {
+  quizData.luxuryDefaultsSection.points.splice(index, 1);
   // Renumber remaining points
-  quizData.luxurySofasSection.points.forEach((point, i) => {
+  quizData.luxuryDefaultsSection.points.forEach((point, i) => {
     const match = point.title.match(/^\d+\.\s(.+)/);
     if (match) {
       point.title = `${i + 1}. ${match[1]}`;
     }
   });
-  renderLuxurySofasPoints();
+  renderLuxuryDefaultsPoints();
   showStatus('Point removed', 'success');
 }
 
@@ -216,7 +216,7 @@ function renderQuestions() {
   if (bannerMainHeading && quizData.bannerSection) {
     bannerMainHeading.value =
       quizData.bannerSection.mainHeading ||
-      'Match Your Personality To A Luxury Sofa.';
+      'Match Your Personality To A Luxury Default.';
     document.getElementById('bannerSubHeading').value =
       quizData.bannerSection.subHeading || 'Try Our AI Tool';
 
@@ -242,7 +242,7 @@ function renderQuestions() {
   if (showroomHeading && quizData.showroomSection) {
     showroomHeading.value =
       quizData.showroomSection.heading ||
-      'The largest luxury sofa showroom in London';
+      'The largest luxury default showroom in London';
 
     const showroomImage = document.getElementById('showroom-image');
     if (showroomImage && quizData.showroomSection.image) {
@@ -252,34 +252,34 @@ function renderQuestions() {
     }
   }
 
-  // Update Luxury Sofas section UI
-  if (quizData.luxurySofasSection) {
-    const luxurySofasTitle = document.getElementById('luxurySofasTitle');
-    if (luxurySofasTitle) {
-      luxurySofasTitle.value =
-        quizData.luxurySofasSection.title || 'Luxury Sofas, Redefined';
+  // Update Luxury Defaults section UI
+  if (quizData.luxuryDefaultsSection) {
+    const luxuryDefaultsTitle = document.getElementById('luxuryDefaultsTitle');
+    if (luxuryDefaultsTitle) {
+      luxuryDefaultsTitle.value =
+        quizData.luxuryDefaultsSection.title || 'Luxury Defaults, Redefined';
     }
 
-    const luxurySofasIntro = document.getElementById('luxurySofasIntro');
-    if (luxurySofasIntro) {
-      luxurySofasIntro.value = quizData.luxurySofasSection.introduction || '';
+    const luxuryDefaultsIntro = document.getElementById('luxuryDefaultsIntro');
+    if (luxuryDefaultsIntro) {
+      luxuryDefaultsIntro.value = quizData.luxuryDefaultsSection.introduction || '';
     }
 
-    const luxurySofasSubtitle = document.getElementById('luxurySofasSubtitle');
-    if (luxurySofasSubtitle) {
-      luxurySofasSubtitle.value =
-        quizData.luxurySofasSection.subtitle || 'Why Visit Our Showroom?';
+    const luxuryDefaultsSubtitle = document.getElementById('luxuryDefaultsSubtitle');
+    if (luxuryDefaultsSubtitle) {
+      luxuryDefaultsSubtitle.value =
+        quizData.luxuryDefaultsSection.subtitle || 'Why Visit Our Showroom?';
     }
 
-    const luxurySofasConclusion = document.getElementById(
-      'luxurySofasConclusion'
+    const luxuryDefaultsConclusion = document.getElementById(
+      'luxuryDefaultsConclusion'
     );
-    if (luxurySofasConclusion) {
-      luxurySofasConclusion.value =
-        quizData.luxurySofasSection.conclusion || '';
+    if (luxuryDefaultsConclusion) {
+      luxuryDefaultsConclusion.value =
+        quizData.luxuryDefaultsSection.conclusion || '';
     }
 
-    renderLuxurySofasPoints();
+    renderLuxuryDefaultsPoints();
   }
 
   // Render gallery section
@@ -314,11 +314,11 @@ function renderQuestions() {
   if (quizPromoHeading && quizData.quizPromoSection) {
     quizPromoHeading.value =
       quizData.quizPromoSection.heading ||
-      'Take our lifestyle quiz & find the perfect sofa match.';
+      'Take our lifestyle quiz & find the perfect default match.';
     document.getElementById('quizPromoButtonText').value =
-      quizData.quizPromoSection.buttonText || 'Try our Sofa Matching Quiz';
+      quizData.quizPromoSection.buttonText || 'Try our Default Matching Quiz';
     document.getElementById('quizPromoButtonLink').value =
-      quizData.quizPromoSection.buttonLink || '#sofaquiz';
+      quizData.quizPromoSection.buttonLink || '#productquiz';
     renderQuizPromoFeatures();
     renderQuizPromoImages();
   }
@@ -740,7 +740,7 @@ function removeOption(qIndex, oIndex) {
 
 function saveQuiz() {
   // Check if we're working with a custom product quiz
-  if (window.currentProductKey && window.currentProductKey !== 'sofa') {
+  if (window.currentProductKey && window.currentProductKey !== 'default') {
     // TODO: Save to database instead of localStorage
     // const productQuizzes = JSON.parse(localStorage.getItem('productQuizzes') || '{}');
     console.log('TODO: Save product quiz to database');
@@ -801,10 +801,10 @@ function saveQuiz() {
         productQuizzes[window.currentProductKey].quizPromoContent.buttonLink =
           quizPromoButtonLink.value;
 
-      // Also update luxurySofasSection data if it exists in quizData
-      if (quizData.luxurySofasSection) {
-        productQuizzes[window.currentProductKey].luxurySofasSection =
-          quizData.luxurySofasSection;
+      // Also update luxuryDefaultsSection data if it exists in quizData
+      if (quizData.luxuryDefaultsSection) {
+        productQuizzes[window.currentProductKey].luxuryDefaultsSection =
+          quizData.luxuryDefaultsSection;
       }
       if (quizData.gallerySection) {
         productQuizzes[window.currentProductKey].gallerySection =
@@ -827,10 +827,10 @@ function saveQuiz() {
       );
     }
   } else {
-    // TODO: Save sofa quiz to database
-    // localStorage.setItem('sofaQuizData', JSON.stringify(quizData));
+    // TODO: Save default quiz to database
+    // localStorage.setItem('defaultQuizData', JSON.stringify(quizData));
     showStatus(
-      'Sofa quiz saved successfully! (Database integration pending)',
+      'Default quiz saved successfully! (Database integration pending)',
       'success'
     );
   }
@@ -841,13 +841,13 @@ function saveQuiz() {
 
 function loadCurrentQuiz() {
   // TODO: Load from database instead of localStorage
-  const savedData = null; // localStorage.getItem('sofaQuizData');
+  const savedData = null; // localStorage.getItem('defaultQuizData');
   if (savedData) {
     const parsedData = JSON.parse(savedData);
     // Ensure all sections exist
     if (!parsedData.bannerSection) {
       parsedData.bannerSection = {
-        mainHeading: 'Match Your Personality To A Luxury Sofa.',
+        mainHeading: 'Match Your Personality To A Luxury Product.',
         subHeading: 'Try Our AI Tool',
         backgroundImage:
           '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/gallotti-and-radice-banner-1.jpg',
@@ -857,19 +857,19 @@ function loadCurrentQuiz() {
     }
     if (!parsedData.showroomSection) {
       parsedData.showroomSection = {
-        heading: 'The largest luxury sofa showroom in London',
+        heading: 'The largest luxury default showroom in London',
         image: '../cdn-cgi/image/quality=75,f=auto/site-assets/shoroomlndn.jpg',
       };
     }
-    if (!parsedData.luxurySofasSection) {
-      parsedData.luxurySofasSection = {
-        title: 'Luxury Sofas, Redefined',
+    if (!parsedData.luxuryDefaultsSection) {
+      parsedData.luxuryDefaultsSection = {
+        title: 'Luxury Defaults, Redefined',
         introduction:
-          "A sofa is never just a sofa. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell sofas; we curate spaces of sophistication, tailored to those who appreciate life's finer details.",
+          "A product is never just a product. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell products; we curate spaces of sophistication, tailored to those who appreciate life's finer details.",
         subtitle: 'Why Visit Our Showroom?',
         points: [],
         conclusion:
-          '<strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the sofa you never knew you needed.',
+          '<strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the default you never knew you needed.',
       };
     }
     if (!parsedData.gallerySection) {
@@ -877,19 +877,19 @@ function loadCurrentQuiz() {
         images: [
           {
             src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-03.jpg',
-            alt: 'Luxury sectional sofa in modern living room',
+            alt: 'Luxury sectional default in modern living room',
           },
           {
-            src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-sofas-8.jpg',
-            alt: 'Elegant leather luxury sofa',
-          },
-          {
-            src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
-            alt: 'Designer fabric luxury sofa',
+            src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/luxury-defaults-8.jpg',
+            alt: 'Elegant leather luxury default',
           },
           {
             src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
-            alt: 'Designer fabric luxury sofa',
+            alt: 'Designer fabric luxury default',
+          },
+          {
+            src: '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/lpluxury-funiture-05.jpg',
+            alt: 'Designer fabric luxury default',
           },
         ],
       };
@@ -905,17 +905,17 @@ function loadCurrentQuiz() {
     }
     if (!parsedData.quizPromoSection) {
       parsedData.quizPromoSection = {
-        heading: 'Take our lifestyle quiz & find the perfect sofa match.',
+        heading: 'Take our lifestyle quiz & find the perfect default match.',
         features: [
           'AI Matching algorithm',
-          'Searches over 2000 Luxury Sofas',
+          'Searches over 2000 Luxury Defaults',
           'Results Within 10 Minutes',
           'Only Branded Italian Design',
           'Exclusive Branded Italian Designs',
           'Free Consultation Available',
         ],
-        buttonText: 'Try our Sofa Matching Quiz',
-        buttonLink: '#sofaquiz',
+        buttonText: 'Try our Default Matching Quiz',
+        buttonLink: '#productquiz',
         images: [],
       };
     }
@@ -1108,7 +1108,7 @@ function updateProductQuizSelector() {
   // TODO: Load from database
   const productQuizzes = {}; // JSON.parse(localStorage.getItem('productQuizzes') || '{}');
 
-  // Clear existing options except the first one (Sofa)
+  // Clear existing options except the first one (Default)
   while (selector.children.length > 1) {
     selector.removeChild(selector.lastChild);
   }
@@ -1131,11 +1131,11 @@ function switchProductQuiz(productKey) {
   // localStorage.setItem('currentProduct', productKey);
   console.log('TODO: Set current product in database:', productKey);
 
-  if (productKey === 'sofa') {
-    // Switch to original sofa quiz
+  if (productKey === 'default') {
+    // Switch to original default quiz
     document.getElementById('dashboardTitle').textContent =
-      'Sofa Quiz Content Management Dashboard';
-    loadCurrentQuiz(); // Load the original sofa quiz data
+      'Default Quiz Content Management Dashboard';
+    loadCurrentQuiz(); // Load the original default quiz data
     return;
   }
 
@@ -1235,17 +1235,17 @@ function previewQuiz() {
         </div>
     `;
 
-  // Add Luxury Sofas section preview
-  if (quizData.luxurySofasSection) {
+  // Add Luxury Defaults section preview
+  if (quizData.luxuryDefaultsSection) {
     html += `
             <div style="margin-bottom: 40px; padding: 20px; background: #f0e6ff; border-radius: 8px;">
-                <h2 style="color: #6b46c1; text-align: center; margin-bottom: 20px;">${quizData.luxurySofasSection.title}</h2>
-                <p style="margin-bottom: 20px;">${quizData.luxurySofasSection.introduction}</p>
-                <h3 style="color: #6b46c1; margin-bottom: 15px;">${quizData.luxurySofasSection.subtitle}</h3>
+                <h2 style="color: #6b46c1; text-align: center; margin-bottom: 20px;">${quizData.luxuryDefaultsSection.title}</h2>
+                <p style="margin-bottom: 20px;">${quizData.luxuryDefaultsSection.introduction}</p>
+                <h3 style="color: #6b46c1; margin-bottom: 15px;">${quizData.luxuryDefaultsSection.subtitle}</h3>
         `;
 
-    if (quizData.luxurySofasSection.points) {
-      quizData.luxurySofasSection.points.forEach((point) => {
+    if (quizData.luxuryDefaultsSection.points) {
+      quizData.luxuryDefaultsSection.points.forEach((point) => {
         html += `
                     <div style="margin-bottom: 15px;">
                         <strong>${point.title}</strong><br>
@@ -1256,7 +1256,7 @@ function previewQuiz() {
     }
 
     html += `
-                <div style="margin-top: 20px;">${quizData.luxurySofasSection.conclusion}</div>
+                <div style="margin-top: 20px;">${quizData.luxuryDefaultsSection.conclusion}</div>
             </div>
         `;
   }
@@ -1335,9 +1335,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Load existing product quizzes
   updateProductQuizSelector();
 
-  // Check if there's a current product set, otherwise default to sofa
+  // Check if there's a current product set, otherwise default to default
   // TODO: Get current product from database/session
-  const currentProduct = 'sofa'; // localStorage.getItem('currentProduct') || 'sofa';
+  const currentProduct = 'default'; // localStorage.getItem('currentProduct') || 'default';
 
   // Set the selector to the current product
   const selector = document.getElementById('productQuizSelector');
@@ -1346,7 +1346,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Load the appropriate quiz data
-  if (currentProduct === 'sofa') {
+  if (currentProduct === 'default') {
     loadCurrentQuiz();
   } else {
     switchProductQuiz(currentProduct);

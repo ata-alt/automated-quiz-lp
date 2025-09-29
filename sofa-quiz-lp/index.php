@@ -54,12 +54,13 @@
 
     <meta name="popup" content="0">
     <meta name="robots" content="noindex, nofollow">
-    <link href="../site-assets/css/luxurylp.css?v=9" rel="stylesheet">
+    <link href="../site-assets/css/luxurylp.css?v=12" rel="stylesheet">
     <link href="../site-assets/css/style-quiz-widget.css?v=6" rel="stylesheet">
-    <script src="../api/api-client.js?v=2"></script>
-    <script src="../site-assets/js/frame.sofa-quiz.js?v=1"></script>
-    <script src="../site-assets/js/sofa-quiz.js?v=2" defer></script>
-    <script src="../site-assets/js/showroom-content.js?v=6" defer></script>
+    <script src="../api/api-client.js?v=3"></script>
+    <script src="../site-assets/js/frame.sofa-quiz.js?v=2"></script>
+    <script src="../site-assets/js/sofa-quiz.js?v=5" defer></script>
+    <script src="../site-assets/js/showroom-content.js?v=11" defer></script>
+
     <style>
         .main {
             margin-top: 0px;
@@ -300,13 +301,13 @@
                 <source srcset="../cdn-cgi/image/quality=60,f=auto/site-assets/images/luxury/luxury-banner-1-mobile.jpg" media="(max-width: 640px)" width="500px" height="660px">
                 <img srcset="../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/gallotti-and-radice-banner-1.jpg" alt="Luxury Sofas Showroom at FCI London" title="Luxury Sofas Showroom at FCI London" width="2000" height="866" class="banner-img full-width">
                 <div class="banner-content banner-content-vertical-center container">
-                    <h1 class="banner-heading white thick-h1 font-family-2 margin-reset">Match Your Personality To A Luxury Sofa.</h1>
+                    <h1 class="banner-heading white thick-h1 font-family-2 margin-reset">Match Your Personality To A Luxury Product.</h1>
                     <p class="banner-heading white thick-h3 font-family-2 margin-reset">Try Our AI Tool</p>
                 </div>
             </picture>
         </section>
         <section class="container" style="padding: 20px 10px;">
-            <div class="row text-center" id="sofaquiz">
+            <div class="row text-center" id="productquiz">
                 <div class="col col-12">
                     <!-- Quiz Widget Container -->
                     <section class="style-quiz-widget container"> <!-- $0 -->
@@ -341,10 +342,10 @@
                             <div id="result-form" class="result-section" style="display: none;">
                                 <h1 class="thick-h2 black">OK We're On It.</h1>
                                 <h3 class="thick-h3 black">
-                                    "We'll send you an email shortly with your lifestyle matched to a few sofa options."
+                                    "We'll send you an email shortly with your lifestyle matched to a few product options."
                                 </h3>
                                 <div class="spacing-v"></div>
-                                <form id="sofaquiz" class="webform" action="#" method="POST" onsubmit="submitDetails(event)" data-hs-cf-bound="true">
+                                <form id="productquiz" class="webform" action="#" method="POST" onsubmit="submitDetails(event)" data-hs-cf-bound="true">
                                     <div class="row">
                                         <div class="col col-12 col-4-mid">
                                             <div class="field-block">
@@ -393,10 +394,10 @@
         </section>
         <section style="padding:10px 10px 20px 20px">
             <div class="container">
-                <p class="thick-h1 text-center black" id="showroomMainTitle">Luxury Sofas, Redefined</p>
+                <p class="thick-h1 text-center black" id="showroomMainTitle">Luxury Products, Redefined</p>
                 <div class="row flex" style="flex-wrap: wrap;">
                     <div class="col col-12" id="showroomContent">
-                        <p class="block-text" id="showroomIntroduction">A sofa is never just a sofa. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell sofas; we curate spaces of sophistication, tailored to those who appreciate life's finer details.</p>
+                        <p class="block-text" id="showroomIntroduction">A product is never just a product. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living space. At FCI London, we don't just sell products; we curate spaces of sophistication, tailored to those who appreciate life's finer details.</p>
                         <p class="block-text" id="showroomWhyVisitTitle">Why Visit Our Showroom?</p>
                         <div id="showroomPoints">
                             <p class="block-text"><strong>1. The Largest Collection in London</strong><br>Why settle for standard when you can have the exceptional? Our showroom houses an unparalleled selection of luxury sofas, from timeless classics to contemporary masterpieces, all meticulously crafted by the world's finest artisans.</p>
@@ -412,7 +413,7 @@
         </section>
         <section style="padding:10px 10px 10px 10px; background-color: #F9F9F9;">
             <div class="container">
-                <p class="thick-h1 text-center black">Take our lifestyle quiz &amp; find the perfect sofa match.</p>
+                <p class="thick-h1 text-center black">Take our lifestyle quiz &amp; find the perfect product match.</p>
                 <div class="row flex" style="flex-wrap: wrap;">
                     <div class="col col-12 col-6-mid spacing-2 block-text">
                         <ul class="block-text">
@@ -423,7 +424,7 @@
                             <li><strong>Exclusive Branded Italian Designs</strong></li>
                             <li><strong>Free Consultation Available</strong></li>
                         </ul>
-                        <p><a class="btn btn-white thick-h3 black" href="#sofaquiz">Try our Sofa Matching Quiz <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
+                        <p><a class="btn btn-white thick-h3 black" href="#productquiz">Try our Product Matching Quiz <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i></a></p>
                     </div>
                     <div class="col col-12 col-6-mid">
                         <ul id="wardrobes-slider">
@@ -843,7 +844,7 @@
         </dialog>
     </div>
     <!-- Zaraz consent Pop up ends here -->
-    <script src="../site-assets/js/showroom-content-fallback.js?v=6"></script>
+    <script src="../site-assets/js/showroom-content-fallback.js?v=11" defer></script>
     <script>
         // Dynamic Title Management
         (function() {
@@ -857,8 +858,8 @@
             // Function to get product display name
             function getProductDisplayName(productKey) {
                 const productNames = {
-                    'sofa': 'Sofa',
-                    'sofas': 'Sofa',
+                    'default': 'Product',
+                    'products': 'Product',
                     'wardrobe': 'Wardrobe',
                     'wardrobes': 'Wardrobe',
                     'kitchen': 'Kitchen',
@@ -879,7 +880,7 @@
                     return capitalize(productKey.replace(/[_-]/g, ' '));
                 }
 
-                return 'Sofa'; // Default fallback
+                return 'Product'; // Default fallback
             }
 
             // Function to update page title
@@ -892,7 +893,7 @@
                     // Get current product from API or use preview product
                     const currentProduct = previewProduct || await window.apiClient.getCurrentProduct();
 
-                    if (currentProduct && currentProduct !== 'sofa') {
+                    if (currentProduct && currentProduct !== 'default') {
                         // Get product data to get the actual name
                         try {
                             const productData = await window.apiClient.getContent(currentProduct);
@@ -915,7 +916,6 @@
                                 titleElement.textContent = newTitle;
                             }
 
-                            console.log(`[Title] Updated to: ${newTitle}`);
 
                         } catch (error) {
                             // If we can't get product data, use the product key
@@ -928,21 +928,18 @@
                                 titleElement.textContent = newTitle;
                             }
 
-                            console.log(`[Title] Updated to: ${newTitle} (fallback)`);
                         }
                     } else {
-                        // Default to Sofa Quiz
-                        const defaultTitle = 'Luxury Sofa Quiz';
+                        // Default to Product Quiz
+                        const defaultTitle = 'Luxury Product Quiz';
                         document.title = defaultTitle;
                         const titleElement = document.getElementById('page-title');
                         if (titleElement) {
                             titleElement.textContent = defaultTitle;
                         }
-                        console.log(`[Title] Using default: ${defaultTitle}`);
                     }
 
                 } catch (error) {
-                    console.warn('[Title] Could not update title:', error);
                     // Keep default title if API fails
                 }
             }
@@ -958,19 +955,15 @@
                     // Listen for storage changes (when dashboard updates current product)
                     window.addEventListener('storage', function(e) {
                         if (e.key === 'currentProduct' || e.key === 'productQuizzes') {
-                            console.log('[Title] Detected product change, updating title...');
                             updatePageTitle();
                         }
                     });
 
                     // Listen for custom events (for real-time updates)
                     window.addEventListener('productChanged', function(e) {
-                        console.log('[Title] Product changed event received:', e.detail);
                         updatePageTitle();
                     });
-                } else {
-                    console.log('[Title] Preview mode detected - skipping auto-update listeners');
-                }
+                } else {}
             }
 
             // Initialize title management

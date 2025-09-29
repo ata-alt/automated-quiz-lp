@@ -47,23 +47,22 @@
 
       // Get current product from API (will use preview product if available)
       const currentProduct = await window.apiClient.getCurrentProduct();
-      if (!currentProduct || currentProduct === 'sofa') {
-        return null; // Use default content for sofa
+      if (!currentProduct || currentProduct === 'default') {
+        return null; // Use default content for default
       }
 
       // Get product content data
       const productData = await window.apiClient.getContent(currentProduct);
       return { productData, productKey: currentProduct };
     } catch (error) {
-      console.warn('[Content] Could not get current product data:', error);
       return null;
     }
   }
 
   // Function to convert product quiz format to expected format
   function convertProductDataFormat(productData, productKey) {
-    if (!productData || productKey === 'sofa') {
-      return productData; // Return as-is for sofa or null data
+    if (!productData || productKey === 'default') {
+      return productData; // Return as-is for default or null data
     }
 
     // Check if data is in the new API format (direct content sections)
@@ -83,7 +82,7 @@
             `The largest luxury ${productKey?.toLowerCase()} showroom in London`,
           image: productData.showroom?.image || '',
         },
-        luxurySofasSection: {
+        luxuryDefaultsSection: {
           title:
             productData.luxury_content?.title ||
             `Luxury ${productKey}, Redefined`,
@@ -121,12 +120,12 @@
           heading:
             productData.quiz_promo?.heading ||
             `Take our lifestyle quiz & find the perfect ${
-              productKey?.toLowerCase() || 'sofa'
+              productKey?.toLowerCase() || 'default'
             } match.`,
           features: productData.quiz_promo?.features || [],
           buttonText:
             productData.quiz_promo?.buttonText ||
-            `Try our ${productKey || 'Sofa'} Matching Quiz`,
+            `Try our ${productKey || 'Product'} Matching Quiz`,
           buttonLink: productData.quiz_promo?.buttonLink || '#quiz',
           images:
             productData.quiz_promo?.images ||
@@ -152,18 +151,18 @@
           `The largest luxury ${productData.name?.toLowerCase()} showroom in London`,
         image: productData.showroomContent?.image || '',
       },
-      luxurySofasSection: {
+      luxuryDefaultsSection: {
         title:
-          productData.luxurySofasSection?.title ||
+          productData.luxuryDefaultsSection?.title ||
           `Luxury ${productData.name}, Redefined`,
         introduction:
-          productData.luxurySofasSection?.introduction ||
+          productData.luxuryDefaultsSection?.introduction ||
           `Experience the finest ${productData.name?.toLowerCase()} collection.`,
         subtitle:
-          productData.luxurySofasSection?.subtitle || 'Why Visit Our Showroom?',
-        points: productData.luxurySofasSection?.points || [],
+          productData.luxuryDefaultsSection?.subtitle || 'Why Visit Our Showroom?',
+        points: productData.luxuryDefaultsSection?.points || [],
         conclusion:
-          productData.luxurySofasSection?.conclusion ||
+          productData.luxuryDefaultsSection?.conclusion ||
           '<strong>Visit Us & Experience Luxury Firsthand</strong>',
       },
       gallerySection: {
@@ -187,12 +186,12 @@
         heading:
           productData.quizPromoContent?.heading ||
           `Take our lifestyle quiz & find the perfect ${
-            productData.name?.toLowerCase() || 'sofa'
+            productData.name?.toLowerCase() || 'default'
           } match.`,
         features: productData.quizPromoContent?.features || [],
         buttonText:
           productData.quizPromoContent?.buttonText ||
-          `Try our ${productData.name || 'Sofa'} Matching Quiz`,
+          `Try our ${productData.name || 'Default'} Matching Quiz`,
         buttonLink: productData.quizPromoContent?.buttonLink || '#quiz',
         images: productData.quizPromoContent?.sliderImages || [],
       },
@@ -204,7 +203,7 @@
     try {
       const result = await getCurrentProductData();
       const rawData = result?.productData;
-      const currentProduct = result?.productKey || 'sofa';
+      const currentProduct = result?.productKey || 'default';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       // Always update banner images, use placeholders if no data
@@ -264,11 +263,7 @@
           }
         }
       }
-
-      console.log('[Banner] Section updated from saved data');
-    } catch (error) {
-      console.error('[Banner] Error loading section:', error);
-    }
+    } catch (error) {}
   }
 
   // Function to load and update showroom section
@@ -276,7 +271,7 @@
     try {
       const result = await getCurrentProductData();
       const rawData = result?.productData;
-      const currentProduct = result?.productKey || 'sofa';
+      const currentProduct = result?.productKey || 'default';
       const data = convertProductDataFormat(rawData, currentProduct);
 
       // Update showroom heading if data exists
@@ -288,7 +283,7 @@
           // Fallback to searching by text content
           const showroomHeadings = document.querySelectorAll('h2');
           showroomHeadings.forEach((heading) => {
-            if (heading.textContent.includes('largest luxury sofa showroom')) {
+            if (heading.textContent.includes('largest luxury product showroom')) {
               heading.textContent = data.showroomSection.heading;
             }
           });
@@ -342,34 +337,30 @@
           applyImageSizing(img, IMAGE_SIZES.showroom);
         });
       }
-
-      console.log('[Showroom] Section updated from saved data');
-    } catch (error) {
-      console.error('[Showroom] Error loading section:', error);
-    }
+    } catch (error) {}
   }
 
-  // Function to load and update Luxury Sofas Content Section
-  async function loadLuxurySofasSection() {
+  // Function to load and update Luxury Products Content Section
+  async function loadLuxuryProductsSection() {
     try {
       const result = await getCurrentProductData();
       const rawData = result?.productData;
-      const currentProduct = result?.productKey || 'sofa';
+      const currentProduct = result?.productKey || 'default';
       const data = convertProductDataFormat(rawData, currentProduct);
 
-      if (data && data.luxurySofasSection) {
+      if (data && data.luxuryDefaultsSection) {
         // Update main title
         const mainTitle = document.getElementById('showroomMainTitle');
         if (mainTitle) {
-          mainTitle.textContent = data.luxurySofasSection.title;
+          mainTitle.textContent = data.luxuryDefaultsSection.title;
         } else {
           // Fallback for elements without ID
           const titles = document.querySelectorAll(
             'p.thick-h1.text-center.black'
           );
           titles.forEach((title) => {
-            if (title.textContent.includes('Luxury Sofas')) {
-              title.textContent = data.luxurySofasSection.title;
+            if (title.textContent.includes('Luxury Products')) {
+              title.textContent = data.luxuryDefaultsSection.title;
             }
           });
         }
@@ -377,19 +368,19 @@
         // Update introduction paragraph
         const introduction = document.getElementById('showroomIntroduction');
         if (introduction) {
-          introduction.textContent = data.luxurySofasSection.introduction;
+          introduction.textContent = data.luxuryDefaultsSection.introduction;
         }
 
         // Update subtitle
         const subtitle = document.getElementById('showroomWhyVisitTitle');
         if (subtitle) {
-          subtitle.textContent = data.luxurySofasSection.subtitle;
+          subtitle.textContent = data.luxuryDefaultsSection.subtitle;
         }
 
         // Update points
         const pointsContainer = document.getElementById('showroomPoints');
-        if (pointsContainer && data.luxurySofasSection.points) {
-          pointsContainer.innerHTML = data.luxurySofasSection.points
+        if (pointsContainer && data.luxuryDefaultsSection.points) {
+          pointsContainer.innerHTML = data.luxuryDefaultsSection.points
             .map(
               (point) =>
                 `<p class="block-text"><strong>${point.title}</strong><br>${point.description}</p>`
@@ -400,38 +391,34 @@
         // Update conclusion
         const conclusion = document.getElementById('showroomConclusion');
         if (conclusion) {
-          conclusion.innerHTML = data.luxurySofasSection.conclusion;
+          conclusion.innerHTML = data.luxuryDefaultsSection.conclusion;
         }
 
         // If elements don't have IDs, try alternative approach
         if (!mainTitle || !introduction) {
           const contentDiv = document.getElementById('showroomContent');
-          if (contentDiv && data.luxurySofasSection.points) {
+          if (contentDiv && data.luxuryDefaultsSection.points) {
             // Build the entire content structure
             let contentHTML = `
-              <p class="block-text" id="showroomIntroduction">${data.luxurySofasSection.introduction}</p>
-              <p class="block-text" id="showroomWhyVisitTitle">${data.luxurySofasSection.subtitle}</p>
+              <p class="block-text" id="showroomIntroduction">${data.luxuryDefaultsSection.introduction}</p>
+              <p class="block-text" id="showroomWhyVisitTitle">${data.luxuryDefaultsSection.subtitle}</p>
               <div id="showroomPoints">
             `;
 
-            data.luxurySofasSection.points.forEach((point) => {
+            data.luxuryDefaultsSection.points.forEach((point) => {
               contentHTML += `<p class="block-text"><strong>${point.title}</strong><br>${point.description}</p>`;
             });
 
             contentHTML += `
               </div>
-              <p class="block-text" id="showroomConclusion">${data.luxurySofasSection.conclusion}</p>
+              <p class="block-text" id="showroomConclusion">${data.luxuryDefaultsSection.conclusion}</p>
             `;
 
             contentDiv.innerHTML = contentHTML;
           }
         }
-
-        console.log('[LuxurySofas] Section updated from saved data');
       }
-    } catch (error) {
-      console.error('[LuxurySofas] Error loading section:', error);
-    }
+    } catch (error) {}
   }
 
   // Function to load and update Gallery section (3 images)
@@ -460,28 +447,32 @@
           // Update gallery titles and subtitles
           data.gallery.images.forEach((imageData, index) => {
             // Update title element
-            const titleElement = document.getElementById(`gallery-title-${index}`);
+            const titleElement = document.getElementById(
+              `gallery-title-${index}`
+            );
             if (titleElement && imageData.title) {
               titleElement.textContent = imageData.title;
             }
 
             // Update subtitle element
-            const subtitleElement = document.getElementById(`gallery-subtitle-${index}`);
+            const subtitleElement = document.getElementById(
+              `gallery-subtitle-${index}`
+            );
             if (subtitleElement && imageData.subtitle) {
               subtitleElement.textContent = imageData.subtitle;
             }
 
             // Update link element
-            const linkElement = document.getElementById(`gallery-link-${index}-btn`);
+            const linkElement = document.getElementById(
+              `gallery-link-${index}-btn`
+            );
             if (linkElement && imageData.link) {
               linkElement.href = imageData.link;
             }
           });
         }
       }
-    } catch (error) {
-      console.error('[Gallery] Error loading section:', error);
-    }
+    } catch (error) {}
   }
 
   // Function to load and update Design Disaster section
@@ -529,11 +520,7 @@
           button.innerHTML = `${buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
         }
       }
-
-      console.log('[DesignExpert] Section updated from data source');
-    } catch (error) {
-      console.error('[DesignExpert] Error loading section:', error);
-    }
+    } catch (error) {}
   }
 
   // Function to load and update Quiz Promo section
@@ -571,7 +558,7 @@
           }
 
           // Update button
-          const button = promoSection.querySelector('a.btn[href*="sofaquiz"]');
+          const button = promoSection.querySelector('a.btn[href*="productquiz"]');
           if (button) {
             button.href = data.quiz_promo.buttonLink;
             button.innerHTML = `${data.quiz_promo.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
@@ -603,12 +590,8 @@
               .join('');
           }
         }
-
-        console.log('[QuizPromo] Section updated from data source');
       }
-    } catch (error) {
-      console.error('[QuizPromo] Error loading section:', error);
-    }
+    } catch (error) {}
   }
 
   // Function to add global CSS for image consistency
@@ -697,14 +680,7 @@
           'Expert CTA'
         );
       }
-
-      console.log('[Placeholders] Default placeholders set for missing images');
-    } catch (error) {
-      console.error(
-        '[Placeholders] Error setting default placeholders:',
-        error
-      );
-    }
+    } catch (error) {}
   }
 
   // Function to load all dynamic content
@@ -717,7 +693,7 @@
     // Then load dynamic content (which may override placeholders)
     await loadBannerSection();
     await loadShowroomSection();
-    await loadLuxurySofasSection(); // Load the new Luxury Sofas section
+    await loadLuxuryProductsSection(); // Load the new Luxury Products section
     await loadGallerySection();
     await loadDesignExpertSection();
     await loadQuizPromoSection();
@@ -750,18 +726,12 @@
 
     if (
       !isPreviewMode &&
-      (e.key === 'sofaQuizData' ||
+      (e.key === 'productQuizData' ||
         e.key === 'productQuizzes' ||
         e.key === 'currentProduct')
     ) {
-      console.log(
-        '[Dynamic Content] Detected data change, reloading sections...'
-      );
       loadDynamicContent();
     } else if (isPreviewMode) {
-      console.log(
-        '[Dynamic Content] Preview mode detected - skipping storage update'
-      );
     }
   });
 
@@ -772,12 +742,8 @@
     const isPreviewMode = urlParams.has('preview') && urlParams.has('product');
 
     if (!isPreviewMode) {
-      console.log('[Dynamic Content] Product changed event received:', e.detail);
       loadDynamicContent();
     } else {
-      console.log(
-        '[Dynamic Content] Preview mode detected - skipping product change event'
-      );
     }
   });
 })();

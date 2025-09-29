@@ -335,12 +335,12 @@
     <div class="dashboard-container">
         <div class="dashboard-header">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
-                <h1 id="dashboardTitle">Sofa Quiz Content Management Dashboard</h1>
+                <h1 id="dashboardTitle">Default Quiz Content Management Dashboard</h1>
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <div class="quiz-selector-container">
                         <label for="productQuizSelector" class="quiz-selector-label">Current Quiz:</label>
                         <select id="productQuizSelector" onchange="switchProductQuiz(this.value)">
-                            <option value="sofa">Sofa Quiz</option>
+                            <option value="default">Default Quiz</option>
                         </select>
                         <button class="btn btn-danger" onclick="confirmDeleteProduct()" id="deleteProductBtn" style="padding: 8px 15px; display: none;">Delete</button>
                     </div>
@@ -419,7 +419,7 @@
             <div class="tab-content active" id="banner-tab">
                 <div class="question-card" style="background: #fff3e0; border: 2px solid #ff6f00;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="bannerTabTitle" style="color: #ff6f00; margin: 0;">Sofa Hero Banner</h2>
+                        <h2 id="bannerTabTitle" style="color: #ff6f00; margin: 0;">🎨 Default Hero Banner</h2>
                         <button class="btn btn-success" onclick="saveBannerSection()" style="padding: 8px 20px;">💾 Save Banner</button>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
@@ -471,7 +471,7 @@
             <div class="tab-content" id="content-tab">
                 <div class="question-card" style="background: #f0e6ff; border: 2px solid #6b46c1;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="contentTabTitle" style="color: #6b46c1; margin: 0;">Sofa Luxury Content</h2>
+                        <h2 id="contentTabTitle" style="color: #6b46c1; margin: 0;">✨ Default Luxury Content</h2>
                         <button class="btn btn-success" onclick="saveLuxurySofasSection()" style="padding: 8px 20px;">💾 Save Content</button>
                     </div>
 
@@ -515,7 +515,7 @@
             <div class="tab-content" id="gallery-tab">
                 <div class="question-card" style="background: #f3e5f5; border: 2px solid #9c27b0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="galleryTabTitle" style="color: #9c27b0; margin: 0;">Sofa Gallery (Nike Featured Style)</h2>
+                        <h2 id="galleryTabTitle" style="color: #9c27b0; margin: 0;">🖼️ Default Gallery (4 Images)</h2>
                         <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
@@ -557,7 +557,7 @@
                             <div id="gallery-item-2"></div>
                             <div style="margin-top: 15px;">
                                 <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
-                                <input type="text" id="gallery-title-2" class="question-input" placeholder="Enter title (e.g., Fabric Sofas)" onchange="updateGalleryText(2, 'title', this.value)">
+                                <input type="text" id="gallery-title-2" class="question-input" placeholder="Enter title (e.g., Fabric Products)" onchange="updateGalleryText(2, 'title', this.value)">
 
                                 <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
                                 <input type="text" id="gallery-subtitle-2" class="question-input" placeholder="Enter subtitle (e.g., Designer Choice)" onchange="updateGalleryText(2, 'subtitle', this.value)">
@@ -589,7 +589,7 @@
             <div class="tab-content" id="promo-tab">
                 <div class="question-card" style="background: #fff8e1; border: 2px solid #ff9800;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="promoTabTitle" style="color: #ff9800; margin: 0;">Sofa Quiz Promo</h2>
+                        <h2 id="promoTabTitle" style="color: #ff9800; margin: 0;">🎯 Default Quiz Promo</h2>
                         <button class="btn btn-success" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
                     </div>
                     <div style="margin-bottom: 20px;">
@@ -740,9 +740,9 @@
     </div>
 </body>
 <script src="../api/api-client-fallback.js"></script>
-<script src="../site-assets/js/dashboard-php.js?v=8"></script>
+<script src="../site-assets/js/dashboard-php.js?v=10"></script>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
-<script src="../site-assets/js/quiz-results.js?v=2" defer></script>
+<script src="../site-assets/js/quiz-results.js?v=4" defer></script>
 
 <script>
     // Tab Management Functions

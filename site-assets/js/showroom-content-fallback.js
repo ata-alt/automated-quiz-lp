@@ -30,12 +30,11 @@
       const urlParams = new URLSearchParams(window.location.search);
       const previewProduct = urlParams.get('product');
       if (previewProduct) {
-        console.log('[API] Using preview product:', previewProduct);
         return previewProduct;
       }
 
       if (this.useFallback) {
-        return localStorage.getItem('currentProduct') || 'sofa';
+        return localStorage.getItem('currentProduct') || 'default';
       }
 
       try {
@@ -43,13 +42,13 @@
           this.baseUrl + 'settings.php?key=current_product'
         );
         const data = await response.json();
-        return data.value || 'sofa';
+        return data.value || 'default';
       } catch (error) {
-        return localStorage.getItem('currentProduct') || 'sofa';
+        return localStorage.getItem('currentProduct') || 'default';
       }
     }
 
-    async getContent(productKey = 'sofa') {
+    async getContent(productKey = 'default') {
       if (this.useFallback) {
         return this.getContentFallback(productKey);
       }
@@ -66,19 +65,19 @@
     }
 
     getContentFallback(productKey) {
-      if (productKey === 'sofa') {
-        const sofaData = JSON.parse(
-          localStorage.getItem('sofaQuizData') || '{}'
+      if (productKey === 'default') {
+        const defaultData = JSON.parse(
+          localStorage.getItem('productQuizData') || '{}'
         );
         return {
           content: {
-            banner: sofaData.bannerSection,
-            showroom: sofaData.showroomSection,
-            luxury_content: sofaData.luxurySofasSection,
-            gallery: sofaData.gallerySection,
-            design_expert: sofaData.designDisasterSection,
-            quiz_promo: sofaData.quizPromoSection,
-            questions: sofaData.questions || [],
+            banner: defaultData.bannerSection,
+            showroom: defaultData.showroomSection,
+            luxury_content: defaultData.luxuryDefaultsSection,
+            gallery: defaultData.gallerySection,
+            design_expert: defaultData.designDisasterSection,
+            quiz_promo: defaultData.quizPromoSection,
+            questions: defaultData.questions || [],
           },
         };
       } else {
@@ -91,7 +90,7 @@
             content: {
               banner: product.bannerContent,
               showroom: product.showroomContent,
-              luxury_content: product.luxurySofasSection,
+              luxury_content: product.luxuryDefaultsSection,
               gallery: product.gallerySection,
               design_expert: product.designDisasterSection,
               quiz_promo: product.quizPromoSection,
@@ -107,7 +106,7 @@
   const apiClient = new ApiClient();
 
   // Store current product name globally for placeholder text
-  let currentProductName = 'Sofa';
+  let currentProductName = 'Default';
 
   // Function to generate placeholder image URL
   function getPlaceholderImage(width, height, text = 'No Image') {
@@ -150,7 +149,6 @@
       const response = await apiClient.getContent(currentProduct);
       return response.content;
     } catch (error) {
-      console.error('Failed to get current product data:', error);
       return null;
     }
   }
@@ -213,10 +211,8 @@
           }
         }
 
-        console.log('[Banner] Section updated from data source');
       }
     } catch (error) {
-      console.error('[Banner] Error loading section:', error);
     }
   }
 
@@ -265,10 +261,8 @@
           });
         }
 
-        console.log('[Showroom] Section updated from data source');
       }
     } catch (error) {
-      console.error('[Showroom] Error loading section:', error);
     }
   }
 
@@ -350,10 +344,8 @@
           }
         }
 
-        console.log('[LuxuryContent] Section updated from data source');
       }
     } catch (error) {
-      console.error('[LuxuryContent] Error loading section:', error);
     }
   }
 
@@ -400,25 +392,30 @@
           // Update gallery titles and subtitles
           data.gallery.images.forEach((imageData, index) => {
             // Update title element
-            const titleElement = document.getElementById(`gallery-title-${index}`);
+            const titleElement = document.getElementById(
+              `gallery-title-${index}`
+            );
             if (titleElement && imageData.title) {
               titleElement.textContent = imageData.title;
             }
 
             // Update subtitle element
-            const subtitleElement = document.getElementById(`gallery-subtitle-${index}`);
+            const subtitleElement = document.getElementById(
+              `gallery-subtitle-${index}`
+            );
             if (subtitleElement && imageData.subtitle) {
               subtitleElement.textContent = imageData.subtitle;
             }
 
             // Update link element
-            const linkElement = document.getElementById(`gallery-link-${index}-btn`);
+            const linkElement = document.getElementById(
+              `gallery-link-${index}-btn`
+            );
             if (linkElement && imageData.link) {
               linkElement.href = imageData.link;
             }
           });
 
-          console.log('[Gallery] Section updated from data source');
         }
       } else {
         // If no gallery data is available, set placeholder images
@@ -435,11 +432,9 @@
             img.title = `${currentProductName} gallery placeholder image`;
             applyImageSizing(img, IMAGE_SIZES.gallery);
           });
-          console.log('[Gallery] Section updated with placeholder images');
         }
       }
     } catch (error) {
-      console.error('[Gallery] Error loading section:', error);
     }
   }
   // Function to load and update Design Expert section
@@ -496,10 +491,8 @@
           }
         }
 
-        console.log('[DesignExpert] Section updated from data source');
       }
     } catch (error) {
-      console.error('[DesignExpert] Error loading section:', error);
     }
   }
 
@@ -538,7 +531,7 @@
           }
 
           // Update button
-          const button = promoSection.querySelector('a.btn[href*="sofaquiz"]');
+          const button = promoSection.querySelector('a.btn[href*="productquiz"]');
           if (button) {
             button.href = data.quiz_promo.buttonLink;
             button.innerHTML = `${data.quiz_promo.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
@@ -644,23 +637,17 @@
                         });
                       });
 
-                      console.log(
-                        '[QuizPromo] Slider re-initialized with working navigation'
-                      );
                     },
                   });
                 }, 50);
               }
             } catch (error) {
-              console.error('[QuizPromo] Error re-initializing slider:', error);
             }
           }, 200);
         }
 
-        console.log('[QuizPromo] Section updated from database');
       }
     } catch (error) {
-      console.error('[QuizPromo] Error loading section:', error);
     }
   }
 
@@ -708,9 +695,7 @@
       await loadLuxuryContentSection();
       await loadGallerySection();
       await loadQuizPromoSection();
-      console.log('[Dynamic Content] All sections loaded successfully');
     } catch (error) {
-      console.error('[Dynamic Content] Error loading sections:', error);
     }
   }
 
@@ -729,27 +714,18 @@
 
     if (
       !isPreviewMode &&
-      (e.key === 'sofaQuizData' ||
+      (e.key === 'productQuizData' ||
         e.key === 'productQuizzes' ||
         e.key === 'currentProduct')
     ) {
-      console.log(
-        '[Dynamic Content] Storage change detected, reloading sections...'
-      );
       loadDynamicContent();
     } else if (isPreviewMode) {
-      console.log(
-        '[Dynamic Content] Preview mode detected - skipping storage update'
-      );
     }
   });
 
   // Listen for potential updates from dashboard
   window.addEventListener('message', function (e) {
     if (e.data && e.data.type === 'content-updated') {
-      console.log(
-        '[Dynamic Content] Content update message received, reloading sections...'
-      );
       loadDynamicContent();
     }
   });

@@ -4,7 +4,7 @@ let quizData = {
   questions: [],
 };
 
-let currentProductKey = 'sofa';
+let currentProductKey = 'default';
 
 // Initialize dashboard
 async function initializeDashboard() {
@@ -54,18 +54,18 @@ async function updateProductQuizSelector() {
       selector.removeChild(selector.lastChild);
     }
 
-    // Add sofa option if not present
+    // Add default option if not present
     if (selector.children.length === 0) {
-      const sofaOption = document.createElement('option');
-      sofaOption.value = 'sofa';
-      sofaOption.textContent = 'Sofa Quiz';
-      selector.appendChild(sofaOption);
+      const defaultOption = document.createElement('option');
+      defaultOption.value = 'default';
+      defaultOption.textContent = 'Default Quiz';
+      selector.appendChild(defaultOption);
     }
 
     // Add options for each product quiz
     response.products.forEach((product) => {
-      if (product.product_key !== 'sofa') {
-        // Skip sofa as it's already added
+      if (product.product_key !== 'default') {
+        // Skip default as it's already added
         const option = document.createElement('option');
         option.value = product.product_key;
         option.textContent = `${product.name} Quiz`;
@@ -90,8 +90,8 @@ async function switchProductQuiz(productKey) {
     const response = await apiClient.getProducts();
     const product = response.products.find((p) => p.product_key === productKey);
 
-    let title = 'Sofa Quiz Content Management Dashboard';
-    if (product && productKey !== 'sofa') {
+    let title = 'Default Quiz Content Management Dashboard';
+    if (product && productKey !== 'default') {
       title = `${product.name} Quiz Content Management Dashboard`;
     }
 
@@ -117,8 +117,8 @@ async function switchProductQuiz(productKey) {
 function updateDeleteButtonVisibility(productKey) {
   const deleteBtn = document.getElementById('deleteProductBtn');
   if (deleteBtn) {
-    // Hide delete button for the default 'sofa' product, show for others
-    if (productKey === 'sofa') {
+    // Hide delete button for the default product, show for others
+    if (productKey === 'default') {
       deleteBtn.style.display = 'none';
     } else {
       deleteBtn.style.display = 'inline-block';
@@ -128,10 +128,10 @@ function updateDeleteButtonVisibility(productKey) {
 
 // Update tab titles with current product name
 function updateTabTitles(product) {
-  let productName = 'Sofa';
+  let productName = 'Default';
 
-  // Get product name, default to 'Sofa' if not found or is the default sofa product
-  if (product && product.product_key !== 'sofa') {
+  // Get product name, default to 'Default' if not found or is the default product
+  if (product && product.product_key !== 'default') {
     productName = product.name;
   }
 
@@ -175,7 +175,7 @@ async function loadCurrentQuiz() {
         'Match Your Personality To A Luxury'
       );
 
-    const isNewProduct = currentProductKey !== 'sofa' && hasTemplateContent;
+    const isNewProduct = currentProductKey !== 'default' && hasTemplateContent;
 
     // Get product info for placeholders
     const productResponse = await apiClient.getProducts();
@@ -371,11 +371,11 @@ async function createNewProductQuiz() {
   }
 }
 
-// Initialize with sample data (fallback for sofa)
+// Initialize with sample data (fallback for default)
 function initializeSampleData() {
   quizData = {
     bannerSection: {
-      mainHeading: 'Match Your Personality To A Luxury Sofa.',
+      mainHeading: 'Match Your Personality To A Luxury Product.',
       subHeading: 'Try Our AI Tool',
       backgroundImage:
         '../cdn-cgi/image/quality=75,f=auto/site-assets/images/fci-lp/gallotti-and-radice-banner-1.jpg',
@@ -383,17 +383,17 @@ function initializeSampleData() {
         '../cdn-cgi/image/quality=60,f=auto/site-assets/images/luxury/luxury-banner-1-mobile.jpg',
     },
     showroomSection: {
-      heading: 'The largest luxury sofa showroom in London',
+      heading: 'The largest luxury product showroom in London',
       image: '../cdn-cgi/image/quality=75,f=auto/site-assets/shoroomlndn.jpg',
     },
     luxurySofasSection: {
-      title: 'Luxury Sofas, Redefined',
+      title: 'Luxury Products, Redefined',
       introduction:
-        "A sofa is never just a sofa. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living room. At FCI London, we don't just sell sofas; we curate spaces of sophistication, tailored to those who appreciate life's finer details.",
+        "A product is never just a product. It's where you unwind after a long day, host spirited conversations, and perhaps—if it's truly exquisite—fall hopelessly in love with your own living space. At FCI London, we don't just sell products; we curate spaces of sophistication, tailored to those who appreciate life's finer details.",
       subtitle: 'Why Visit Our Showroom?',
       points: [],
       conclusion:
-        '<strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step—or rather, a single seat. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the sofa you never knew you needed.',
+        '<strong>Visit Us & Experience Luxury Firsthand</strong><br>Indulgence begins with a single step. Visit our London showroom to immerse yourself in a world of impeccable design and let us help you find the product you never knew you needed.',
     },
     gallerySection: {
       images: [
@@ -411,10 +411,10 @@ function initializeSampleData() {
       buttonLink: '/book-a-showroom-visit.html',
     },
     quizPromoSection: {
-      heading: 'Take our lifestyle quiz & find the perfect sofa match.',
+      heading: 'Take our lifestyle quiz & find the perfect product match.',
       features: [],
-      buttonText: 'Try our Sofa Matching Quiz',
-      buttonLink: '#sofaquiz',
+      buttonText: 'Try our Product Matching Quiz',
+      buttonLink: '#productquiz',
       images: [],
     },
     questions: [],
@@ -1241,8 +1241,8 @@ function removeOption(qIndex, oIndex) {
 // Product deletion functions
 async function confirmDeleteProduct() {
   try {
-    if (currentProductKey === 'sofa') {
-      showStatus('Cannot delete the default sofa product', 'error');
+    if (currentProductKey === 'default') {
+      showStatus('Cannot delete the default product', 'error');
       return;
     }
 
@@ -1297,11 +1297,11 @@ async function deleteProduct(productKey) {
     // Update the product selector
     await updateProductQuizSelector();
 
-    // Switch to the sofa product (default)
+    // Switch to the default product
     const selector = document.getElementById('productQuizSelector');
     if (selector) {
-      selector.value = 'sofa';
-      await switchProductQuiz('sofa');
+      selector.value = 'default';
+      await switchProductQuiz('default');
     }
 
     showStatus('Product deleted successfully', 'success');
@@ -1393,7 +1393,9 @@ function previewQuiz() {
 
       // Replace the filename with index.php and include product-specific parameters
       const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-      const previewUrl = `${baseUrl}/index.php?preview=1&product=${encodeURIComponent(currentProductKey)}&t=${Date.now()}`;
+      const previewUrl = `${baseUrl}/index.php?preview=1&product=${encodeURIComponent(
+        currentProductKey
+      )}&t=${Date.now()}`;
 
       console.log('Base URL:', baseUrl);
       console.log('Opening preview URL:', previewUrl);
@@ -1401,7 +1403,10 @@ function previewQuiz() {
       // Open in new tab with specific product context
       window.open(previewUrl, '_blank');
 
-      showStatus(`Opening ${currentProductKey} preview in new tab...`, 'success');
+      showStatus(
+        `Opening ${currentProductKey} preview in new tab...`,
+        'success'
+      );
     })
     .catch((error) => {
       console.error('Failed to save before preview:', error);

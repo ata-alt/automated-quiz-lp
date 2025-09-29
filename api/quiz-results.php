@@ -23,6 +23,9 @@ switch ($method) {
     case 'GET':
         getQuizResults($db);
         break;
+    case 'DELETE':
+        deleteQuizResult($db);
+        break;
     default:
         sendError("Method not allowed", 405);
         break;
@@ -152,5 +155,58 @@ function getQuizResults($db)
     } catch (Exception $e) {
         error_log("General error: " . $e->getMessage());
         sendError("An error occurred while retrieving quiz results", 500);
+    }
+}
+
+function deleteQuizResult($db)
+{
+    try {
+        // Get the result ID from the URL path
+        $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $pathParts = explode('/', trim($path, '/'));
+        $resultId = end($pathParts);
+
+        // If no ID in path, check for 'id' parameter
+        if (!is_numeric($resultId)) {
+            $resultId = isset($_GET['id']) ? intval($_GET['id']) : null;
+        } else {
+            $resultId = intval($resultId);
+        }
+
+        // Validate result ID
+        if (!$resultId || $resultId <= 0) {
+            sendError("Invalid or missing result ID", 400);
+        }
+
+        // Check if result exists
+        $checkQuery = "SELECT id FROM automated_quiz_results WHERE id = :id";
+        $checkStmt = $db->prepare($checkQuery);
+        $checkStmt->bindParam(':id', $resultId, PDO::PARAM_INT);
+        $checkStmt->execute();
+
+        if ($checkStmt->rowCount() === 0) {
+            sendError("Quiz result not found", 404);
+        }
+
+        // Delete the result
+        $deleteQuery = "DELETE FROM automated_quiz_results WHERE id = :id";
+        $deleteStmt = $db->prepare($deleteQuery);
+        $deleteStmt->bindParam(':id', $resultId, PDO::PARAM_INT);
+
+        if ($deleteStmt->execute()) {
+            sendResponse([
+                'success' => true,
+                'message' => 'Quiz result deleted successfully',
+                'deleted_id' => $resultId
+            ]);
+        } else {
+            sendError("Failed to delete quiz result", 500);
+        }
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+        sendError("Database error occurred", 500);
+    } catch (Exception $e) {
+        error_log("General error: " . $e->getMessage());
+        sendError("An error occurred while deleting the quiz result", 500);
     }
 }

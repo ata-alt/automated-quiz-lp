@@ -24,13 +24,21 @@ async function loadResults(
     const params = new URLSearchParams({
       limit: limit,
       offset: page * limit,
+      _t: Date.now() // Cache busting timestamp
     });
 
     if (productFilter) {
       params.append('product_key', productFilter);
     }
 
-    const response = await fetch(`../api/quiz-results.php?${params}`);
+    const response = await fetch(`../api/quiz-results.php?${params}`, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
     const data = await response.json();
 
     if (data.success) {
@@ -204,7 +212,14 @@ function updateResultsCount(pagination) {
 async function loadProductFilter() {
   try {
     // Get unique product keys from the API (you might need to add this endpoint)
-    const response = await fetch('../api/quiz-results.php');
+    const response = await fetch(`../api/quiz-results.php?_t=${Date.now()}`, {
+      method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }
+    });
     const data = await response.json();
 
     if (data.success) {
@@ -363,7 +378,7 @@ function viewAnswers(resultId) {
 }
 
 // Delete a result
-function deleteResult(resultId) {
+async function deleteResult(resultId) {
   if (
     !confirm(
       'Are you sure you want to delete this quiz result? This action cannot be undone.'
@@ -372,8 +387,33 @@ function deleteResult(resultId) {
     return;
   }
 
-  // You would implement DELETE endpoint in quiz-results.php
-  alert('Delete functionality needs to be implemented in the API');
+  try {
+    console.log('[Results] Deleting result with ID:', resultId);
+
+    const response = await fetch(`../api/quiz-results.php?id=${resultId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      console.log('[Results] Result deleted successfully:', data.deleted_id);
+
+      // Show success message
+      alert('Quiz result deleted successfully!');
+
+      // Refresh the results to update the display
+      refreshResults();
+    } else {
+      throw new Error(data.error || 'Failed to delete result');
+    }
+  } catch (error) {
+    console.error('[Results] Error deleting result:', error);
+    alert('Failed to delete quiz result: ' + error.message);
+  }
 }
 
 // Export results to CSV

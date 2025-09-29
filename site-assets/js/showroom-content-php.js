@@ -27,7 +27,6 @@
         }
         return await response.json();
       } catch (error) {
-        console.error('API request failed:', error);
         throw error;
       }
     }
@@ -35,13 +34,13 @@
     async getCurrentProduct() {
       try {
         const response = await this.request('settings.php?key=current_product');
-        return response.value || 'sofa';
+        return response.value || 'default';
       } catch (error) {
-        return 'sofa';
+        return 'default';
       }
     }
 
-    async getContent(productKey = 'sofa') {
+    async getContent(productKey = 'default') {
       return this.request(`content.php?product_key=${productKey}`);
     }
   }
@@ -49,7 +48,7 @@
   const apiClient = new ApiClient();
 
   // Store current product name globally for placeholder text
-  let currentProductName = 'Sofa';
+  let currentProductName = 'Default';
 
   // Function to generate placeholder image URL
   function getPlaceholderImage(width, height, text = 'No Image') {
@@ -93,7 +92,6 @@
       const response = await apiClient.getContent(currentProduct);
       return response.content;
     } catch (error) {
-      console.error('Failed to get current product data:', error);
       return null;
     }
   }
@@ -156,10 +154,8 @@
           }
         }
 
-        console.log('[Banner] Section updated from database');
       }
     } catch (error) {
-      console.error('[Banner] Error loading section:', error);
     }
   }
 
@@ -208,10 +204,8 @@
           });
         }
 
-        console.log('[Showroom] Section updated from database');
       }
     } catch (error) {
-      console.error('[Showroom] Error loading section:', error);
     }
   }
 
@@ -293,10 +287,8 @@
           }
         }
 
-        console.log('[LuxuryContent] Section updated from database');
       }
     } catch (error) {
-      console.error('[LuxuryContent] Error loading section:', error);
     }
   }
 
@@ -361,7 +353,6 @@
             }
           });
 
-          console.log('[Gallery] Section updated from data source');
         }
       } else {
         // If no gallery data is available, set placeholder images
@@ -378,11 +369,9 @@
             img.title = `${currentProductName} gallery placeholder image`;
             applyImageSizing(img, IMAGE_SIZES.gallery);
           });
-          console.log('[Gallery] Section updated with placeholder images');
         }
       }
     } catch (error) {
-      console.error('[Gallery] Error loading section:', error);
     }
   }
 
@@ -433,10 +422,8 @@
           }
         }
 
-        console.log('[DesignExpert] Section updated from database');
       }
     } catch (error) {
-      console.error('[DesignExpert] Error loading section:', error);
     }
   }
 
@@ -475,7 +462,7 @@
           }
 
           // Update button
-          const button = promoSection.querySelector('a.btn[href*="sofaquiz"]');
+          const button = promoSection.querySelector('a.btn[href*="productquiz"]');
           if (button) {
             button.href = data.quiz_promo.buttonLink;
             button.innerHTML = `${data.quiz_promo.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
@@ -581,23 +568,17 @@
                         });
                       });
 
-                      console.log(
-                        '[QuizPromo] Slider re-initialized with working navigation'
-                      );
                     },
                   });
                 }, 50);
               }
             } catch (error) {
-              console.error('[QuizPromo] Error re-initializing slider:', error);
             }
           }, 200);
         }
 
-        console.log('[QuizPromo] Section updated from database');
       }
     } catch (error) {
-      console.error('[QuizPromo] Error loading section:', error);
     }
   }
 
@@ -645,9 +626,7 @@
       await loadLuxuryContentSection();
       await loadGallerySection();
       await loadQuizPromoSection();
-      console.log('[Dynamic Content] All sections loaded successfully');
     } catch (error) {
-      console.error('[Dynamic Content] Error loading sections:', error);
     }
   }
 
@@ -661,9 +640,6 @@
   // Listen for potential updates (can be triggered by dashboard changes)
   window.addEventListener('message', function (e) {
     if (e.data && e.data.type === 'content-updated') {
-      console.log(
-        '[Dynamic Content] Content update detected, reloading sections...'
-      );
       loadDynamicContent();
     }
   });

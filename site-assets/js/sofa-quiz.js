@@ -21,7 +21,7 @@
       }
 
       if (typeof window.apiClient !== 'undefined') {
-        // Get the current active product instead of hardcoding 'sofa'
+        // Get the current active product instead of hardcoding 'default'
         const currentProduct = await window.apiClient.getCurrentProduct();
         console.log('[Quiz] Loading questions for product:', currentProduct);
         const response = await window.apiClient.getContent(currentProduct);
@@ -187,7 +187,7 @@
     current: 0,
     answers: [],
     questions: [], // Will be populated on init
-    currentProductName: 'Sofa', // Will be updated on init
+    currentProductName: 'Default', // Will be updated on init
 
     init: async function () {
       console.log('[Quiz] Initializing quiz...');
@@ -212,7 +212,7 @@
               (p) => p.product_key === currentProduct
             );
             if (product) {
-              this.currentProductName = product.name || 'Sofa';
+              this.currentProductName = product.name || 'Default';
             }
           } catch (error) {
             console.warn(
@@ -420,7 +420,7 @@
             (p) => p.product_key === currentProduct
           );
           if (product) {
-            this.currentProductName = product.name || 'Sofa';
+            this.currentProductName = product.name || 'Default';
           }
         } catch (error) {
           console.warn(
@@ -434,11 +434,11 @@
   // Make styleQuiz globally available
   window.styleQuiz = styleQuiz;
 
-  // Form submission handler - stores quiz results to database
+  // Form submission handler - stores quiz results to database AND sends to HubSpot
   window.submitDetails = async function (e) {
     e.preventDefault();
 
-    const form = document.querySelector('#sofaquiz');
+    const form = document.querySelector('#productquiz');
     if (!form) {
       console.error('[Quiz] Form not found');
       return;
@@ -460,6 +460,9 @@
 
     // Prepare quiz answers for database storage
     const quizAnswers = [];
+    // Also prepare answers for HubSpot format
+    const hubspotAnswers = {};
+
     styleQuiz.answers.forEach(function (a) {
       const q = styleQuiz.questions.find(function (q) {
         return q.id == a.questionId;
@@ -474,12 +477,17 @@
         return opt.id === a.optionId;
       });
 
+      // For database
       quizAnswers.push({
         questionId: a.questionId,
         questionText: q.text,
         optionId: a.optionId,
         optionText: selectedOption ? selectedOption.text : 'Unknown'
       });
+
+      // For HubSpot
+      hubspotAnswers['q' + a.questionId] =
+        q.text + ': ' + (selectedOption ? selectedOption.text : 'Unknown');
     });
 
     // Get current product key if available
@@ -514,6 +522,9 @@
       if (data.success) {
         console.log('[Quiz] Quiz result stored successfully with ID:', data.result_id);
 
+        // Now also send to HubSpot
+        sendToHubspot(name, email, phone, hubspotAnswers);
+
         // Show success message
         const result = document.getElementById('result-form');
         result.innerHTML =
@@ -524,15 +535,15 @@
         // Track event
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
-          formID: 'sofaquiz',
+          formID: 'productquiz',
           event: 'formsubmit',
           email: email,
           quizResultId: data.result_id
         });
 
         if (typeof zaraz !== 'undefined') {
-          zaraz.track('sofaquiz', {
-            formID: 'sofaquiz',
+          zaraz.track('productquiz', {
+            formID: 'productquiz',
             quizResultId: data.result_id
           });
         }
@@ -542,10 +553,53 @@
     })
     .catch(error => {
       console.error('[Quiz] Error storing quiz result:', error);
+      // Even if database fails, try to send to HubSpot
+      sendToHubspot(name, email, phone, hubspotAnswers);
       alert('Something went wrong. Please try again later.');
       submitBtn.value = originalBtnValue;
       submitBtn.disabled = false;
     });
+
+    function sendToHubspot(name, email, phone, answers) {
+      const fields = [
+        { name: 'firstname', value: name },
+        { name: 'email', value: email },
+        { name: 'phone', value: phone },
+        ...Object.entries(answers).map(([key, value]) => ({
+          name: key,
+          value: value,
+        })),
+      ];
+
+      fetch(
+        'https://api.hsforms.com/submissions/v3/integration/submit/6991142/d02069e2-8aa3-4f69-b176-5e14d2abb0bf',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            fields,
+            context: {
+              pageUri: window.location.href,
+              pageName: document.title,
+            },
+          }),
+        }
+      )
+        .then((response) => {
+          if (response.ok) {
+            console.log('[Quiz] Successfully submitted to HubSpot');
+          } else {
+            response
+              .text()
+              .then((text) => console.error('HubSpot submission issue:', text));
+          }
+        })
+        .catch((error) => {
+          console.error('Error submitting to HubSpot:', error);
+        });
+    }
   };
 
   // COMMENTED OUT - Original submitDetails function that sends to HubSpot
@@ -553,7 +607,7 @@
   window.submitDetails_OLD = function (e) {
     e.preventDefault();
 
-    const form = document.querySelector('#sofaquiz');
+    const form = document.querySelector('#productquiz');
     if (!form) {
       console.error('[Quiz] Form not found');
       return;
@@ -597,12 +651,12 @@
       email: email,
       phone: phone,
       gdpr: 'yes',
-      message: 'Sofa Quiz Submission',
+      message: 'Product Quiz Submission',
     };
 
     // jQuery AJAX call
     if (typeof $ !== 'undefined' && $.post) {
-      $.post('/form.submit?form=sofaquiz', formData, function (data) {
+      $.post('/form.submit?form=productquiz', formData, function (data) {
         if (data === '0') {
           sendToHubspot(name, email, phone, answers);
         } else {
@@ -661,13 +715,13 @@
             // Track event
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
-              formID: 'sofaquiz',
+              formID: 'productquiz',
               event: 'formsubmit',
               email: email,
             });
 
             if (typeof zaraz !== 'undefined') {
-              zaraz.track('sofaquiz', { formID: 'sofaquiz' });
+              zaraz.track('productquiz', { formID: 'productquiz' });
             }
           } else {
             response
