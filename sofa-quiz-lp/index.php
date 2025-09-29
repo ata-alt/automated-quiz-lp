@@ -56,10 +56,10 @@
     <meta name="robots" content="noindex, nofollow">
     <link href="../site-assets/css/luxurylp.css?v=9" rel="stylesheet">
     <link href="../site-assets/css/style-quiz-widget.css?v=6" rel="stylesheet">
-    <script src="../api/api-client.js"></script>
+    <script src="../api/api-client.js?v=2"></script>
     <script src="../site-assets/js/frame.sofa-quiz.js?v=1"></script>
     <script src="../site-assets/js/sofa-quiz.js?v=2" defer></script>
-    <script src="../site-assets/js/showroom-content.js?v=3" defer></script>
+    <script src="../site-assets/js/showroom-content.js?v=6" defer></script>
     <style>
         .main {
             margin-top: 0px;
@@ -843,7 +843,7 @@
         </dialog>
     </div>
     <!-- Zaraz consent Pop up ends here -->
-    <script src="../site-assets/js/showroom-content-fallback.js?v=3"></script>
+    <script src="../site-assets/js/showroom-content-fallback.js?v=6"></script>
     <script>
         // Dynamic Title Management
         (function() {
@@ -885,8 +885,12 @@
             // Function to update page title
             async function updatePageTitle() {
                 try {
-                    // Get current product from API
-                    const currentProduct = await window.apiClient.getCurrentProduct();
+                    // Check if we're in preview mode with a specific product
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const previewProduct = urlParams.get('product');
+
+                    // Get current product from API or use preview product
+                    const currentProduct = previewProduct || await window.apiClient.getCurrentProduct();
 
                     if (currentProduct && currentProduct !== 'sofa') {
                         // Get product data to get the actual name
@@ -945,19 +949,28 @@
 
             // Function to listen for product changes
             function setupProductChangeListener() {
-                // Listen for storage changes (when dashboard updates current product)
-                window.addEventListener('storage', function(e) {
-                    if (e.key === 'currentProduct' || e.key === 'productQuizzes') {
-                        console.log('[Title] Detected product change, updating title...');
-                        updatePageTitle();
-                    }
-                });
+                // Check if we're in preview mode with a specific product
+                const urlParams = new URLSearchParams(window.location.search);
+                const isPreviewMode = urlParams.has('preview') && urlParams.has('product');
 
-                // Listen for custom events (for real-time updates)
-                window.addEventListener('productChanged', function(e) {
-                    console.log('[Title] Product changed event received:', e.detail);
-                    updatePageTitle();
-                });
+                // Only setup listeners if NOT in preview mode
+                if (!isPreviewMode) {
+                    // Listen for storage changes (when dashboard updates current product)
+                    window.addEventListener('storage', function(e) {
+                        if (e.key === 'currentProduct' || e.key === 'productQuizzes') {
+                            console.log('[Title] Detected product change, updating title...');
+                            updatePageTitle();
+                        }
+                    });
+
+                    // Listen for custom events (for real-time updates)
+                    window.addEventListener('productChanged', function(e) {
+                        console.log('[Title] Product changed event received:', e.detail);
+                        updatePageTitle();
+                    });
+                } else {
+                    console.log('[Title] Preview mode detected - skipping auto-update listeners');
+                }
             }
 
             // Initialize title management

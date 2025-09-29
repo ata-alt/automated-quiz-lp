@@ -41,7 +41,11 @@
   // Function to get current product data from database
   async function getCurrentProductData() {
     try {
-      // Get current product from API
+      // Check if we're in preview mode with a specific product
+      const urlParams = new URLSearchParams(window.location.search);
+      const previewProduct = urlParams.get('product');
+
+      // Get current product from API (will use preview product if available)
       const currentProduct = await window.apiClient.getCurrentProduct();
       if (!currentProduct || currentProduct === 'sofa') {
         return null; // Use default content for sofa
@@ -740,21 +744,40 @@
 
   // Listen for storage changes (live updates from admin dashboard)
   window.addEventListener('storage', function (e) {
+    // Check if we're in preview mode with a specific product
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPreviewMode = urlParams.has('preview') && urlParams.has('product');
+
     if (
-      e.key === 'sofaQuizData' ||
-      e.key === 'productQuizzes' ||
-      e.key === 'currentProduct'
+      !isPreviewMode &&
+      (e.key === 'sofaQuizData' ||
+        e.key === 'productQuizzes' ||
+        e.key === 'currentProduct')
     ) {
       console.log(
         '[Dynamic Content] Detected data change, reloading sections...'
       );
       loadDynamicContent();
+    } else if (isPreviewMode) {
+      console.log(
+        '[Dynamic Content] Preview mode detected - skipping storage update'
+      );
     }
   });
 
   // Listen for custom product change events
   window.addEventListener('productChanged', function (e) {
-    console.log('[Dynamic Content] Product changed event received:', e.detail);
-    loadDynamicContent();
+    // Check if we're in preview mode with a specific product
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPreviewMode = urlParams.has('preview') && urlParams.has('product');
+
+    if (!isPreviewMode) {
+      console.log('[Dynamic Content] Product changed event received:', e.detail);
+      loadDynamicContent();
+    } else {
+      console.log(
+        '[Dynamic Content] Preview mode detected - skipping product change event'
+      );
+    }
   });
 })();

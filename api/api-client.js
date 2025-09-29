@@ -89,6 +89,14 @@ class ApiClient {
   }
 
   async getCurrentProduct() {
+    // Check if we're in preview mode with a specific product
+    const urlParams = new URLSearchParams(window.location.search);
+    const previewProduct = urlParams.get('product');
+    if (previewProduct) {
+      console.log('[API] Using preview product:', previewProduct);
+      return previewProduct;
+    }
+
     try {
       const response = await this.getSetting('current_product');
       return response.value || 'sofa';

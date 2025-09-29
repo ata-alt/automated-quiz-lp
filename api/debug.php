@@ -26,7 +26,12 @@ try {
     require_once 'config/database.php';
 
     $database = new Database();
-    $db = $database->getConnection();
+    try {
+        $db = $database->getConnection();
+    } catch (PDOException $e) {
+        $debug['database_test'] = 'Connection failed: ' . $e->getMessage();
+        $db = null;
+    }
 
     if ($db) {
         // Test query

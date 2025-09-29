@@ -7,8 +7,16 @@ require_once 'config/database.php';
 
 setCorsHeaders();
 
-$database = new Database();
-$db = $database->getConnection();
+try {
+    $database = new Database();
+    $db = $database->getConnection();
+
+    if (!$db) {
+        sendError('Database connection failed', 500);
+    }
+} catch (Exception $e) {
+    sendError('Database connection error: ' . $e->getMessage(), 500);
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 

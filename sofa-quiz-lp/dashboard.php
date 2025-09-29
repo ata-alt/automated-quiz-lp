@@ -740,9 +740,9 @@
     </div>
 </body>
 <script src="../api/api-client-fallback.js"></script>
-<script src="../site-assets/js/dashboard-php.js"></script>
+<script src="../site-assets/js/dashboard-php.js?v=8"></script>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
-<script src="../site-assets/js/quiz-results.js" defer></script>
+<script src="../site-assets/js/quiz-results.js?v=2" defer></script>
 
 <script>
     // Tab Management Functions

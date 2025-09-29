@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS automated_product_quizzes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_key VARCHAR(50) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
-    emoji VARCHAR(10) DEFAULT '📦',
     description TEXT,
     is_active BOOLEAN DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -93,9 +92,9 @@ CREATE TABLE IF NOT EXISTS automated_system_settings (
 -- Insert default data
 
 -- 1. Insert default product (sofa)
-INSERT INTO automated_product_quizzes (product_key, name, emoji, description)
-VALUES ('sofa', 'Sofa', '🛋️', 'Luxury sofa matching quiz')
-ON DUPLICATE KEY UPDATE name = VALUES(name), emoji = VALUES(emoji);
+INSERT INTO automated_product_quizzes (product_key, name, description)
+VALUES ('sofa', 'Sofa', 'Luxury sofa matching quiz')
+ON DUPLICATE KEY UPDATE name = VALUES(name);
 
 -- 2. Insert default system settings
 INSERT INTO automated_system_settings (setting_key, setting_value)

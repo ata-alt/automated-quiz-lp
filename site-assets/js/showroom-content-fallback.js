@@ -26,6 +26,14 @@
     }
 
     async getCurrentProduct() {
+      // Check if we're in preview mode with a specific product
+      const urlParams = new URLSearchParams(window.location.search);
+      const previewProduct = urlParams.get('product');
+      if (previewProduct) {
+        console.log('[API] Using preview product:', previewProduct);
+        return previewProduct;
+      }
+
       if (this.useFallback) {
         return localStorage.getItem('currentProduct') || 'sofa';
       }
@@ -715,15 +723,24 @@
 
   // Listen for localStorage changes (for fallback mode)
   window.addEventListener('storage', function (e) {
+    // Check if we're in preview mode with a specific product
+    const urlParams = new URLSearchParams(window.location.search);
+    const isPreviewMode = urlParams.has('preview') && urlParams.has('product');
+
     if (
-      e.key === 'sofaQuizData' ||
-      e.key === 'productQuizzes' ||
-      e.key === 'currentProduct'
+      !isPreviewMode &&
+      (e.key === 'sofaQuizData' ||
+        e.key === 'productQuizzes' ||
+        e.key === 'currentProduct')
     ) {
       console.log(
         '[Dynamic Content] Storage change detected, reloading sections...'
       );
       loadDynamicContent();
+    } else if (isPreviewMode) {
+      console.log(
+        '[Dynamic Content] Preview mode detected - skipping storage update'
+      );
     }
   });
 

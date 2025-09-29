@@ -7,8 +7,16 @@ require_once 'config/database.php';
 
 setCorsHeaders();
 
-$database = new Database();
-$db = $database->getConnection();
+try {
+    $database = new Database();
+    $db = $database->getConnection();
+
+    if (!$db) {
+        sendError('Database connection failed', 500);
+    }
+} catch (Exception $e) {
+    sendError('Database connection error: ' . $e->getMessage(), 500);
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -63,12 +71,11 @@ function createProduct($db)
         }
 
         // Insert new product
-        $query = "INSERT INTO automated_product_quizzes (product_key, name, emoji, description) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO automated_product_quizzes (product_key, name, description) VALUES (?, ?, ?)";
         $stmt = $db->prepare($query);
         $stmt->execute([
             $data['product_key'],
             $data['name'],
-            $data['emoji'] ?? '📦',
             $data['description'] ?? ''
         ]);
 
@@ -198,11 +205,10 @@ function updateProduct($db)
             sendError('Product key is required');
         }
 
-        $query = "UPDATE automated_product_quizzes SET name = ?, emoji = ?, description = ? WHERE product_key = ?";
+        $query = "UPDATE automated_product_quizzes SET name = ?, description = ? WHERE product_key = ?";
         $stmt = $db->prepare($query);
         $stmt->execute([
             $data['name'] ?? '',
-            $data['emoji'] ?? '📦',
             $data['description'] ?? '',
             $data['product_key']
         ]);

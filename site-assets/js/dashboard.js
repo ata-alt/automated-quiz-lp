@@ -533,13 +533,19 @@ function updateGalleryText(index, field, value) {
         { src: '', alt: '', title: '', subtitle: '', link: '' },
         { src: '', alt: '', title: '', subtitle: '', link: '' },
         { src: '', alt: '', title: '', subtitle: '', link: '' },
-        { src: '', alt: '', title: '', subtitle: '', link: '' }
-      ]
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+      ],
     };
   }
 
   if (!quizData.gallerySection.images[index]) {
-    quizData.gallerySection.images[index] = { src: '', alt: '', title: '', subtitle: '', link: '' };
+    quizData.gallerySection.images[index] = {
+      src: '',
+      alt: '',
+      title: '',
+      subtitle: '',
+      link: '',
+    };
   }
 
   quizData.gallerySection.images[index][field] = value;
@@ -1128,7 +1134,7 @@ function switchProductQuiz(productKey) {
   if (productKey === 'sofa') {
     // Switch to original sofa quiz
     document.getElementById('dashboardTitle').textContent =
-      '🛋️ Sofa Quiz Content Management Dashboard';
+      'Sofa Quiz Content Management Dashboard';
     loadCurrentQuiz(); // Load the original sofa quiz data
     return;
   }

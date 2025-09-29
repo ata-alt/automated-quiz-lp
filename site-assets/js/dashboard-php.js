@@ -58,7 +58,7 @@ async function updateProductQuizSelector() {
     if (selector.children.length === 0) {
       const sofaOption = document.createElement('option');
       sofaOption.value = 'sofa';
-      sofaOption.textContent = '🛋️ Sofa Quiz';
+      sofaOption.textContent = 'Sofa Quiz';
       selector.appendChild(sofaOption);
     }
 
@@ -90,7 +90,7 @@ async function switchProductQuiz(productKey) {
     const response = await apiClient.getProducts();
     const product = response.products.find((p) => p.product_key === productKey);
 
-    let title = '🛋️ Sofa Quiz Content Management Dashboard';
+    let title = 'Sofa Quiz Content Management Dashboard';
     if (product && productKey !== 'sofa') {
       title = `${product.name} Quiz Content Management Dashboard`;
     }
@@ -279,7 +279,13 @@ async function loadCurrentQuiz() {
 
     // Ensure we always have exactly 4 image slots with all fields
     while (quizData.gallerySection.images.length < 4) {
-      quizData.gallerySection.images.push({ src: '', alt: '', title: '', subtitle: '', link: '' });
+      quizData.gallerySection.images.push({
+        src: '',
+        alt: '',
+        title: '',
+        subtitle: '',
+        link: '',
+      });
     }
     renderGalleryItems();
 
@@ -877,13 +883,19 @@ function updateGalleryText(index, field, value) {
         { src: '', alt: '', title: '', subtitle: '', link: '' },
         { src: '', alt: '', title: '', subtitle: '', link: '' },
         { src: '', alt: '', title: '', subtitle: '', link: '' },
-        { src: '', alt: '', title: '', subtitle: '', link: '' }
-      ]
+        { src: '', alt: '', title: '', subtitle: '', link: '' },
+      ],
     };
   }
 
   if (!quizData.gallerySection.images[index]) {
-    quizData.gallerySection.images[index] = { src: '', alt: '', title: '', subtitle: '', link: '' };
+    quizData.gallerySection.images[index] = {
+      src: '',
+      alt: '',
+      title: '',
+      subtitle: '',
+      link: '',
+    };
   }
 
   quizData.gallerySection.images[index][field] = value;
@@ -1370,12 +1382,7 @@ function previewQuiz() {
   // Save current data first to ensure preview shows latest changes
   saveQuiz()
     .then(() => {
-      // Set the current product in the API client for the preview
-      window.apiClient.setCurrentProduct(currentProductKey);
-
-      // Construct the correct URL for index.php
-      // Current URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/Dashboard.php
-      // Target URL: http://localhost/sofa-quiz-lp/sofa-quiz-lp/index.php
+      // Construct the correct URL for index.php with specific product parameter
       const currentUrl = window.location.href;
       console.log('Current URL:', currentUrl);
 
@@ -1384,17 +1391,17 @@ function previewQuiz() {
       const fileName = urlParts[urlParts.length - 1];
       console.log('Current file:', fileName);
 
-      // Replace the filename with index.php
+      // Replace the filename with index.php and include product-specific parameters
       const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/'));
-      const previewUrl = `${baseUrl}/index.php?preview=1&t=${Date.now()}`;
+      const previewUrl = `${baseUrl}/index.php?preview=1&product=${encodeURIComponent(currentProductKey)}&t=${Date.now()}`;
 
       console.log('Base URL:', baseUrl);
       console.log('Opening preview URL:', previewUrl);
 
-      // Open in new tab
+      // Open in new tab with specific product context
       window.open(previewUrl, '_blank');
 
-      showStatus('Opening preview in new tab...', 'success');
+      showStatus(`Opening ${currentProductKey} preview in new tab...`, 'success');
     })
     .catch((error) => {
       console.error('Failed to save before preview:', error);
@@ -1559,7 +1566,13 @@ window.onload = function () {
 
     // Ensure we always have exactly 4 image slots with all fields
     while (quizData.gallerySection.images.length < 4) {
-      quizData.gallerySection.images.push({ src: '', alt: '', title: '', subtitle: '', link: '' });
+      quizData.gallerySection.images.push({
+        src: '',
+        alt: '',
+        title: '',
+        subtitle: '',
+        link: '',
+      });
     }
     renderGalleryItems();
   }, 500);
