@@ -69,6 +69,35 @@ body {
   line-height: 1.1;
 }
 
+/* Mobile Dashboard Header */
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 20px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .dashboard-header > div {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 15px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-header {
+    padding: 15px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+}
+
 /* Modern Product Quiz Selector */
 #productQuizSelector {
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
@@ -189,6 +218,36 @@ body {
   border: 1px solid var(--border-color);
 }
 
+/* Mobile Actions Bar */
+@media (max-width: 768px) {
+  .actions-bar {
+    margin: 20px;
+    padding: 15px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .actions-bar > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .actions-bar .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions-bar {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+  }
+}
+
 /* Modern Button Styles - Lisbon Chairs Inspired */
 .btn {
   padding: 12px 24px;
@@ -206,6 +265,44 @@ body {
   position: relative;
   transition: var(--transition);
   text-decoration: none;
+  white-space: nowrap;
+}
+
+/* Mobile Button Styles */
+@media (max-width: 768px) {
+  .btn {
+    padding: 10px 20px;
+    font-size: 13px;
+    gap: 6px;
+  }
+
+  .btn--big {
+    font-size: 16px;
+    padding: 14px 28px;
+  }
+
+  .btn--small {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    padding: 8px 16px;
+    font-size: 12px;
+    letter-spacing: 0.3px;
+  }
+
+  .btn--big {
+    font-size: 14px;
+    padding: 12px 24px;
+  }
+
+  .btn--small {
+    font-size: 11px;
+    padding: 5px 8px;
+  }
 }
 
 .btn:hover {
@@ -266,6 +363,7 @@ body {
   position: relative;
   border-left: 4px solid var(--primary-color);
   transition: var(--transition);
+  overflow-x: auto;
 }
 
 .question-card:hover {
@@ -332,6 +430,30 @@ textarea {
   background: white;
 }
 
+/* Mobile Input Fields */
+@media (max-width: 768px) {
+  .question-input,
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 10px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .question-input,
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    padding: 8px 12px;
+  }
+}
+
 .question-input:focus,
 input[type="text"]:focus,
 input[type="email"]:focus,
@@ -356,6 +478,22 @@ textarea {
   margin-top: 48px;
 }
 
+/* Mobile Options Grid */
+@media (max-width: 768px) {
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .options-grid {
+    gap: 15px;
+    margin-top: 15px;
+  }
+}
+
 .option-card {
   border: 2px solid var(--border-color);
   border-radius: var(--border-radius);
@@ -377,6 +515,8 @@ textarea {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .option-label {
@@ -388,6 +528,58 @@ textarea {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile Option Styles */
+@media (max-width: 768px) {
+  .option-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .option-header button {
+    flex-shrink: 0;
+  }
+
+  .option-label {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .option-header .btn-danger {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .option-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .option-label {
+    width: fit-content;
+    padding: 6px 14px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .option-header .btn-danger {
+    width: auto;
+    min-width: auto;
+    margin-top: 0;
+    padding: 6px 10px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
 }
 
 /* Image Upload Areas - Lightweight */
@@ -406,6 +598,27 @@ textarea {
   position: relative;
   background-size: cover;
   background-position: center;
+}
+
+/* Mobile Image Upload Areas */
+@media (max-width: 768px) {
+  .image-upload-area {
+    padding: 20px;
+    min-height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .image-upload-area {
+    padding: 15px;
+    min-height: 120px;
+    border-width: 2px;
+  }
+
+  .upload-text {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
 }
 
 
@@ -770,6 +983,9 @@ input[type="checkbox"] {
   background: white;
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .tab-buttons {
@@ -779,6 +995,8 @@ input[type="checkbox"] {
   overflow-x: auto;
   padding: 0 20px;
   gap: 5px;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .tab-btn {
@@ -797,6 +1015,8 @@ input[type="checkbox"] {
   transition: var(--transition);
   position: relative;
   margin-top: 5px;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .tab-btn:hover {
@@ -888,11 +1108,16 @@ input[type="checkbox"] {
 
 /* Enhanced Responsive Design for Tabs */
 @media (max-width: 768px) {
+  .tab-navigation {
+    position: relative;
+  }
+
   .tab-buttons {
     padding: 0 10px;
     overflow-x: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    padding-bottom: 5px;
   }
 
   .tab-buttons::-webkit-scrollbar {
@@ -900,34 +1125,65 @@ input[type="checkbox"] {
   }
 
   .tab-btn {
-    padding: 12px 15px;
+    padding: 10px 12px;
     font-size: 12px;
-    min-width: 120px;
+    min-width: auto;
+    flex: 0 0 auto;
   }
 
   .tab-icon {
     font-size: 16px;
   }
 
+  .tab-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
   .tab-text {
     font-size: 11px;
+    display: block;
   }
 
   .tab-content .question-card {
-    margin: 20px 20px;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .tab-content .question-card h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
   }
 
   .tab-navigation .actions-bar {
-    padding: 15px 20px;
+    padding: 15px;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
+  }
+
+  .tab-navigation .actions-bar > div {
+    width: 100%;
+  }
+
+  .tab-navigation .actions-bar .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
+  .tab-buttons {
+    gap: 2px;
+    padding: 0 5px;
+  }
+
   .tab-btn {
-    padding: 10px 12px;
-    min-width: 100px;
+    padding: 8px 10px;
+    min-width: auto;
+    gap: 4px;
+    font-size: 11px;
+    border-radius: 8px 8px 0 0;
   }
 
   .tab-text {
@@ -935,12 +1191,35 @@ input[type="checkbox"] {
   }
 
   .tab-icon {
-    font-size: 20px;
+    font-size: 18px;
+  }
+
+  .tab-icon svg {
+    width: 20px;
+    height: 20px;
   }
 
   .tab-content .question-card {
-    margin: 15px 10px;
-    padding: 20px;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  .tab-content .question-card h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  /* Make tab buttons scrollable with visual indicator */
+  .tab-buttons::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to right, transparent, var(--light-gray));
+    pointer-events: none;
   }
 }
 
@@ -965,6 +1244,379 @@ input[type="checkbox"] {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Dashboard Header Content Styling */
+.dashboard-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.dashboard-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.btn-text-desktop {
+  display: inline;
+}
+
+.btn-text-mobile {
+  display: none;
+}
+
+/* Mobile Dashboard Header Content */
+@media (max-width: 768px) {
+  .dashboard-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .dashboard-header-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .quiz-selector-container {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .btn-create-quiz {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-text-desktop {
+    display: none;
+  }
+
+  .btn-text-mobile {
+    display: inline;
+  }
+
+  .dashboard-header-actions {
+    gap: 8px;
+  }
+
+  #deleteProductBtn {
+    width: 100%;
+    margin-top: 8px;
+  }
+}
+
+/* Gallery Grid Responsive */
+@media (max-width: 768px) {
+  div[style*="grid-template-columns: repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+}
+
+/* Result Table Responsive */
+@media (max-width: 768px) {
+  .results-table {
+    font-size: 12px;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 8px 5px;
+  }
+
+  .results-table thead {
+    display: none;
+  }
+
+  .results-table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .results-table tbody td {
+    display: block;
+    text-align: left;
+    padding: 5px 10px;
+    border: none;
+  }
+
+  .results-table tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
+
+/* Modal Responsive Improvements */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 2% auto;
+    padding: 0;
+    max-height: 95vh;
+  }
+
+  .modal-header {
+    padding: 20px;
+  }
+
+  .modal-body {
+    padding: 20px;
+    max-height: 70vh;
+  }
+
+  .user-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .answer-card {
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .modal-header {
+    padding: 15px;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .modal-body {
+    padding: 15px;
+    max-height: calc(100vh - 60px);
+  }
+
+  .close {
+    font-size: 24px;
+    top: 15px;
+    right: 15px;
+  }
+}
+
+/* Pagination Responsive */
+@media (max-width: 480px) {
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  #paginationContainer {
+    gap: 5px;
+  }
+}
+
+/* Form Elements in Tab Content */
+@media (max-width: 768px) {
+  .tab-content input[type="text"],
+  .tab-content input[type="email"],
+  .tab-content input[type="tel"],
+  .tab-content select,
+  .tab-content textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  .tab-content label {
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+
+  .option-card {
+    padding: 20px;
+  }
+
+  /* Banner and Gallery Grids */
+  .banner-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .button-settings-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .filters-container {
+    flex-direction: column;
+    align-items: flex-start !important;
+    width: 100%;
+  }
+
+  .filters-container > div {
+    width: 100%;
+  }
+
+  .filters-container select {
+    width: 100%;
+  }
+
+  /* Luxury Content Showroom Points Mobile */
+  .luxury-point-card {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+
+  .luxury-point-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .luxury-point-content {
+    flex: 1;
+  }
+
+  .luxury-point-title,
+  .luxury-point-description {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 10px;
+  }
+
+  .luxury-point-delete {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .btn-add-point {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  /* Quiz Promo Images Mobile */
+  .promo-images-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 15px !important;
+  }
+
+  .promo-image-slot {
+    width: 100%;
+  }
+
+  .promo-upload-area {
+    height: 120px !important;
+    min-height: 120px !important;
+  }
+
+  .promo-upload-text {
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+  }
+
+  .promo-image-delete {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+    top: 8px !important;
+    right: 8px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Luxury Content Showroom Points - Small Mobile */
+  .luxury-point-card {
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+  }
+
+  .luxury-point-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .luxury-point-content {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .luxury-point-title,
+  .luxury-point-description {
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 6px;
+  }
+
+  .luxury-point-description {
+    min-height: 50px;
+  }
+
+  .luxury-point-delete {
+    width: 100%;
+    padding: 8px;
+    font-size: 12px;
+    border-radius: 6px;
+    margin-top: 5px;
+  }
+
+  .btn-add-point {
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Quiz Promo Images - Small Mobile */
+  .promo-images-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .promo-upload-area {
+    height: 100px !important;
+    min-height: 100px !important;
+    padding: 10px !important;
+  }
+
+  .promo-upload-text {
+    font-size: 10px !important;
+    padding: 6px 10px !important;
+  }
+
+  .promo-image-delete {
+    padding: 3px 6px !important;
+    font-size: 10px !important;
+    top: 5px !important;
+    right: 5px !important;
+    border-radius: 50% !important;
+    width: 24px !important;
+    height: 24px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .promo-image-slot {
+    position: relative;
   }
 }
 

@@ -5,8 +5,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Admin Dashboard</title>
-    <link rel="stylesheet" href="../site-assets/css/dashboard.css?v=3">
+    <link rel="stylesheet" href="../site-assets/css/dashboard.css?v=5">
     <style>
+        /* Additional Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .modal-content {
+                width: 95% !important;
+                margin: 10px auto !important;
+            }
+
+            .user-info-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .answer-card {
+                margin-bottom: 10px;
+            }
+
+            div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Promo Tab Mobile Styles */
+            #quizPromoFeatures {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            #quizPromoFeatures>div {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+                width: 100%;
+            }
+
+            #quizPromoFeatures input {
+                flex: 1;
+                min-width: 0;
+            }
+
+            #quizPromoFeatures button {
+                flex-shrink: 0;
+            }
+
+            #quizPromoImages {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+
+            /* Questions Tab Mobile Styles */
+            .options-grid {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+
+            .option-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 10px;
+            }
+
+            .option-label {
+                width: 100%;
+                text-align: center;
+                padding: 8px 16px !important;
+                font-size: 14px !important;
+            }
+
+            .option-card {
+                padding: 20px !important;
+            }
+
+            /* Button Responsive Adjustments */
+            .question-card button.btn {
+                padding: 10px 16px !important;
+                font-size: 13px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-header h1 {
+                font-size: 18px !important;
+                line-height: 1.3 !important;
+            }
+
+            .tab-text {
+                display: none !important;
+            }
+
+            .tab-icon {
+                margin: 0 !important;
+            }
+
+            .question-card {
+                padding: 15px !important;
+                margin: 10px !important;
+            }
+
+            .question-card h2 {
+                font-size: 20px !important;
+                margin-bottom: 15px !important;
+            }
+
+            .modal-content {
+                width: 100% !important;
+                height: 100vh !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+                max-height: 100vh !important;
+            }
+
+            .results-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .results-table thead {
+                display: none;
+            }
+
+            .results-table tr {
+                display: block;
+                margin-bottom: 10px;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+            }
+
+            .results-table td {
+                display: block;
+                padding: 8px !important;
+                text-align: left;
+                border: none !important;
+            }
+
+            .results-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                margin-right: 10px;
+            }
+
+            /* Promo Tab Mobile Styles - Small Screens */
+            #quizPromoImages {
+                grid-template-columns: 1fr !important;
+                gap: 15px !important;
+            }
+
+            #quizPromoFeatures button.btn-danger {
+                padding: 6px 10px !important;
+                font-size: 11px !important;
+            }
+
+            .button-settings-grid input {
+                font-size: 14px !important;
+                padding: 10px !important;
+            }
+
+            /* Questions Tab Mobile Styles - Small Screens */
+            .option-header {
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                flex-wrap: nowrap !important;
+            }
+
+            .option-label {
+                font-size: 12px !important;
+                padding: 6px 12px !important;
+                border-radius: 50px !important;
+                display: inline-flex !important;
+                width: auto !important;
+                flex-shrink: 0 !important;
+            }
+
+            .option-card {
+                padding: 15px !important;
+                border-radius: 10px !important;
+            }
+
+            .option-header .btn-danger {
+                width: auto !important;
+                min-width: auto !important;
+                margin-top: 0 !important;
+                padding: 6px 10px !important;
+                font-size: 11px !important;
+                flex-shrink: 0 !important;
+            }
+
+            .image-upload-area {
+                min-height: 100px !important;
+                padding: 10px !important;
+            }
+
+            .upload-text {
+                font-size: 12px !important;
+                padding: 8px 12px !important;
+            }
+
+            /* Add Question Card Mobile Styles */
+            #addQuestionCard {
+                padding: 20px !important;
+            }
+
+            #addQuestionCard h3 {
+                font-size: 18px !important;
+            }
+
+            #addQuestionCard button {
+                padding: 12px 20px !important;
+                font-size: 14px !important;
+                width: 100% !important;
+            }
+
+            #addQuestionCard p {
+                font-size: 12px !important;
+            }
+
+            /* Promo Header Mobile */
+            .promo-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .btn-save-promo {
+                width: 100% !important;
+            }
+
+            /* Features and Images Buttons Mobile */
+            .btn-add-feature,
+            .btn-add-image,
+            .btn-add-point {
+                width: 100% !important;
+                max-width: none !important;
+            }
+
+            /* Luxury Content Showroom Points Mobile - 480px */
+            .luxury-point-card {
+                padding: 10px !important;
+                margin-bottom: 12px !important;
+                border-radius: 8px !important;
+            }
+
+            .luxury-point-header {
+                gap: 8px !important;
+            }
+
+            .luxury-point-title,
+            .luxury-point-description {
+                font-size: 14px !important;
+                padding: 8px !important;
+                border-radius: 6px !important;
+            }
+
+            .luxury-point-description {
+                min-height: 50px !important;
+            }
+
+            .luxury-point-delete {
+                padding: 8px !important;
+                font-size: 12px !important;
+                border-radius: 6px !important;
+            }
+
+        }
+
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -334,9 +596,9 @@
 
     <div class="dashboard-container">
         <div class="dashboard-header">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <div class="dashboard-header-content">
                 <h1 id="dashboardTitle">Default Quiz Content Management Dashboard</h1>
-                <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="dashboard-header-actions">
                     <div class="quiz-selector-container">
                         <label for="productQuizSelector" class="quiz-selector-label">Current Quiz:</label>
                         <select id="productQuizSelector" onchange="switchProductQuiz(this.value)">
@@ -344,7 +606,7 @@
                         </select>
                         <button class="btn btn-danger" onclick="confirmDeleteProduct()" id="deleteProductBtn" style="padding: 8px 15px; display: none;">Delete</button>
                     </div>
-                    <button class="btn btn-success" onclick="openNewProductQuizModal()">+ Create New Product Quiz</button>
+                    <button class="btn btn-success btn-create-quiz" onclick="openNewProductQuizModal()"><span class="btn-text-desktop">+ Create New Product Quiz</span><span class="btn-text-mobile">+ New Quiz</span></button>
                 </div>
             </div>
         </div>
@@ -422,7 +684,7 @@
                         <h2 id="bannerTabTitle" style="color: #ff6f00; margin: 0;">🎨 Default Hero Banner</h2>
                         <button class="btn btn-success" onclick="saveBannerSection()" style="padding: 8px 20px;">💾 Save Banner</button>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="banner-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div>
                             <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Heading:</label>
                             <input type="text"
@@ -497,10 +759,10 @@
                         onchange="updateLuxurySofasContent('subtitle', this.value)"
                         placeholder="Type your section subtitle here...">
 
-                    <div style="margin-bottom: 20px;">
+                    <div class="showroom-points-section" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; display: block; margin-bottom: 10px;">Showroom Points:</label>
-                        <div id="luxurySofasPoints"></div>
-                        <button class="btn btn-primary" onclick="addLuxurySofasPoint()" style="margin-top: 10px;">+ Add Point</button>
+                        <div id="luxurySofasPoints" class="luxury-points-container"></div>
+                        <button class="btn btn-primary btn-add-point" onclick="addLuxurySofasPoint()" style="margin-top: 10px; width: 100%; max-width: 200px;">+ Add Point</button>
                     </div>
 
                     <label style="font-weight: bold; display: block; margin-bottom: 10px;">Conclusion Paragraph:</label>
@@ -518,7 +780,7 @@
                         <h2 id="galleryTabTitle" style="color: #9c27b0; margin: 0;">🖼️ Default Gallery (4 Images)</h2>
                         <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div class="gallery-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
                         <!-- Gallery Item 1 -->
                         <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
                             <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 1</h4>
@@ -588,9 +850,9 @@
             <!-- Promo Tab Content -->
             <div class="tab-content" id="promo-tab">
                 <div class="question-card" style="background: #fff8e1; border: 2px solid #ff9800;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div class="promo-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
                         <h2 id="promoTabTitle" style="color: #ff9800; margin: 0;">🎯 Default Quiz Promo</h2>
-                        <button class="btn btn-success" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
+                        <button class="btn btn-success btn-save-promo" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
                     </div>
                     <div style="margin-bottom: 20px;">
                         <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading:</label>
@@ -602,15 +864,15 @@
                             placeholder="Type your section heading here...">
                     </div>
 
-                    <div style="margin-bottom: 20px;">
+                    <div class="features-section" style="margin-bottom: 20px;">
                         <label style="font-weight: bold; display: block; margin-bottom: 10px;">Features List:</label>
-                        <div id="quizPromoFeatures"></div>
-                        <button class="btn btn-primary" onclick="addQuizPromoFeature()" style="margin-top: 10px;">+ Add Feature</button>
+                        <div id="quizPromoFeatures" class="features-list"></div>
+                        <button class="btn btn-primary btn-add-feature" onclick="addQuizPromoFeature()" style="margin-top: 10px; width: 100%; max-width: 200px;">+ Add Feature</button>
                     </div>
 
                     <div style="margin-bottom: 20px;">
                         <label style="font-weight: bold; display: block; margin-bottom: 10px;">Button Settings:</label>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div class="button-settings-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                             <input type="text"
                                 id="quizPromoButtonText"
                                 placeholder="Try our Matching Quiz"
@@ -626,10 +888,10 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="slider-images-section">
                         <label style="font-weight: bold; display: block; margin-bottom: 10px;">Slider Images:</label>
-                        <div id="quizPromoImages" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;"></div>
-                        <button class="btn btn-primary" onclick="addQuizPromoImage()" style="margin-top: 10px;">+ Add Image</button>
+                        <div id="quizPromoImages" class="promo-images-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;"></div>
+                        <button class="btn btn-primary btn-add-image" onclick="addQuizPromoImage()" style="margin-top: 10px; width: 100%; max-width: 200px;">+ Add Image</button>
                     </div>
                 </div>
             </div>
@@ -639,11 +901,12 @@
                 <div id="questionsContainer"></div>
 
                 <!-- Add New Question Card -->
-                <div class="question-card" id="addQuestionCard" style="background: #e8f5e9; border: 2px solid #4caf50;">
-                    <div style="text-align: center; padding: 40px 20px;">
+                <div class="question-card add-question-card" id="addQuestionCard" style="background: #e8f5e9; border: 2px solid #4caf50;">
+                    <div class="add-question-content" style="text-align: center; padding: 40px 20px;">
                         <h3 style="color: #4caf50; margin-bottom: 20px;">Add New Question</h3>
-                        <button class="btn btn-primary" onclick="addNewQuestion()" style="padding: 15px 30px; font-size: 18px;">
-                            ➕ Add Question
+                        <button class="btn btn-primary btn-add-question" onclick="addNewQuestion()" style="padding: 15px 30px; font-size: 18px;">
+                            <span class="btn-text-desktop">➕ Add Question</span>
+                            <span class="btn-text-mobile">➕ Add</span>
                         </button>
                         <p style="margin-top: 15px; color: #666;">Click to add a new quiz question</p>
                     </div>
@@ -662,7 +925,7 @@
                     </div>
 
                     <!-- Filters -->
-                    <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
+                    <div class="filters-container" style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
                         <div>
                             <label style="font-weight: bold; margin-right: 8px;">Filter by Product:</label>
                             <select id="productFilter" onchange="filterResults()" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
@@ -740,7 +1003,7 @@
     </div>
 </body>
 <script src="../api/api-client-fallback.js"></script>
-<script src="../site-assets/js/dashboard-php.js?v=11"></script>
+<script src="../site-assets/js/dashboard-php.js?v=12"></script>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
 <script src="../site-assets/js/quiz-results.js?v=4" defer></script>
 
