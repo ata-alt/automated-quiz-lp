@@ -2,10 +2,10 @@
 // Database configuration
 class Database
 {
-    private $host = 'localhost';
-    private $db_name = 'automated_quiz';
-    private $username = 'root'; // Change this to your MySQL username
-    private $password = '';     // Change this to your MySQL password
+    private $dbHOST = 'localhost';
+    private $dbUSER = 'root';
+    private $dbPASS = '';
+    private $dbBASE = 'automated_quiz';
     private $conn;
 
     public function getConnection()
@@ -14,13 +14,13 @@ class Database
 
         try {
             $this->conn = new PDO(
-                "mysql:host=" . $this->host . ";dbname=" . $this->db_name . ";charset=utf8mb4",
-                $this->username,
-                $this->password,
+                "mysql:host=" . $this->dbHOST . ";dbname=" . $this->dbBASE . ";charset=utf8",
+                $this->dbUSER,
+                $this->dbPASS,
                 array(
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci"
+                    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8 COLLATE utf8_unicode_ci"
                 )
             );
         } catch (PDOException $exception) {
@@ -30,6 +30,7 @@ class Database
         return $this->conn;
     }
 }
+
 
 // CORS headers for API
 function setCorsHeaders()

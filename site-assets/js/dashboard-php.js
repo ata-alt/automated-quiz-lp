@@ -493,20 +493,22 @@ function renderLuxurySofasPoints() {
   container.innerHTML = quizData.luxurySofasSection.points
     .map(
       (point, index) => `
-        <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-bottom: 10px; background: #f9f9f9;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div style="flex: 1; margin-right: 10px;">
+        <div class="luxury-point-card" style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-bottom: 10px; background: #f9f9f9;">
+            <div class="luxury-point-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px;">
+                <div class="luxury-point-content" style="flex: 1; margin-right: 10px;">
                     <input type="text"
                            value="${point.title}"
                            onchange="updateLuxurySofasPoint(${index}, 'title', this.value)"
+                           class="luxury-point-title"
                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 8px; font-weight: bold;"
                            placeholder="Point title...">
                     <textarea
                            onchange="updateLuxurySofasPoint(${index}, 'description', this.value)"
+                           class="luxury-point-description"
                            style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; min-height: 60px;"
                            placeholder="Point description...">${point.description}</textarea>
                 </div>
-                <button class="btn btn-danger" onclick="removeLuxurySofasPoint(${index})" style="padding: 5px 10px;">×</button>
+                <button class="btn btn-danger luxury-point-delete" onclick="removeLuxurySofasPoint(${index})" style="padding: 5px 10px; flex-shrink: 0;">×</button>
             </div>
         </div>
     `
@@ -731,19 +733,19 @@ function renderQuizPromoImages() {
       const uploadIcon = hasImage ? '📷' : '📤';
 
       return `
-        <div style="position: relative;">
-            <div class="image-upload-area ${hasImage ? 'has-image' : ''}"
+        <div class="promo-image-slot" style="position: relative;">
+            <div class="image-upload-area promo-upload-area ${hasImage ? 'has-image' : ''}"
                  id="quizpromo-image-${index}"
                  style="height: 100px; ${backgroundStyle}"
                  onclick="document.getElementById('quizpromo-file-${index}').click()">
-                <div class="upload-text" style="font-size: 10px;">
+                <div class="upload-text promo-upload-text" style="font-size: 10px;">
                     ${uploadIcon}
                 </div>
             </div>
             <input type="file" id="quizpromo-file-${index}"
                    style="display: none;" accept="image/*"
                    onchange="handleQuizPromoImageUpload(${index}, this)">
-            <button class="btn btn-danger"
+            <button class="btn btn-danger promo-image-delete"
                     onclick="removeQuizPromoImage(${index})"
                     style="position: absolute; top: 5px; right: 5px; padding: 2px 6px; font-size: 12px;">×</button>
         </div>
