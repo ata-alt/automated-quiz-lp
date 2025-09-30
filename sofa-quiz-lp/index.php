@@ -55,11 +55,11 @@
     <meta name="popup" content="0">
     <meta name="robots" content="noindex, nofollow">
     <link href="../site-assets/css/luxurylp.css?v=12" rel="stylesheet">
-    <link href="../site-assets/css/style-quiz-widget.css?v=6" rel="stylesheet">
+    <link href="../site-assets/css/style-quiz-widget.css?v=10" rel="stylesheet">
     <script src="../api/api-client.js?v=3"></script>
     <script src="../site-assets/js/frame.sofa-quiz.js?v=2"></script>
     <script src="../site-assets/js/sofa-quiz.js?v=5" defer></script>
-    <script src="../site-assets/js/showroom-content.js?v=11" defer></script>
+    <script src="../site-assets/js/showroom-content.js?v=12" defer></script>
 
     <style>
         .main {
@@ -349,7 +349,7 @@
                                     <div class="row">
                                         <div class="col col-12 col-4-mid">
                                             <div class="field-block">
-                                                <input type="text" name="fname" placeholder="Full Name" class="input-text input-lg" pattern=".{2,255}" required title="2 to 255 characters">
+                                                <input type="text" name="fname" placeholder="First Name" class="input-text input-lg" pattern=".{2,255}" required title="2 to 255 characters">
                                             </div>
                                         </div>
                                         <div class="col col-12 col-4-mid">
@@ -844,7 +844,7 @@
         </dialog>
     </div>
     <!-- Zaraz consent Pop up ends here -->
-    <script src="../site-assets/js/showroom-content-fallback.js?v=11" defer></script>
+    <script src="../site-assets/js/showroom-content-fallback.js?v=12" defer></script>
     <script>
         // Dynamic Title Management
         (function() {

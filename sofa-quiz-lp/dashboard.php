@@ -740,7 +740,7 @@
     </div>
 </body>
 <script src="../api/api-client-fallback.js"></script>
-<script src="../site-assets/js/dashboard-php.js?v=10"></script>
+<script src="../site-assets/js/dashboard-php.js?v=11"></script>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
 <script src="../site-assets/js/quiz-results.js?v=4" defer></script>
 

@@ -143,7 +143,7 @@ function updateTabTitles(product) {
 
   const contentTitle = document.getElementById('contentTabTitle');
   if (contentTitle) {
-    contentTitle.textContent = `✨ ${productName} Luxury Content`;
+    contentTitle.textContent = `✨ Luxury ${productName} `;
   }
 
   const galleryTitle = document.getElementById('galleryTabTitle');
