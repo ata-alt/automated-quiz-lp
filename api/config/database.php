@@ -61,9 +61,16 @@ function sendResponse($data, $status_code = 200)
     exit();
 }
 
+function sendSuccess($data, $status_code = 200)
+{
+    http_response_code($status_code);
+    echo json_encode(array_merge(['success' => true], $data));
+    exit();
+}
+
 function sendError($message, $status_code = 400)
 {
     http_response_code($status_code);
-    echo json_encode(['error' => $message]);
+    echo json_encode(['success' => false, 'error' => $message, 'message' => $message]);
     exit();
 }

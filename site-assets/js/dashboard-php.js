@@ -1098,6 +1098,10 @@ function renderQuestions() {
                     <button class="btn btn-danger" onclick="removeQuestion(${qIndex})">Remove</button>
                 </div>
             </div>
+            <input type="text" class="question-input" value="${question.title || ''}"
+                   onchange="updateQuestionTitle(${qIndex}, this.value)"
+                   placeholder="Enter question title (optional)..."
+                   style="margin-bottom: 10px; font-weight: 600; font-size: 16px;">
             <input type="text" class="question-input" value="${question.text}"
                    onchange="updateQuestionText(${qIndex}, this.value)"
                    placeholder="Enter question text...">
@@ -1154,6 +1158,11 @@ function updateQuestionText(qIndex, text) {
   showStatus('Question text updated', 'success');
 }
 
+function updateQuestionTitle(qIndex, title) {
+  quizData.questions[qIndex].title = title;
+  showStatus('Question title updated', 'success');
+}
+
 function updateOptionText(qIndex, oIndex, text) {
   quizData.questions[qIndex].options[oIndex].text = text;
   showStatus('Option text updated', 'success');
@@ -1195,6 +1204,7 @@ function addNewQuestion() {
   const newId = quizData.questions.length + 1;
   quizData.questions.push({
     id: newId,
+    title: '',
     text: `New Question ${newId}`,
     options: [
       { id: 'a', text: 'Option A', image: '' },

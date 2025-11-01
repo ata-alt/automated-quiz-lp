@@ -110,6 +110,82 @@
   }
 }
 
+/* Quiz intro content sections */
+.quiz-intro-content {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  text-align: left;
+}
+
+.intro-section {
+  margin-bottom: 30px;
+}
+
+.intro-section h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #000;
+}
+
+.intro-tagline {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.intro-section p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 0;
+}
+
+.intro-section ul {
+  list-style: disc;
+  padding-left: 25px;
+  margin: 0;
+}
+
+.intro-section ul.checklist {
+  list-style: none;
+  padding-left: 0;
+}
+
+.intro-section li {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.intro-footer {
+  font-size: 16px;
+  font-style: italic;
+  color: #666;
+  text-align: center;
+  margin-top: 30px;
+}
+
+/* Result form styles */
+#result-form p {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 10px 10px;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 0;
+}
+
+#result-form p:nth-of-type(2) {
+  text-align: center;
+  color: #333;
+}
+
 @media only screen and (max-width: 768px) {
   .quiz-intro-title {
     font-size: 1.8rem;

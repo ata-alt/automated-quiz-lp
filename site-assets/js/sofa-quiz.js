@@ -13,6 +13,7 @@
     return [
       {
         id: 1,
+        title: '',
         text: 'Question 1',
         options: [
           {
@@ -34,6 +35,7 @@
       },
       {
         id: 2,
+        title: '',
         text: 'Question 2',
         options: [
           {
@@ -55,6 +57,7 @@
       },
       {
         id: 3,
+        title: '',
         text: 'Question 3',
         options: [
           {
@@ -76,6 +79,7 @@
       },
       {
         id: 4,
+        title: '',
         text: 'Question 4',
         options: [
           {
@@ -97,6 +101,7 @@
       },
       {
         id: 5,
+        title: '',
         text: 'Question 5',
         options: [
           {
@@ -118,6 +123,7 @@
       },
       {
         id: 6,
+        title: '',
         text: 'Question 6',
         options: [
           {
@@ -290,7 +296,9 @@
               imageUrl = imageUrl;
             } else if (imageUrl.startsWith('../uploaded-image/')) {
               // Relative path from dashboard - convert to absolute for deployed site
-              imageUrl = '/site-assets/automated-quiz/v2/uploaded-image/' + imageUrl.substring(18); // Remove '../uploaded-image/'
+              imageUrl =
+                '/site-assets/automated-quiz/v2/uploaded-image/' +
+                imageUrl.substring(18); // Remove '../uploaded-image/'
             } else if (imageUrl.startsWith('uploaded-image/')) {
               // Missing path prefix - add absolute path
               imageUrl = '/site-assets/automated-quiz/v2/' + imageUrl;
@@ -327,9 +335,26 @@
         const progressWidth =
           ((this.current + 1) / this.questions.length) * 100;
 
+        // Build the title HTML if a title exists
+        const titleHTML =
+          q.title && q.title.trim()
+            ? '<h2 class="thick-h3 black" style="margin-bottom: 10px; margin-top: 0; font-size: 28px; font-weight: 700; line-height: 1.3;">' +
+              q.title +
+              '</h2>'
+            : '';
+
+        // If we have a title, make the question text smaller and less prominent
+        const questionTextStyle =
+          q.title && q.title.trim()
+            ? 'style="font-size: 20px; font-weight: 500; color: #555; margin-top: 5px;"'
+            : '';
+
         quiz.innerHTML =
           '<div class="question-container spacing-v">' +
-          '<h3 class="thick-h3 black">' +
+          titleHTML +
+          '<h3 class="thick-h3 black" ' +
+          questionTextStyle +
+          '>' +
           q.text +
           '</h3>' +
           '<div class="row options-grid">' +
@@ -446,7 +471,7 @@
   window.styleQuiz = styleQuiz;
 
   // Function to start quiz (called from intro button)
-  window.startQuiz = function() {
+  window.startQuiz = function () {
     const intro = document.getElementById('quiz-intro');
     const quiz = document.getElementById('quiz');
 
@@ -470,8 +495,13 @@
     }
 
     // Use the properly formatted product name from styleQuiz
-    if (styleQuiz.currentProductName && styleQuiz.currentProductName !== 'Default') {
-      productNameSpans.forEach(span => span.textContent = styleQuiz.currentProductName);
+    if (
+      styleQuiz.currentProductName &&
+      styleQuiz.currentProductName !== 'Default'
+    ) {
+      productNameSpans.forEach(
+        (span) => (span.textContent = styleQuiz.currentProductName)
+      );
       return true;
     } else {
       return false; // Retry if product name not yet loaded
@@ -491,14 +521,61 @@
 
   // Update product name when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       tryUpdateProductName();
     });
   } else {
     tryUpdateProductName();
   }
 
-  // Form submission handler - stores quiz results to database AND sends to HubSpot
+  // Function to display personality result
+  function displayPersonalityResult(userName, personality) {
+    const result = document.getElementById('result-form');
+
+    // Create the personality result HTML with styling matching the quiz theme
+    const resultHTML = `
+      <div class="personality-result" style="text-align: center; padding: 20px; animation: fadeIn 0.5s;">
+        <h3 class="thick-h3" style="color:#0f172a; font-size: 28px; margin-bottom: 30px;">
+          ${escapeHtml(personality.profileName)}
+        </h3>
+
+        <div style="margin: 30px auto; max-width: 600px;">
+          <img
+            src="${escapeHtml(personality.imageUrl)}"
+            alt="${escapeHtml(personality.profileName)}"
+            style="max-width: 100%; height: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"
+            onerror="this.style.display='none'"
+          />
+        </div>
+      </div>
+
+      <style>
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      </style>
+    `;
+
+    result.innerHTML = resultHTML;
+
+    // Scroll to result
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Helper function to escape HTML
+  function escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Form submission handler - stores quiz results to database AND sends to webhook
   window.submitDetails = async function (e) {
     e.preventDefault();
 
@@ -508,6 +585,7 @@
     }
 
     const name = form.querySelector("input[name='fname']").value;
+    const lname = form.querySelector("input[name='lname']").value;
     const email = form.querySelector("input[name='email']").value;
     const phone = form.querySelector("input[name='phone']").value;
 
@@ -542,14 +620,16 @@
       // For database
       quizAnswers.push({
         questionId: a.questionId,
+        questionTitle: q.title || '',
         questionText: q.text,
         optionId: a.optionId,
         optionText: selectedOption ? selectedOption.text : 'Unknown',
       });
 
-      // For HubSpot
-      hubspotAnswers['q' + a.questionId] =
-        q.text + ': ' + (selectedOption ? selectedOption.text : 'Unknown');
+      // For HubSpot - include title if it exists and send option ID instead of text
+      const questionDisplay =
+        q.title && q.title.trim() ? q.title + ' - ' + q.text : q.text;
+      hubspotAnswers['q' + a.questionId] = questionDisplay + ': ' + a.optionId;
     });
 
     // Get current product key from data attribute or API
@@ -567,6 +647,7 @@
 
     const quizData = {
       name: name,
+      lname: lname,
       email: email,
       phone: phone,
       product_key: currentProduct,
@@ -574,7 +655,7 @@
     };
 
     // Store quiz result in database
-    fetch('/site-assets/automated-quiz/v2/api/quiz-results.php', {
+    fetch('/sofa-quiz-lp/api/quiz-results.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -584,15 +665,34 @@
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          // Now also send to HubSpot
-          sendToHubspot(name, email, phone, hubspotAnswers);
+          // Send to HubSpot
+          sendToHubspot(name, lname, email, phone, hubspotAnswers);
 
-          // Show success message
+          // Show final success message
           const result = document.getElementById('result-form');
           result.innerHTML =
-            "<h2 style='color:#0f172a;'>Thank you, " +
-            name +
-            '! Your quiz results have been saved.</h2>';
+            '<h2 class="thick-h2 black">Your Design Profile is Complete</h2>' +
+            '<p>Out of 6,561 possible design personalities, you have a completely unique profile that reveals exactly why certain spaces make you feel at home while others never quite feel right.</p>' +
+            "<p>We'll email you your personalised report shortly.</p>";
+
+          // Send to n8n webhook (in background without showing spinner)
+          if (typeof window.sendQuizToWebhook === 'function') {
+            window
+              .sendQuizToWebhook(
+                name,
+                lname,
+                email,
+                phone,
+                currentProduct,
+                quizAnswers
+              )
+              .then((webhookResult) => {
+                console.log('[Quiz] Webhook result received:', webhookResult);
+              })
+              .catch((error) => {
+                console.warn('[Quiz] Webhook error but continuing:', error);
+              });
+          }
 
           // Track event
           window.dataLayer = window.dataLayer || [];
@@ -615,15 +715,17 @@
       })
       .catch((error) => {
         // Even if database fails, try to send to HubSpot
-        sendToHubspot(name, email, phone, hubspotAnswers);
+        sendToHubspot(name, lname, email, phone, hubspotAnswers);
         alert('Something went wrong. Please try again later.');
         submitBtn.value = originalBtnValue;
         submitBtn.disabled = false;
       });
 
-    function sendToHubspot(name, email, phone, answers) {
+    // HubSpot integration
+    function sendToHubspot(name, lname, email, phone, answers) {
       const fields = [
         { name: 'firstname', value: name },
+        { name: 'lastname', value: lname },
         { name: 'email', value: email },
         { name: 'phone', value: phone },
         ...Object.entries(answers).map(([key, value]) => ({

@@ -52,7 +52,7 @@ function getContent($db)
 
         // Get questions and options
         $questionsQuery = "
-            SELECT q.id, q.question_order, q.question_text,
+            SELECT q.id, q.question_order, q.question_title, q.question_text,
                    o.option_key, o.option_text, o.image_url, o.option_order
             FROM automated_quiz_questions q
             LEFT JOIN automated_question_options o ON q.id = o.question_id
@@ -71,6 +71,7 @@ function getContent($db)
             if (!isset($questions[$qId])) {
                 $questions[$qId] = [
                     'id' => $row['question_order'],
+                    'title' => $row['question_title'] ?? '',
                     'text' => $row['question_text'],
                     'options' => []
                 ];
@@ -136,13 +137,14 @@ function saveContent($db)
             // Insert new questions
             foreach ($data['questions'] as $index => $question) {
                 $questionQuery = "
-                    INSERT INTO automated_quiz_questions (product_key, question_order, question_text)
-                    VALUES (?, ?, ?)
+                    INSERT INTO automated_quiz_questions (product_key, question_order, question_title, question_text)
+                    VALUES (?, ?, ?, ?)
                 ";
                 $questionStmt = $db->prepare($questionQuery);
                 $questionStmt->execute([
                     $productKey,
                     $index + 1,
+                    $question['title'] ?? '',
                     $question['text']
                 ]);
 

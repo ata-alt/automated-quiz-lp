@@ -46,25 +46,57 @@
               console.log('[Loader] styleQuiz already defined. Calling init.');
               window.styleQuiz.init();
             } else {
-              const script = document.createElement('script');
-              script.src = '/sofa-quiz-lp/site-assets/js/sofa-quiz.js';
-              script.defer = true;
-              script.onload = () => {
-                if (
-                  typeof window.styleQuiz !== 'undefined' &&
-                  typeof window.styleQuiz.init === 'function'
-                ) {
-                  console.log(
-                    '[Loader] Script loaded. Calling window.styleQuiz.init()'
-                  );
-                  window.styleQuiz.init();
-                } else {
-                  console.warn(
-                    '[Loader] Script loaded but styleQuiz not found'
-                  );
-                }
+              // Load webhook handler first
+              const webhookScript = document.createElement('script');
+              webhookScript.src = '/sofa-quiz-lp/site-assets/js/webhook-handler.js';
+              webhookScript.defer = true;
+              webhookScript.onload = () => {
+                console.log('[Loader] Webhook handler loaded');
+                // Then load main quiz script
+                const script = document.createElement('script');
+                script.src = '/sofa-quiz-lp/site-assets/js/sofa-quiz.js';
+                script.defer = true;
+                script.onload = () => {
+                  if (
+                    typeof window.styleQuiz !== 'undefined' &&
+                    typeof window.styleQuiz.init === 'function'
+                  ) {
+                    console.log(
+                      '[Loader] Script loaded. Calling window.styleQuiz.init()'
+                    );
+                    window.styleQuiz.init();
+                  } else {
+                    console.warn(
+                      '[Loader] Script loaded but styleQuiz not found'
+                    );
+                  }
+                };
+                document.body.appendChild(script);
               };
-              document.body.appendChild(script);
+              webhookScript.onerror = () => {
+                console.warn('[Loader] Failed to load webhook handler, continuing anyway');
+                // Continue loading main script even if webhook fails
+                const script = document.createElement('script');
+                script.src = '/sofa-quiz-lp/site-assets/js/sofa-quiz.js';
+                script.defer = true;
+                script.onload = () => {
+                  if (
+                    typeof window.styleQuiz !== 'undefined' &&
+                    typeof window.styleQuiz.init === 'function'
+                  ) {
+                    console.log(
+                      '[Loader] Script loaded. Calling window.styleQuiz.init()'
+                    );
+                    window.styleQuiz.init();
+                  } else {
+                    console.warn(
+                      '[Loader] Script loaded but styleQuiz not found'
+                    );
+                  }
+                };
+                document.body.appendChild(script);
+              };
+              document.body.appendChild(webhookScript);
             }
           });
         });

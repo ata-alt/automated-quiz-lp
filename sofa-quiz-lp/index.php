@@ -56,6 +56,7 @@
     <meta name="robots" content="noindex, nofollow">
     <link href="../site-assets/css/style-quiz-widget.css?v=13" rel="stylesheet">
     <script src="../api/api-client.js?v=3"></script>
+    <script src="../site-assets/js/webhook-handler.js?v=1"></script>
     <script src="../site-assets/js/frame.sofa-quiz.js?v=23"></script>
     <script src="../site-assets/js/showroom-content.js?v=12" defer></script>
 
@@ -69,35 +70,34 @@
                 margin-top: 10px;
             }
         }
-
     </style>
-    
+
 </head>
 
 <body>
-   
+
     <main class="main">
         <section class="container" style="padding: 20px 10px;">
             <div class="row text-center" id="productquiz">
                 <div class="col col-12">
                     <!-- Quiz Widget Container -->
-                    <section class="style-quiz-widget container" data-quiz-type="sofa"> </section>
+                    <section class="style-quiz-widget container" data-quiz-type="diningtable"> </section>
                 </div>
             </div>
             </div>
         </section>
-        
-       
-      
-       
-    
+
+
+
+
+
     </main>
     <!-- Start FOOTER -->
-  
+
     <!-- Zaraz consent Pop up ends here -->
     <script src="../site-assets/js/showroom-content-fallback.js?v=12" defer></script>
     <script>
-	 (function() {
+        (function() {
             'use strict';
 
             // Function to update quiz type attribute

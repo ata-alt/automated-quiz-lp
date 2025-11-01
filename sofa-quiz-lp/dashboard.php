@@ -1,4 +1,25 @@
-﻿<!DOCTYPE html>
+<?php
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header('Location: signin.php');
+    exit;
+}
+
+// Optional: Check session timeout (24 hours)
+$session_timeout = 24 * 60 * 60; // 24 hours in seconds
+if (isset($_SESSION['login_time']) && (time() - $_SESSION['login_time'] > $session_timeout)) {
+    session_destroy();
+    header('Location: signin.php');
+    exit;
+}
+
+// Get user role from session (default to 'editor' if not set)
+$userRole = isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'editor';
+$isAdmin = ($userRole === 'admin');
+?>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -619,6 +640,7 @@
                     </div>
                     <button class="btn btn-primary" onclick="openDeveloperNotesModal()"><span class="btn-text-desktop">Developer Notes</span><span class="btn-text-mobile">Docs</span></button>
                     <button class="btn btn-success btn-create-quiz" onclick="openNewProductQuizModal()"><span class="btn-text-desktop">+ Create New Product Quiz</span><span class="btn-text-mobile">+ New Quiz</span></button>
+                    <button class="btn btn-danger" onclick="confirmLogout()" style="background: #dc2626; border-color: #dc2626;"><span class="btn-text-desktop">Logout</span><span class="btn-text-mobile">Exit</span></button>
                 </div>
             </div>
         </div>
@@ -650,6 +672,16 @@
                     </span>
                     <span class="tab-text">Developer Notes</span>
                 </button>
+                <?php if ($isAdmin): ?>
+                    <button class="tab-btn" onclick="showTab('users')" data-tab="users">
+                        <span class="tab-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
+                            </svg>
+                        </span>
+                        <span class="tab-text">User Management</span>
+                    </button>
+                <?php endif; ?>
             </div>
             <div class="actions-bar">
                 <div>
@@ -694,7 +726,7 @@
 
                     <!-- Filters -->
                     <div class="filters-container" style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
-                           <div>
+                        <div>
                             <label style="font-weight: bold; margin-right: 8px;">Showing Results For:</label>
                             <input type="text" id="currentProductDisplay" readonly value="Default" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; background: #f5f5f5; color: #666; cursor: not-allowed; font-weight: 500;">
                         </div>
@@ -726,6 +758,26 @@
                     </div>
                 </div>
             </div>
+
+            <!-- User Management Tab Content (Admin Only) -->
+            <?php if ($isAdmin): ?>
+                <div class="tab-content" id="users-tab">
+                    <div class="question-card" style="background: white; border: 1px solid #e0e0e0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2 style="color: #000000; margin: 0;">User Management</h2>
+                            <button class="btn btn-success" onclick="openCreateUserModal()" style="padding: 8px 20px;">+ Create New User</button>
+                        </div>
+
+                        <!-- Users List -->
+                        <div id="usersListContainer" style="background: white; border-radius: 8px; overflow: hidden;">
+                            <div id="loadingUsers" style="text-align: center; padding: 40px;">
+                                <div style="display: inline-block; animation: spin 1s linear infinite; font-size: 24px;">⏳</div>
+                                <p>Loading users...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
 
         </div> <!-- End tab-content-container -->
 
@@ -767,6 +819,68 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal for Creating New User (Admin Only) -->
+    <?php if ($isAdmin): ?>
+        <div id="createUserModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Create New User</h2>
+                    <span class="close" onclick="closeCreateUserModal()">×</span>
+                </div>
+                <div class="modal-body">
+                    <form id="createUserForm" onsubmit="createNewUser(event)">
+                        <div style="margin-bottom: 20px;">
+                            <label for="newUsername" style="display: block; margin-bottom: 8px; font-weight: bold;">Username:</label>
+                            <input type="text" id="newUsername" required
+                                placeholder="Enter username"
+                                style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label for="newEmail" style="display: block; margin-bottom: 8px; font-weight: bold;">Email:</label>
+                            <input type="email" id="newEmail" required
+                                placeholder="user@example.com"
+                                style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label for="newFullName" style="display: block; margin-bottom: 8px; font-weight: bold;">Full Name:</label>
+                            <input type="text" id="newFullName" required
+                                placeholder="Enter full name"
+                                style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label for="newPassword" style="display: block; margin-bottom: 8px; font-weight: bold;">Password:</label>
+                            <input type="password" id="newPassword" required
+                                placeholder="Enter password (min 8 characters)"
+                                minlength="8"
+                                style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                            <small style="color: #666; font-size: 12px;">Minimum 8 characters required</small>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label for="newPasswordConfirm" style="display: block; margin-bottom: 8px; font-weight: bold;">Confirm Password:</label>
+                            <input type="password" id="newPasswordConfirm" required
+                                placeholder="Re-enter password"
+                                minlength="8"
+                                style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <label for="newUserRole" style="display: block; margin-bottom: 8px; font-weight: bold;">Role:</label>
+                            <select id="newUserRole" required
+                                style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                                <option value="editor">Editor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <small style="color: #666; font-size: 12px;">Editors can manage quiz content. Admins can also manage users.</small>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 30px;">
+                            <button type="button" class="btn" onclick="closeCreateUserModal()" style="background: #ccc; color: #333;">Cancel</button>
+                            <button type="submit" class="btn btn-success">Create User</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 
     <!-- Modal for Developer Notes -->
     <div id="developerNotesModal" class="modal">
@@ -848,38 +962,38 @@
     </div>
 </body>
 <script src="../api/api-client-fallback.js"></script>
-<script src="../site-assets/js/dashboard-php.js?v=14"></script>
+<script src="../site-assets/js/dashboard-php.js?v=15"></script>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
 <script src="../site-assets/js/quiz-results.js?v=7" defer></script>
+<?php if ($isAdmin): ?>
+    <script src="../site-assets/js/user-management.js" defer></script>
+<?php endif; ?>
 
 <script>
-    // Tab Management Functions
     function showTab(tabName) {
-        // Hide all tab contents
+
         const tabContents = document.querySelectorAll('.tab-content');
         tabContents.forEach(content => {
             content.classList.remove('active');
         });
 
-        // Remove active class from all tab buttons
+
         const tabBtns = document.querySelectorAll('.tab-btn');
         tabBtns.forEach(btn => {
             btn.classList.remove('active');
         });
 
-        // Show selected tab content
         const selectedTab = document.getElementById(tabName + '-tab');
         if (selectedTab) {
             selectedTab.classList.add('active');
         }
 
-        // Add active class to clicked tab button
         const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
         if (activeBtn) {
             activeBtn.classList.add('active');
         }
 
-        // Update current tab actions (if needed)
+
         updateTabActions(tabName);
     }
 
@@ -887,10 +1001,10 @@
         const actionsContainer = document.getElementById('currentTabActions');
         if (!actionsContainer) return;
 
-        // Clear current actions
+
         actionsContainer.innerHTML = '';
 
-        // Add specific actions based on tab
+
         switch (tabName) {
             case 'questions':
                 actionsContainer.innerHTML = '<button class="btn btn-primary" onclick="addNewQuestion()">➕ Add Question</button>';
@@ -901,12 +1015,12 @@
         }
     }
 
-    // Initialize first tab on page load
+
     document.addEventListener('DOMContentLoaded', function() {
         showTab('questions');
     });
 
-    // Developer Notes Modal Functions
+
     function openDeveloperNotesModal() {
         document.getElementById('developerNotesModal').style.display = 'block';
     }
@@ -915,12 +1029,11 @@
         document.getElementById('developerNotesModal').style.display = 'none';
     }
 
-    // Select Quiz Type and Update Integration Code
+
     function selectQuizType(type) {
-        // Update the quiz type value in the integration code
+
         document.getElementById('quizTypeValue').textContent = type;
 
-        // Remove active class from all items
         const allItems = document.querySelectorAll('.quiz-type-item');
         allItems.forEach(item => {
             item.classList.remove('active');
@@ -930,7 +1043,7 @@
             if (span) span.style.color = '#000';
         });
 
-        // Add active class to selected item
+
         const selectedItem = document.querySelector(`.quiz-type-item[data-type="${type}"]`);
         if (selectedItem) {
             selectedItem.classList.add('active');
@@ -941,7 +1054,7 @@
         }
     }
 
-    // Update Developer Notes Quiz Types List
+
     async function updateDeveloperNotesQuizTypes() {
         try {
             const response = await apiClient.getProducts();
@@ -949,10 +1062,10 @@
 
             if (!quizTypesGrid) return;
 
-            // Clear existing items
+
             quizTypesGrid.innerHTML = '';
 
-            // Add quiz type for each product
+
             response.products.forEach((product, index) => {
                 const productKey = product.product_key;
                 const isFirst = index === 0;
@@ -979,7 +1092,7 @@
                 quizTypesGrid.appendChild(quizTypeItem);
             });
 
-            // Update the integration code to show the first product key
+
             if (response.products.length > 0) {
                 document.getElementById('quizTypeValue').textContent = response.products[0].product_key;
             }
@@ -988,27 +1101,26 @@
         }
     }
 
-    // Override openDeveloperNotesModal to refresh quiz types
+
     const originalOpenDeveloperNotesModal = openDeveloperNotesModal;
     openDeveloperNotesModal = function() {
         updateDeveloperNotesQuizTypes();
         document.getElementById('developerNotesModal').style.display = 'block';
     };
 
-    // Copy Integration Code to Clipboard
+
     function copyIntegrationCode() {
         const quizType = document.getElementById('quizTypeValue').textContent;
         const codeText = `<section class="style-quiz-widget container" data-quiz-type="${quizType}"> </section>`;
 
         navigator.clipboard.writeText(codeText).then(() => {
-            // Update button to show success state
+
             const copyIcon = document.getElementById('copyIcon');
             const copyText = document.getElementById('copyText');
 
             copyIcon.textContent = '✓';
             copyText.textContent = 'Copied!';
 
-            // Reset button after 2 seconds
             setTimeout(() => {
                 copyIcon.textContent = '📋';
                 copyText.textContent = 'Copy';
@@ -1019,13 +1131,20 @@
         });
     }
 
-    // Close modal when clicking outside
+
     window.addEventListener('click', function(event) {
         const modal = document.getElementById('developerNotesModal');
         if (event.target === modal) {
             closeDeveloperNotesModal();
         }
     });
+
+
+    function confirmLogout() {
+        if (confirm('Are you sure you want to logout?')) {
+            window.location.href = 'signout.php';
+        }
+    }
 </script>
 
 </html>
