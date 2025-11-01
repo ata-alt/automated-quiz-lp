@@ -1,9 +1,11 @@
-// Dashboard JavaScript - Quiz Content Management System with PHP Backend
+﻿// Dashboard JavaScript - Quiz Content Management System with PHP Backend
 
 let quizData = {
   questions: [],
 };
 
+// Make currentProductKey globally accessible
+window.currentProductKey = 'default';
 let currentProductKey = 'default';
 
 // Initialize dashboard
@@ -11,6 +13,7 @@ async function initializeDashboard() {
   try {
     // Get current product
     currentProductKey = await apiClient.getCurrentProduct();
+    window.currentProductKey = currentProductKey;
 
     // Update product selector
     await updateProductQuizSelector();
@@ -82,6 +85,7 @@ async function updateProductQuizSelector() {
 async function switchProductQuiz(productKey) {
   try {
     currentProductKey = productKey;
+    window.currentProductKey = productKey;
 
     // Update current product setting
     await apiClient.setCurrentProduct(productKey);
@@ -154,6 +158,15 @@ function updateTabTitles(product) {
   const promoTitle = document.getElementById('promoTabTitle');
   if (promoTitle) {
     promoTitle.textContent = `🎯 ${productName} Quiz Promo`;
+  }
+
+  const resultsTitle = document.getElementById('resultsTabTitle');
+  if (resultsTitle) {
+    if (productName === 'Default') {
+      resultsTitle.textContent = `Quiz Results`;
+    } else {
+      resultsTitle.textContent = `${productName} Quiz Results`;
+    }
   }
 }
 

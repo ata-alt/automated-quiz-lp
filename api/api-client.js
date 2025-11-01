@@ -1,6 +1,7 @@
 // API Client for Quiz Management
 class ApiClient {
   constructor() {
+    // Use absolute path to work with CMS
     this.baseUrl = '../api/';
   }
 

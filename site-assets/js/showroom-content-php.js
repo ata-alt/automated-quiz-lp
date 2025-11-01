@@ -153,10 +153,8 @@
             }
           }
         }
-
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Function to load and update showroom section
@@ -203,10 +201,8 @@
             }
           });
         }
-
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Function to load and update Luxury Content Section
@@ -286,10 +282,8 @@
             contentDiv.innerHTML = contentHTML;
           }
         }
-
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Function to load and update Gallery section (3 images)
@@ -335,24 +329,29 @@
           // Update gallery titles and subtitles
           data.gallery.images.forEach((imageData, index) => {
             // Update title element
-            const titleElement = document.getElementById(`gallery-title-${index}`);
+            const titleElement = document.getElementById(
+              `gallery-title-${index}`
+            );
             if (titleElement && imageData.title) {
               titleElement.textContent = imageData.title;
             }
 
             // Update subtitle element
-            const subtitleElement = document.getElementById(`gallery-subtitle-${index}`);
+            const subtitleElement = document.getElementById(
+              `gallery-subtitle-${index}`
+            );
             if (subtitleElement && imageData.subtitle) {
               subtitleElement.textContent = imageData.subtitle;
             }
 
             // Update link element
-            const linkElement = document.getElementById(`gallery-link-${index}-btn`);
+            const linkElement = document.getElementById(
+              `gallery-link-${index}-btn`
+            );
             if (linkElement && imageData.link) {
               linkElement.href = imageData.link;
             }
           });
-
         }
       } else {
         // If no gallery data is available, set placeholder images
@@ -371,8 +370,7 @@
           });
         }
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Function to load and update Design Expert section
@@ -421,10 +419,8 @@
             button.innerHTML = `${data.design_expert.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
           }
         }
-
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Function to load and update Quiz Promo section
@@ -462,7 +458,9 @@
           }
 
           // Update button
-          const button = promoSection.querySelector('a.btn[href*="productquiz"]');
+          const button = promoSection.querySelector(
+            'a.btn[href*="productquiz"]'
+          );
           if (button) {
             button.href = data.quiz_promo.buttonLink;
             button.innerHTML = `${data.quiz_promo.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
@@ -546,40 +544,46 @@
                 // Remove any existing navigation controls to prevent duplicates
                 $slider.parent().find('.lSAction').remove();
 
-                // Wait for cleanup to complete, then reinitialize
+                // Wait for cleanup to complete, then reinitialize (only on desktop)
                 setTimeout(() => {
-                  $slider.lightSlider({
-                    item: 1,
-                    loop: true,
-                    controls: true,
-                    slideMargin: 0,
-                    adaptiveHeight: true,
-                    pager: false,
-                    speed: 400,
-                    onSliderLoad: function () {
-                      // Ensure images are properly sized after slider loads
-                      jQuery('#wardrobes-slider img').each(function () {
-                        const img = jQuery(this);
-                        img.css({
-                          width: '100%',
-                          height: '400px',
-                          'object-fit': 'cover',
-                          'object-position': 'center',
+                  // Only initialize slider on desktop (> 768px)
+                  if (jQuery(window).width() > 768) {
+                    $slider.lightSlider({
+                      item: 1,
+                      loop: true,
+                      controls: true,
+                      slideMargin: 0,
+                      adaptiveHeight: true,
+                      pager: false,
+                      speed: 400,
+                      onSliderLoad: function () {
+                        // Ensure images are properly sized after slider loads
+                        jQuery('#wardrobes-slider img').each(function () {
+                          const img = jQuery(this);
+                          img.css({
+                            width: '100%',
+                            height: '400px',
+                            'object-fit': 'cover',
+                            'object-position': 'center',
+                          });
                         });
-                      });
-
-                    },
-                  });
+                      },
+                    });
+                  } else {
+                    // On mobile, ensure all images are visible for horizontal scroll
+                    jQuery('#wardrobes-slider li').css({
+                      'display': 'block',
+                      'visibility': 'visible',
+                      'opacity': '1'
+                    });
+                  }
                 }, 50);
               }
-            } catch (error) {
-            }
+            } catch (error) {}
           }, 200);
         }
-
       }
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Function to add global CSS for image consistency is gone
@@ -626,8 +630,7 @@
       await loadLuxuryContentSection();
       await loadGallerySection();
       await loadQuizPromoSection();
-    } catch (error) {
-    }
+    } catch (error) {}
   }
 
   // Load on DOM ready

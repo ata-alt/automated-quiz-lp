@@ -452,14 +452,27 @@
 			adaptiveHeight: true,
 		});
 
-		// Slider: wardrobe pages
-		$("#wardrobes-slider").lightSlider({
-			item: 1,
-			loop:true,
-			controls: true,
-			slideMargin: 0,
-			adaptiveHeight: true,
-			pager: false,
+		// Slider: wardrobe pages (only on desktop)
+		if ($(window).width() > 768) {
+			$("#wardrobes-slider").lightSlider({
+				item: 1,
+				loop:true,
+				controls: true,
+				slideMargin: 0,
+				adaptiveHeight: true,
+				pager: false,
+			});
+		}
+
+		// Destroy slider on resize if going to mobile
+		$(window).on('resize', function() {
+			if ($(window).width() <= 768) {
+				const slider = $("#wardrobes-slider");
+				if (slider.parent().hasClass('lSSlideOuter')) {
+					slider.parent().replaceWith(slider);
+					slider.removeAttr('style').addClass('mobile-scroll');
+				}
+			}
 		});
 
 		// -------------------------------------

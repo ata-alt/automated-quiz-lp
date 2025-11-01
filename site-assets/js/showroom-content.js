@@ -159,7 +159,8 @@
           productData.luxuryDefaultsSection?.introduction ||
           `Experience the finest ${productData.name?.toLowerCase()} collection.`,
         subtitle:
-          productData.luxuryDefaultsSection?.subtitle || 'Why Visit Our Showroom?',
+          productData.luxuryDefaultsSection?.subtitle ||
+          'Why Visit Our Showroom?',
         points: productData.luxuryDefaultsSection?.points || [],
         conclusion:
           productData.luxuryDefaultsSection?.conclusion ||
@@ -283,7 +284,9 @@
           // Fallback to searching by text content
           const showroomHeadings = document.querySelectorAll('h2');
           showroomHeadings.forEach((heading) => {
-            if (heading.textContent.includes('largest luxury product showroom')) {
+            if (
+              heading.textContent.includes('largest luxury product showroom')
+            ) {
               heading.textContent = data.showroomSection.heading;
             }
           });
@@ -558,7 +561,9 @@
           }
 
           // Update button
-          const button = promoSection.querySelector('a.btn[href*="productquiz"]');
+          const button = promoSection.querySelector(
+            'a.btn[href*="productquiz"]'
+          );
           if (button) {
             button.href = data.quiz_promo.buttonLink;
             button.innerHTML = `${data.quiz_promo.buttonText} <i class="fa-solid fa-circle-chevron-right fa-lg" style="color: #000000;"></i>`;
@@ -611,18 +616,44 @@
         height: 560px;
         object-fit: cover;
       }
-      
-      @media (max-width: 640px) {
+
+      @media (max-width: 768px) {
         .banner-block img.banner-img {
           max-height: 660px;
         }
-        
+
         section.container.big img {
           height: 300px;
         }
-        
+
+        #wardrobes-slider {
+          display: flex !important;
+          overflow-x: auto !important;
+          flex-wrap: nowrap !important;
+        }
+
+        #wardrobes-slider li {
+          flex: 0 0 auto !important;
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+          width: 300px !important;
+          height: 220px !important;
+        }
+
         #wardrobes-slider img {
-          height: 400px;
+          width: 100% !important;
+          height: 100% !important;
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #wardrobes-slider li {
+          width: 240px !important;
+          height: 180px !important;
         }
       }
     `;

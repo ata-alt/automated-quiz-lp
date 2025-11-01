@@ -8,51 +8,8 @@
     )}`;
   }
 
-  // Function to load quiz data from database or use defaults
-  const loadQuizData = async function () {
-    try {
-      console.log('[Quiz] Attempting to fetch questions from database...');
-
-      // Wait for API client to be available (with timeout)
-      let attempts = 0;
-      while (typeof window.apiClient === 'undefined' && attempts < 50) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        attempts++;
-      }
-
-      if (typeof window.apiClient !== 'undefined') {
-        // Get the current active product instead of hardcoding 'default'
-        const currentProduct = await window.apiClient.getCurrentProduct();
-        console.log('[Quiz] Loading questions for product:', currentProduct);
-        const response = await window.apiClient.getContent(currentProduct);
-
-        if (
-          response &&
-          response.content &&
-          response.content.questions &&
-          response.content.questions.length > 0
-        ) {
-          console.log(
-            '[Quiz] Successfully loaded questions from database:',
-            response.content.questions.length,
-            'questions'
-          );
-          return response.content.questions;
-        } else {
-          console.warn('[Quiz] No questions found in database, using defaults');
-        }
-      } else {
-        console.warn(
-          '[Quiz] API client not available after timeout, using defaults'
-        );
-      }
-    } catch (error) {
-      console.error('[Quiz] Error loading data from database:', error);
-      console.log('[Quiz] Falling back to default questions');
-    }
-
-    console.log('[Quiz] Using default quiz questions');
-    // Return default questions if no saved data
+  // Function to return default questions
+  function getDefaultQuestions() {
     return [
       {
         id: 1,
@@ -181,6 +138,58 @@
         ],
       },
     ];
+  }
+
+  // Function to load quiz data from database or use defaults
+  const loadQuizData = async function () {
+    try {
+      // Check if we have a data-quiz-type attribute first
+      const quizWidget = document.querySelector('.style-quiz-widget');
+      const productType = quizWidget?.getAttribute('data-quiz-type');
+
+      // Only wait for API client if we don't have a product type
+      if (!productType) {
+        let attempts = 0;
+        while (typeof window.apiClient === 'undefined' && attempts < 50) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          attempts++;
+        }
+
+        if (typeof window.apiClient === 'undefined') {
+          return getDefaultQuestions();
+        }
+      }
+
+      // Wait for API client to be available (with shorter timeout since we have product type)
+      let attempts = 0;
+      while (typeof window.apiClient === 'undefined' && attempts < 50) {
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        attempts++;
+      }
+
+      if (typeof window.apiClient !== 'undefined') {
+        // Get product type from data-quiz-type attribute or fallback to API
+        const currentProduct =
+          productType || (await window.apiClient.getCurrentProduct());
+        const response = await window.apiClient.getContent(currentProduct);
+
+        if (
+          response &&
+          response.content &&
+          response.content.questions &&
+          response.content.questions.length > 0
+        ) {
+          return response.content.questions;
+        }
+      } else {
+        return getDefaultQuestions();
+      }
+    } catch (error) {
+      // Silently fall back to defaults
+    }
+
+    // Return default questions if no saved data
+    return getDefaultQuestions();
   };
 
   const styleQuiz = {
@@ -190,11 +199,8 @@
     currentProductName: 'Default', // Will be updated on init
 
     init: async function () {
-      console.log('[Quiz] Initializing quiz...');
-
       const quiz = document.getElementById('quiz');
       if (!quiz) {
-        console.warn('[Quiz] Quiz element not found');
         return;
       }
 
@@ -203,10 +209,14 @@
         '<div class="loading-state"><h3>Loading quiz...</h3></div>';
 
       try {
-        // Get current product name for placeholder images
+        // Get current product from data attribute or API
         if (typeof window.apiClient !== 'undefined') {
           try {
-            const currentProduct = await window.apiClient.getCurrentProduct();
+            const quizWidget = document.querySelector('.style-quiz-widget');
+            const productType = quizWidget?.getAttribute('data-quiz-type');
+            const currentProduct =
+              productType || (await window.apiClient.getCurrentProduct());
+
             const response = await window.apiClient.getProducts();
             const product = response.products.find(
               (p) => p.product_key === currentProduct
@@ -215,9 +225,7 @@
               this.currentProductName = product.name || 'Default';
             }
           } catch (error) {
-            console.warn(
-              '[Quiz] Could not get current product name, using default'
-            );
+            // Silently use default
           }
         }
 
@@ -230,19 +238,12 @@
           return;
         }
 
-        console.log(
-          '[Quiz] Quiz initialized with',
-          this.questions.length,
-          'questions'
-        );
-
         // Reset to first question
         this.current = 0;
         this.answers = [];
 
         this.renderQuestion(true); // Pass true to indicate this is the initial render
       } catch (error) {
-        console.error('[Quiz] Failed to initialize quiz:', error);
         quiz.innerHTML =
           '<div class="error-state"><h3>Failed to load quiz</h3></div>';
       }
@@ -258,7 +259,6 @@
       setTimeout(() => {
         const q = this.questions[this.current];
         if (!q) {
-          console.error('[Quiz] Question not found at index:', this.current);
           return;
         }
 
@@ -280,9 +280,23 @@
               );
             }
 
-            // Fix absolute paths from database to relative paths for HTML location
+            // Fix paths for deployed environment
+            // Deployed at: /site-assets/automated-quiz/v2/
+            // Images at: /site-assets/automated-quiz/v2/uploaded-image/
+
+            // Handle absolute paths starting with /
             if (imageUrl.startsWith('/site-assets/')) {
-              imageUrl = '../' + imageUrl.substring(1); // Remove leading slash and add ../
+              // Already absolute path - use as is
+              imageUrl = imageUrl;
+            } else if (imageUrl.startsWith('../uploaded-image/')) {
+              // Relative path from dashboard - convert to absolute for deployed site
+              imageUrl = '/site-assets/automated-quiz/v2/uploaded-image/' + imageUrl.substring(18); // Remove '../uploaded-image/'
+            } else if (imageUrl.startsWith('uploaded-image/')) {
+              // Missing path prefix - add absolute path
+              imageUrl = '/site-assets/automated-quiz/v2/' + imageUrl;
+            } else if (imageUrl.startsWith('../site-assets/')) {
+              // Convert relative site-assets to absolute
+              imageUrl = '/' + imageUrl.substring(3); // Remove '../'
             }
 
             return (
@@ -385,7 +399,6 @@
       const result = document.getElementById('result-form');
 
       if (!quiz || !result) {
-        console.error('[Quiz] Result elements not found');
         return;
       }
 
@@ -423,9 +436,7 @@
             this.currentProductName = product.name || 'Default';
           }
         } catch (error) {
-          console.warn(
-            '[Quiz] Could not get current product name, using default'
-          );
+          // Silently use default
         }
       }
     },
@@ -434,13 +445,65 @@
   // Make styleQuiz globally available
   window.styleQuiz = styleQuiz;
 
+  // Function to start quiz (called from intro button)
+  window.startQuiz = function() {
+    const intro = document.getElementById('quiz-intro');
+    const quiz = document.getElementById('quiz');
+
+    if (intro && quiz) {
+      intro.style.display = 'none';
+      quiz.style.display = 'block';
+
+      // Initialize quiz if not already initialized
+      if (window.styleQuiz && typeof window.styleQuiz.init === 'function') {
+        window.styleQuiz.init();
+      }
+    }
+  };
+
+  // Function to update product name in intro button
+  function updateIntroProductName() {
+    const productNameSpans = document.querySelectorAll('.product-name');
+
+    if (!productNameSpans.length) {
+      return false;
+    }
+
+    // Use the properly formatted product name from styleQuiz
+    if (styleQuiz.currentProductName && styleQuiz.currentProductName !== 'Default') {
+      productNameSpans.forEach(span => span.textContent = styleQuiz.currentProductName);
+      return true;
+    } else {
+      return false; // Retry if product name not yet loaded
+    }
+  }
+
+  // Retry mechanism to wait for element to be available
+  function tryUpdateProductName(attempts = 0, maxAttempts = 50) {
+    const success = updateIntroProductName();
+
+    if (!success && attempts < maxAttempts) {
+      setTimeout(() => {
+        tryUpdateProductName(attempts + 1, maxAttempts);
+      }, 100); // Retry every 100ms
+    }
+  }
+
+  // Update product name when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      tryUpdateProductName();
+    });
+  } else {
+    tryUpdateProductName();
+  }
+
   // Form submission handler - stores quiz results to database AND sends to HubSpot
   window.submitDetails = async function (e) {
     e.preventDefault();
 
     const form = document.querySelector('#productquiz');
     if (!form) {
-      console.error('[Quiz] Form not found');
       return;
     }
 
@@ -469,7 +532,6 @@
       });
 
       if (!q) {
-        console.warn('[Quiz] Question not found for answer:', a);
         return;
       }
 
@@ -482,7 +544,7 @@
         questionId: a.questionId,
         questionText: q.text,
         optionId: a.optionId,
-        optionText: selectedOption ? selectedOption.text : 'Unknown'
+        optionText: selectedOption ? selectedOption.text : 'Unknown',
       });
 
       // For HubSpot
@@ -490,14 +552,16 @@
         q.text + ': ' + (selectedOption ? selectedOption.text : 'Unknown');
     });
 
-    // Get current product key if available
+    // Get current product key from data attribute or API
     let currentProduct = null;
     if (typeof window.apiClient !== 'undefined') {
       try {
-        currentProduct = await window.apiClient.getCurrentProduct();
-        console.log('[Quiz] Current product:', currentProduct);
+        const quizWidget = document.querySelector('.style-quiz-widget');
+        const productType = quizWidget?.getAttribute('data-quiz-type');
+        currentProduct =
+          productType || (await window.apiClient.getCurrentProduct());
       } catch (error) {
-        console.warn('[Quiz] Could not get current product:', error);
+        // Silently continue
       }
     }
 
@@ -506,59 +570,56 @@
       email: email,
       phone: phone,
       product_key: currentProduct,
-      answers: quizAnswers
+      answers: quizAnswers,
     };
 
     // Store quiz result in database
-    fetch('../api/quiz-results.php', {
+    fetch('/site-assets/automated-quiz/v2/api/quiz-results.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(quizData)
+      body: JSON.stringify(quizData),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        console.log('[Quiz] Quiz result stored successfully with ID:', data.result_id);
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          // Now also send to HubSpot
+          sendToHubspot(name, email, phone, hubspotAnswers);
 
-        // Now also send to HubSpot
-        sendToHubspot(name, email, phone, hubspotAnswers);
+          // Show success message
+          const result = document.getElementById('result-form');
+          result.innerHTML =
+            "<h2 style='color:#0f172a;'>Thank you, " +
+            name +
+            '! Your quiz results have been saved.</h2>';
 
-        // Show success message
-        const result = document.getElementById('result-form');
-        result.innerHTML =
-          "<h2 style='color:#0f172a;'>Thank you, " +
-          name +
-          '! Your quiz results have been saved.</h2>';
-
-        // Track event
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          formID: 'productquiz',
-          event: 'formsubmit',
-          email: email,
-          quizResultId: data.result_id
-        });
-
-        if (typeof zaraz !== 'undefined') {
-          zaraz.track('productquiz', {
+          // Track event
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
             formID: 'productquiz',
-            quizResultId: data.result_id
+            event: 'formsubmit',
+            email: email,
+            quizResultId: data.result_id,
           });
+
+          if (typeof zaraz !== 'undefined') {
+            zaraz.track('productquiz', {
+              formID: 'productquiz',
+              quizResultId: data.result_id,
+            });
+          }
+        } else {
+          throw new Error(data.message || 'Failed to store quiz result');
         }
-      } else {
-        throw new Error(data.message || 'Failed to store quiz result');
-      }
-    })
-    .catch(error => {
-      console.error('[Quiz] Error storing quiz result:', error);
-      // Even if database fails, try to send to HubSpot
-      sendToHubspot(name, email, phone, hubspotAnswers);
-      alert('Something went wrong. Please try again later.');
-      submitBtn.value = originalBtnValue;
-      submitBtn.disabled = false;
-    });
+      })
+      .catch((error) => {
+        // Even if database fails, try to send to HubSpot
+        sendToHubspot(name, email, phone, hubspotAnswers);
+        alert('Something went wrong. Please try again later.');
+        submitBtn.value = originalBtnValue;
+        submitBtn.disabled = false;
+      });
 
     function sendToHubspot(name, email, phone, answers) {
       const fields = [
@@ -588,16 +649,12 @@
         }
       )
         .then((response) => {
-          if (response.ok) {
-            console.log('[Quiz] Successfully submitted to HubSpot');
-          } else {
-            response
-              .text()
-              .then((text) => console.error('HubSpot submission issue:', text));
+          if (!response.ok) {
+            response.text();
           }
         })
         .catch((error) => {
-          console.error('Error submitting to HubSpot:', error);
+          // Silently fail
         });
     }
   };
@@ -747,7 +804,6 @@
 
   // Listen for custom events to update quiz when admin makes changes
   window.addEventListener('quizDataUpdated', function (e) {
-    console.log('[Quiz] Detected quiz data change, reloading...');
     if (
       window.styleQuiz &&
       typeof window.styleQuiz.reloadQuizData === 'function'
@@ -756,19 +812,6 @@
     }
   });
 
-  // Initialize quiz when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', async function () {
-      console.log('[Quiz] DOM loaded, initializing quiz...');
-      if (window.styleQuiz && typeof window.styleQuiz.init === 'function') {
-        await window.styleQuiz.init();
-      }
-    });
-  } else {
-    // DOM already loaded
-    console.log('[Quiz] DOM already loaded, initializing quiz immediately...');
-    if (window.styleQuiz && typeof window.styleQuiz.init === 'function') {
-      window.styleQuiz.init();
-    }
-  }
+  // Don't auto-initialize quiz - wait for user to click "Start Quiz" button
+  // Quiz will be initialized when startQuiz() is called
 })();

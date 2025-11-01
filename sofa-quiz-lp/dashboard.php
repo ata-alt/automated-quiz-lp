@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Admin Dashboard</title>
-    <link rel="stylesheet" href="../site-assets/css/dashboard.css?v=5">
+    <link rel="stylesheet" href="../site-assets/css/dashboard.css?v=8">
     <style>
         /* Additional Mobile Responsive Styles */
         @media (max-width: 768px) {
@@ -337,8 +337,8 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(4px);
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
             animation: fadeIn 0.3s ease;
         }
 
@@ -346,70 +346,73 @@
             background-color: #ffffff;
             margin: 5% auto;
             padding: 0;
-            border-radius: 16px;
+            border-radius: 0;
             width: 90%;
             max-width: 800px;
             max-height: 85vh;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
             animation: slideIn 0.3s ease;
             overflow: hidden;
+            border: 1px solid #e0e0e0;
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            color: white;
-            padding: 24px 32px;
-            border-bottom: none;
+            background: #ffffff;
+            color: #000000;
+            padding: 32px 40px;
+            border-bottom: 1px solid #e0e0e0;
             position: relative;
         }
 
         .modal-header h2 {
             margin: 0;
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
         .modal-body {
-            padding: 32px;
+            padding: 40px;
             max-height: 60vh;
             overflow-y: auto;
-            background: #fafbff;
+            background: #ffffff;
         }
 
         .close {
             position: absolute;
-            top: 20px;
-            right: 24px;
-            color: white;
-            font-size: 28px;
+            top: 32px;
+            right: 40px;
+            color: #000000;
+            font-size: 24px;
             font-weight: 300;
             cursor: pointer;
-            opacity: 0.8;
+            opacity: 1;
             transition: all 0.2s ease;
-            width: 32px;
-            height: 32px;
+            width: auto;
+            height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
+            border-radius: 0;
         }
 
         .close:hover {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(90deg);
+            opacity: 0.6;
+            background: transparent;
+            transform: none;
         }
 
         .user-info-card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
+            background: #fafafa;
+            border-radius: 0;
+            padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid #2563eb;
+            box-shadow: none;
+            border: 1px solid #e0e0e0;
         }
 
         .user-info-grid {
@@ -426,17 +429,17 @@
         }
 
         .user-info-label {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 10px;
+            font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #6b7280;
+            letter-spacing: 0.15em;
+            color: #6b6b6b;
         }
 
         .user-info-value {
-            font-size: 16px;
-            font-weight: 500;
-            color: #111827;
+            font-size: 14px;
+            font-weight: 300;
+            color: #000000;
         }
 
         .answers-section {
@@ -454,71 +457,77 @@
 
         .answers-header h4 {
             margin: 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: #111827;
+            font-size: 14px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #000000;
         }
 
         .answers-count {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
+            background: transparent;
+            color: #000000;
+            padding: 6px 16px;
+            border-radius: 0;
+            border: 1px solid #e0e0e0;
+            font-size: 11px;
+            font-weight: 300;
+            letter-spacing: 0.1em;
         }
 
         .answer-card {
             background: white;
             margin-bottom: 16px;
-            border-radius: 12px;
+            border-radius: 0;
             overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e5e7eb;
+            box-shadow: none;
+            border: 1px solid #e0e0e0;
             transition: all 0.2s ease;
         }
 
         .answer-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transform: translateY(-1px);
+            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+            transform: none;
         }
 
         .answer-header {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 16px 20px;
-            border-bottom: 1px solid #e5e7eb;
+            background: #fafafa;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .answer-question {
-            font-weight: 600;
-            color: #374151;
+            font-weight: 300;
+            color: #000000;
             margin: 0;
-            font-size: 15px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
         }
 
         .question-number {
-            background: #005743 !important;
-            color: #ffffff !important;
-            min-width: 120px !important;
-            height: 40px !important;
-            border-radius: 100px !important;
+            background: transparent !important;
+            color: #000000 !important;
+            min-width: auto !important;
+            height: auto !important;
+            border-radius: 0 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            font-size: 14px !important;
-            font-weight: 700 !important;
+            font-size: 11px !important;
+            font-weight: 300 !important;
             flex-shrink: 0 !important;
             text-align: center !important;
             line-height: 1 !important;
-            border: 2px solid #ffffff !important;
-            box-shadow: 0px 4px 6px -1px rgba(0, 87, 67, 0.1) !important;
-            padding: 0 16px !important;
+            border: 1px solid #e0e0e0 !important;
+            box-shadow: none !important;
+            padding: 8px 16px !important;
             white-space: nowrap !important;
             text-transform: uppercase !important;
-            letter-spacing: 0.5px !important;
+            letter-spacing: 0.15em !important;
         }
 
         .answer-content {
@@ -526,13 +535,15 @@
         }
 
         .answer-text {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-            color: #1e40af;
-            padding: 12px 16px;
-            border-radius: 8px;
-            font-weight: 500;
+            background: #fafafa;
+            color: #000000;
+            padding: 16px 20px;
+            border-radius: 0;
+            font-weight: 300;
             margin: 0;
-            border-left: 4px solid #2563eb;
+            border: 1px solid #e0e0e0;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         .no-answers {
@@ -571,21 +582,21 @@
 
         /* Custom scrollbar for modal body */
         .modal-body::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         .modal-body::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
+            background: #fafafa;
+            border-radius: 0;
         }
 
         .modal-body::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+            background: #e0e0e0;
+            border-radius: 0;
         }
 
         .modal-body::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: #6b6b6b;
         }
     </style>
 </head>
@@ -606,6 +617,7 @@
                         </select>
                         <button class="btn btn-danger" onclick="confirmDeleteProduct()" id="deleteProductBtn" style="padding: 8px 15px; display: none;">Delete</button>
                     </div>
+                    <button class="btn btn-primary" onclick="openDeveloperNotesModal()"><span class="btn-text-desktop">Developer Notes</span><span class="btn-text-mobile">Docs</span></button>
                     <button class="btn btn-success btn-create-quiz" onclick="openNewProductQuizModal()"><span class="btn-text-desktop">+ Create New Product Quiz</span><span class="btn-text-mobile">+ New Quiz</span></button>
                 </div>
             </div>
@@ -614,39 +626,7 @@
         <!-- Tab Navigation -->
         <div class="tab-navigation">
             <div class="tab-buttons">
-                <button class="tab-btn active" onclick="showTab('banner')" data-tab="banner">
-                    <span class="tab-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M3.792 2.938A49.069 49.069 0 0112 2.25c2.797 0 5.54.236 8.208.688a1.857 1.857 0 011.792 1.792c.452 2.668.688 5.41.688 8.208 0 2.797-.236 5.54-.688 8.208a1.857 1.857 0 01-1.792 1.792 49.069 49.069 0 01-8.208.688 49.069 49.069 0 01-8.208-.688 1.857 1.857 0 01-1.792-1.792A49.069 49.069 0 012.25 12c0-2.797.236-5.54.688-8.208A1.857 1.857 0 013.792 2.938zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm3 2.25a.75.75 0 100-1.5.75.75 0 000 1.5zm-6 0a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
-                    <span class="tab-text">Hero Banner</span>
-                </button>
-                <button class="tab-btn" onclick="showTab('content')" data-tab="content">
-                    <span class="tab-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5zM18 1.5a.75.75 0 01.728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 010 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 01-1.456 0l-.258-1.036a2.625 2.625 0 00-1.91-1.91l-1.036-.258a.75.75 0 010-1.456l1.036-.258a2.625 2.625 0 001.91-1.91l.258-1.036A.75.75 0 0118 1.5zM16.5 15a.75.75 0 01.712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 010 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 01-1.422 0l-.395-1.183a1.5 1.5 0 00-.948-.948l-1.183-.395a.75.75 0 010-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0116.5 15z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
-                    <span class="tab-text">Luxury Content</span>
-                </button>
-                <button class="tab-btn" onclick="showTab('gallery')" data-tab="gallery">
-                    <span class="tab-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 012.25-2.25h16.5A2.25 2.25 0 0122.5 6v12a2.25 2.25 0 01-2.25 2.25H3.75A2.25 2.25 0 011.5 18V6zM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0021 18v-1.94l-2.69-2.689a1.5 1.5 0 00-2.12 0l-.88.879.97.97a.75.75 0 11-1.06 1.06l-5.16-5.159a1.5 1.5 0 00-2.12 0L3 16.061zm10.125-7.81a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0z" clip-rule="evenodd" />
-                        </svg>
-                    </span>
-                    <span class="tab-text">Gallery</span>
-                </button>
-                <button class="tab-btn" onclick="showTab('promo')" data-tab="promo">
-                    <span class="tab-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                        </svg>
-                    </span>
-                    <span class="tab-text">Quiz Promo</span>
-                </button>
-                <button class="tab-btn" onclick="showTab('questions')" data-tab="questions">
+                <button class="tab-btn active" onclick="showTab('questions')" data-tab="questions">
                     <span class="tab-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                             <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 00-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 01-.189-.866c0-.298.059-.605.189-.866zm2.023 6.828a.75.75 0 10-1.06-1.06 3.75 3.75 0 01-5.304 0 .75.75 0 00-1.06 1.06 5.25 5.25 0 007.424 0z" clip-rule="evenodd" />
@@ -662,262 +642,50 @@
                     </span>
                     <span class="tab-text">Quiz Results</span>
                 </button>
+                <button class="tab-btn" onclick="openDeveloperNotesModal()" data-tab="developer-notes">
+                    <span class="tab-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                        </svg>
+                    </span>
+                    <span class="tab-text">Developer Notes</span>
+                </button>
             </div>
             <div class="actions-bar">
                 <div>
                     <span id="currentTabActions"></span>
                 </div>
                 <div>
-                    <button class="btn btn-success" onclick="saveQuiz()">💾 Save All Changes</button>
-                    <button class="btn btn-primary" onclick="previewQuiz()">👁️ Preview</button>
+                    <button class="btn btn-success" onclick="saveQuiz()">Save All Changes</button>
+                    <button class="btn btn-primary" onclick="previewQuiz()">Preview</button>
                 </div>
             </div>
         </div>
 
         <!-- Tab Content Container -->
         <div class="tab-content-container">
-
-            <!-- Banner Tab Content -->
-            <div class="tab-content active" id="banner-tab">
-                <div class="question-card" style="background: #fff3e0; border: 2px solid #ff6f00;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="bannerTabTitle" style="color: #ff6f00; margin: 0;">🎨 Default Hero Banner</h2>
-                        <button class="btn btn-success" onclick="saveBannerSection()" style="padding: 8px 20px;">💾 Save Banner</button>
-                    </div>
-                    <div class="banner-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div>
-                            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Heading:</label>
-                            <input type="text"
-                                id="bannerMainHeading"
-                                class="question-input"
-                                value=""
-                                onchange="updateBannerText('mainHeading', this.value)"
-                                placeholder="Type your main heading here...">
-
-                            <label style="font-weight: bold; display: block; margin: 15px 0 10px 0;">Sub Heading:</label>
-                            <input type="text"
-                                id="bannerSubHeading"
-                                class="question-input"
-                                value=""
-                                onchange="updateBannerText('subHeading', this.value)"
-                                placeholder="Type your sub heading here...">
-                        </div>
-                        <div>
-                            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Desktop Background Image:</label>
-                            <div class="image-upload-area"
-                                id="banner-desktop-image"
-                                style="height: 120px; margin-bottom: 15px;"
-                                onclick="document.getElementById('banner-desktop-file').click()">
-                                <div class="upload-text">📤 Upload Desktop Banner</div>
-                            </div>
-                            <input type="file" id="banner-desktop-file"
-                                style="display: none;" accept="image/*"
-                                onchange="handleBannerImageUpload('desktop', this)">
-
-                            <label style="font-weight: bold; display: block; margin-bottom: 10px;">Mobile Background Image:</label>
-                            <div class="image-upload-area"
-                                id="banner-mobile-image"
-                                style="height: 120px;"
-                                onclick="document.getElementById('banner-mobile-file').click()">
-                                <div class="upload-text">📱 Upload Mobile Banner</div>
-                            </div>
-                            <input type="file" id="banner-mobile-file"
-                                style="display: none;" accept="image/*"
-                                onchange="handleBannerImageUpload('mobile', this)">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Luxury Content Tab Content -->
-            <div class="tab-content" id="content-tab">
-                <div class="question-card" style="background: #f0e6ff; border: 2px solid #6b46c1;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="contentTabTitle" style="color: #6b46c1; margin: 0;">✨ Default Luxury Content</h2>
-                        <button class="btn btn-success" onclick="saveLuxurySofasSection()" style="padding: 8px 20px;">💾 Save Content</button>
-                    </div>
-
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Main Title:</label>
-                    <input type="text"
-                        id="luxurySofasTitle"
-                        class="question-input"
-                        value=""
-                        onchange="updateLuxurySofasContent('title', this.value)"
-                        placeholder="Type your main title here...">
-
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Introduction Paragraph:</label>
-                    <textarea id="luxurySofasIntro"
-                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-height: 100px; margin-bottom: 15px;"
-                        onchange="updateLuxurySofasContent('introduction', this.value)"
-                        placeholder="Enter introduction paragraph describing your luxury products..."></textarea>
-
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Subtitle:</label>
-                    <input type="text"
-                        id="luxurySofasSubtitle"
-                        class="question-input"
-                        value=""
-                        onchange="updateLuxurySofasContent('subtitle', this.value)"
-                        placeholder="Type your section subtitle here...">
-
-                    <div class="showroom-points-section" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Showroom Points:</label>
-                        <div id="luxurySofasPoints" class="luxury-points-container"></div>
-                        <button class="btn btn-primary btn-add-point" onclick="addLuxurySofasPoint()" style="margin-top: 10px; width: 100%; max-width: 200px;">+ Add Point</button>
-                    </div>
-
-                    <label style="font-weight: bold; display: block; margin-bottom: 10px;">Conclusion Paragraph:</label>
-                    <textarea id="luxurySofasConclusion"
-                        style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-height: 80px;"
-                        onchange="updateLuxurySofasContent('conclusion', this.value)"
-                        placeholder="Type your conclusion paragraph here..."></textarea>
-                </div>
-            </div>
-
-            <!-- Gallery Tab Content -->
-            <div class="tab-content" id="gallery-tab">
-                <div class="question-card" style="background: #f3e5f5; border: 2px solid #9c27b0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="galleryTabTitle" style="color: #9c27b0; margin: 0;">🖼️ Default Gallery (4 Images)</h2>
-                        <button class="btn btn-success" onclick="saveGallerySection()" style="padding: 8px 20px;">💾 Save Gallery</button>
-                    </div>
-                    <div class="gallery-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
-                        <!-- Gallery Item 1 -->
-                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
-                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 1</h4>
-                            <div id="gallery-item-0"></div>
-                            <div style="margin-top: 15px;">
-                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
-                                <input type="text" id="gallery-title-0" class="question-input" placeholder="Enter title (e.g., Modern Sectionals)" onchange="updateGalleryText(0, 'title', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
-                                <input type="text" id="gallery-subtitle-0" class="question-input" placeholder="Enter subtitle (e.g., Luxury Living)" onchange="updateGalleryText(0, 'subtitle', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
-                                <input type="text" id="gallery-link-0" class="question-input" placeholder="Enter link URL (e.g., /shop/sectionals)" onchange="updateGalleryText(0, 'link', this.value)">
-                            </div>
-                        </div>
-
-                        <!-- Gallery Item 2 -->
-                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
-                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 2</h4>
-                            <div id="gallery-item-1"></div>
-                            <div style="margin-top: 15px;">
-                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
-                                <input type="text" id="gallery-title-1" class="question-input" placeholder="Enter title (e.g., Leather Collection)" onchange="updateGalleryText(1, 'title', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
-                                <input type="text" id="gallery-subtitle-1" class="question-input" placeholder="Enter subtitle (e.g., Premium Quality)" onchange="updateGalleryText(1, 'subtitle', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
-                                <input type="text" id="gallery-link-1" class="question-input" placeholder="Enter link URL (e.g., /shop/leather)" onchange="updateGalleryText(1, 'link', this.value)">
-                            </div>
-                        </div>
-
-                        <!-- Gallery Item 3 -->
-                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
-                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 3</h4>
-                            <div id="gallery-item-2"></div>
-                            <div style="margin-top: 15px;">
-                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
-                                <input type="text" id="gallery-title-2" class="question-input" placeholder="Enter title (e.g., Fabric Products)" onchange="updateGalleryText(2, 'title', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
-                                <input type="text" id="gallery-subtitle-2" class="question-input" placeholder="Enter subtitle (e.g., Designer Choice)" onchange="updateGalleryText(2, 'subtitle', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
-                                <input type="text" id="gallery-link-2" class="question-input" placeholder="Enter link URL (e.g., /shop/fabric)" onchange="updateGalleryText(2, 'link', this.value)">
-                            </div>
-                        </div>
-
-                        <!-- Gallery Item 4 -->
-                        <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd;">
-                            <h4 style="color: #9c27b0; margin: 0 0 15px 0;">Gallery Item 4</h4>
-                            <div id="gallery-item-3"></div>
-                            <div style="margin-top: 15px;">
-                                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Title:</label>
-                                <input type="text" id="gallery-title-3" class="question-input" placeholder="Enter title (e.g., Custom Designs)" onchange="updateGalleryText(3, 'title', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Subtitle:</label>
-                                <input type="text" id="gallery-subtitle-3" class="question-input" placeholder="Enter subtitle (e.g., Bespoke Luxury)" onchange="updateGalleryText(3, 'subtitle', this.value)">
-
-                                <label style="font-weight: bold; display: block; margin: 10px 0 5px 0;">Button Link:</label>
-                                <input type="text" id="gallery-link-3" class="question-input" placeholder="Enter link URL (e.g., /shop/custom)" onchange="updateGalleryText(3, 'link', this.value)">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Promo Tab Content -->
-            <div class="tab-content" id="promo-tab">
-                <div class="question-card" style="background: #fff8e1; border: 2px solid #ff9800;">
-                    <div class="promo-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-                        <h2 id="promoTabTitle" style="color: #ff9800; margin: 0;">🎯 Default Quiz Promo</h2>
-                        <button class="btn btn-success btn-save-promo" onclick="saveQuizPromoSection()" style="padding: 8px 20px;">💾 Save Promo</button>
-                    </div>
-                    <div style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Section Heading:</label>
-                        <input type="text"
-                            id="quizPromoHeading"
-                            class="question-input"
-                            value=""
-                            onchange="updateQuizPromoHeading(this.value)"
-                            placeholder="Type your section heading here...">
-                    </div>
-
-                    <div class="features-section" style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Features List:</label>
-                        <div id="quizPromoFeatures" class="features-list"></div>
-                        <button class="btn btn-primary btn-add-feature" onclick="addQuizPromoFeature()" style="margin-top: 10px; width: 100%; max-width: 200px;">+ Add Feature</button>
-                    </div>
-
-                    <div style="margin-bottom: 20px;">
-                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Button Settings:</label>
-                        <div class="button-settings-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                            <input type="text"
-                                id="quizPromoButtonText"
-                                placeholder="Try our Matching Quiz"
-                                value=""
-                                onchange="updateQuizPromoButton('text', this.value)"
-                                style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                            <input type="text"
-                                id="quizPromoButtonLink"
-                                placeholder="#quiz"
-                                value=""
-                                onchange="updateQuizPromoButton('link', this.value)"
-                                style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                    </div>
-
-                    <div class="slider-images-section">
-                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Slider Images:</label>
-                        <div id="quizPromoImages" class="promo-images-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;"></div>
-                        <button class="btn btn-primary btn-add-image" onclick="addQuizPromoImage()" style="margin-top: 10px; width: 100%; max-width: 200px;">+ Add Image</button>
-                    </div>
-                </div>
-            </div>
-
             <!-- Questions Tab Content -->
-            <div class="tab-content" id="questions-tab">
+            <div class="tab-content active" id="questions-tab">
                 <div id="questionsContainer"></div>
 
                 <!-- Add New Question Card -->
-                <div class="question-card add-question-card" id="addQuestionCard" style="background: #e8f5e9; border: 2px solid #4caf50;">
+                <div class="question-card add-question-card" id="addQuestionCard" style="background: #fafafa; border: 1px solid #e0e0e0;">
                     <div class="add-question-content" style="text-align: center; padding: 40px 20px;">
-                        <h3 style="color: #4caf50; margin-bottom: 20px;">Add New Question</h3>
+                        <h3 style="color: #000000; margin-bottom: 20px; font-weight: 300; text-transform: uppercase; letter-spacing: 0.1em; font-size: 16px;">Add New Question</h3>
                         <button class="btn btn-primary btn-add-question" onclick="addNewQuestion()" style="padding: 15px 30px; font-size: 18px;">
                             <span class="btn-text-desktop">➕ Add Question</span>
                             <span class="btn-text-mobile">➕ Add</span>
                         </button>
-                        <p style="margin-top: 15px; color: #666;">Click to add a new quiz question</p>
+                        <p style="margin-top: 15px; color: #6b6b6b; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Click to add a new quiz question</p>
                     </div>
                 </div>
             </div>
 
             <!-- Quiz Results Tab Content -->
             <div class="tab-content" id="results-tab">
-                <div class="question-card" style="background: #f0f4ff; border: 2px solid #2563eb;">
+                <div class="question-card" style="background: white; border: 1px solid #e0e0e0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 id="resultsTabTitle" style="color: #2563eb; margin: 0;">Quiz Results</h2>
+                        <h2 id="resultsTabTitle" style="color: #000000; margin: 0;">Quiz Results</h2>
                         <div style="display: flex; gap: 10px;">
                             <button class="btn btn-primary" onclick="refreshResults()" style="padding: 8px 20px;">🔄 Refresh</button>
                             <button class="btn btn-success" onclick="exportResults()" style="padding: 8px 20px;">Export CSV</button>
@@ -926,11 +694,9 @@
 
                     <!-- Filters -->
                     <div class="filters-container" style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
-                        <div>
-                            <label style="font-weight: bold; margin-right: 8px;">Filter by Product:</label>
-                            <select id="productFilter" onchange="filterResults()" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                                <option value="">All Products</option>
-                            </select>
+                           <div>
+                            <label style="font-weight: bold; margin-right: 8px;">Showing Results For:</label>
+                            <input type="text" id="currentProductDisplay" readonly value="Default" style="padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; background: #f5f5f5; color: #666; cursor: not-allowed; font-weight: 500;">
                         </div>
                         <div>
                             <label style="font-weight: bold; margin-right: 8px;">Results per page:</label>
@@ -1001,11 +767,90 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal for Developer Notes -->
+    <div id="developerNotesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Widget Integration Guide</h2>
+                <span class="close" onclick="closeDeveloperNotesModal()">×</span>
+            </div>
+            <div class="modal-body" style="max-height: 70vh;">
+                <div style="background: #fafafa; padding: 24px; border-radius: 0; border: 1px solid #e0e0e0; margin-bottom: 24px;">
+                    <h3 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.1em; color: #000;">Integration Code</h3>
+                    <p style="margin-bottom: 12px; font-size: 13px; color: #6b6b6b; line-height: 1.6;">To integrate the quiz widget into your webpage, add the following code snippet where you want the quiz to appear:</p>
+                    <div style="position: relative;">
+                        <div style="background: #000; color: #10b981; padding: 16px; border-radius: 0; font-family: 'Courier New', monospace; font-size: 13px; overflow-x: auto; border: 1px solid #333;">
+                            <code id="integrationCode">&lt;section class="style-quiz-widget container" data-quiz-type="<span id="quizTypeValue" style="color: #fbbf24;">table</span>"&gt; &lt;/section&gt;</code>
+                        </div>
+                        <button onclick="copyIntegrationCode()" class="btn btn-primary" style="position: absolute; top: 8px; right: 8px; padding: 8px 16px; font-size: 11px; display: flex; align-items: center; gap: 6px;">
+                            <span id="copyIcon">📋</span>
+                            <span id="copyText">Copy</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="background: white; padding: 24px; border-radius: 0; border: 1px solid #e0e0e0;">
+                    <h3 style="margin: 0 0 16px 0; font-size: 14px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.1em; color: #000;">Available Quiz Types</h3>
+                    <p style="margin-bottom: 16px; font-size: 13px; color: #6b6b6b; line-height: 1.6;">Click on any product category below to update the integration code:</p>
+
+                    <div id="quizTypesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 16px;">
+                        <div class="quiz-type-item active" data-type="table" onclick="selectQuizType('table')" style="background: #000; padding: 12px 16px; border-radius: 0; border: 1px solid #000; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #fff; font-weight: 500;">table</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="wardrobes" onclick="selectQuizType('wardrobes')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">wardrobes</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="rugs" onclick="selectQuizType('rugs')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">rugs</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="sofas" onclick="selectQuizType('sofas')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">sofas</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="furniture" onclick="selectQuizType('furniture')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">furniture</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="bedroom" onclick="selectQuizType('bedroom')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">bedroom</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="chair" onclick="selectQuizType('chair')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">chair</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="coffeetables" onclick="selectQuizType('coffeetables')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">coffeetables</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="kitchen" onclick="selectQuizType('kitchen')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">kitchen</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="tv" onclick="selectQuizType('tv')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">tv</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="diningtable" onclick="selectQuizType('diningtable')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">diningtable</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="storagefurniture" onclick="selectQuizType('storagefurniture')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">storagefurniture</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="sideboard" onclick="selectQuizType('sideboard')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">sideboard</span>
+                        </div>
+                        <div class="quiz-type-item" data-type="barstool" onclick="selectQuizType('barstool')" style="background: #fafafa; padding: 12px 16px; border-radius: 0; border: 1px solid #e0e0e0; cursor: pointer; transition: all 0.3s ease;">
+                            <span style="font-family: 'Courier New', monospace; font-size: 12px; color: #000; font-weight: 500;">barstool</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 24px; padding: 16px; background: #f0f9ff; border-left: 3px solid #3b82f6; border-radius: 0;">
+                        <p style="margin: 0; font-size: 13px; color: #1e40af; line-height: 1.6;"><strong>Note:</strong> Ensure that the quiz type you select corresponds to a configured product quiz in your dashboard. The widget will dynamically load the appropriate quiz content based on the specified type.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="../api/api-client-fallback.js"></script>
-<script src="../site-assets/js/dashboard-php.js?v=12"></script>
+<script src="../site-assets/js/dashboard-php.js?v=14"></script>
 <script src="../site-assets/js/dashboard-effects.js" defer></script>
-<script src="../site-assets/js/quiz-results.js?v=4" defer></script>
+<script src="../site-assets/js/quiz-results.js?v=7" defer></script>
 
 <script>
     // Tab Management Functions
@@ -1047,18 +892,6 @@
 
         // Add specific actions based on tab
         switch (tabName) {
-            case 'banner':
-                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveBannerSection()">💾 Save Banner</button>';
-                break;
-            case 'content':
-                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveLuxurySofasSection()">💾 Save Content</button>';
-                break;
-            case 'gallery':
-                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveGallerySection()">💾 Save Gallery</button>';
-                break;
-            case 'promo':
-                actionsContainer.innerHTML = '<button class="btn btn-info" onclick="saveQuizPromoSection()">💾 Save Promo</button>';
-                break;
             case 'questions':
                 actionsContainer.innerHTML = '<button class="btn btn-primary" onclick="addNewQuestion()">➕ Add Question</button>';
                 break;
@@ -1070,7 +903,128 @@
 
     // Initialize first tab on page load
     document.addEventListener('DOMContentLoaded', function() {
-        showTab('banner');
+        showTab('questions');
+    });
+
+    // Developer Notes Modal Functions
+    function openDeveloperNotesModal() {
+        document.getElementById('developerNotesModal').style.display = 'block';
+    }
+
+    function closeDeveloperNotesModal() {
+        document.getElementById('developerNotesModal').style.display = 'none';
+    }
+
+    // Select Quiz Type and Update Integration Code
+    function selectQuizType(type) {
+        // Update the quiz type value in the integration code
+        document.getElementById('quizTypeValue').textContent = type;
+
+        // Remove active class from all items
+        const allItems = document.querySelectorAll('.quiz-type-item');
+        allItems.forEach(item => {
+            item.classList.remove('active');
+            item.style.background = '#fafafa';
+            item.style.borderColor = '#e0e0e0';
+            const span = item.querySelector('span');
+            if (span) span.style.color = '#000';
+        });
+
+        // Add active class to selected item
+        const selectedItem = document.querySelector(`.quiz-type-item[data-type="${type}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('active');
+            selectedItem.style.background = '#000';
+            selectedItem.style.borderColor = '#000';
+            const span = selectedItem.querySelector('span');
+            if (span) span.style.color = '#fff';
+        }
+    }
+
+    // Update Developer Notes Quiz Types List
+    async function updateDeveloperNotesQuizTypes() {
+        try {
+            const response = await apiClient.getProducts();
+            const quizTypesGrid = document.getElementById('quizTypesGrid');
+
+            if (!quizTypesGrid) return;
+
+            // Clear existing items
+            quizTypesGrid.innerHTML = '';
+
+            // Add quiz type for each product
+            response.products.forEach((product, index) => {
+                const productKey = product.product_key;
+                const isFirst = index === 0;
+
+                const quizTypeItem = document.createElement('div');
+                quizTypeItem.className = `quiz-type-item ${isFirst ? 'active' : ''}`;
+                quizTypeItem.setAttribute('data-type', productKey);
+                quizTypeItem.onclick = () => selectQuizType(productKey);
+                quizTypeItem.style.background = isFirst ? '#000' : '#fafafa';
+                quizTypeItem.style.padding = '12px 16px';
+                quizTypeItem.style.borderRadius = '0';
+                quizTypeItem.style.border = isFirst ? '1px solid #000' : '1px solid #e0e0e0';
+                quizTypeItem.style.cursor = 'pointer';
+                quizTypeItem.style.transition = 'all 0.3s ease';
+
+                const span = document.createElement('span');
+                span.style.fontFamily = "'Courier New', monospace";
+                span.style.fontSize = '12px';
+                span.style.color = isFirst ? '#fff' : '#000';
+                span.style.fontWeight = '500';
+                span.textContent = productKey;
+
+                quizTypeItem.appendChild(span);
+                quizTypesGrid.appendChild(quizTypeItem);
+            });
+
+            // Update the integration code to show the first product key
+            if (response.products.length > 0) {
+                document.getElementById('quizTypeValue').textContent = response.products[0].product_key;
+            }
+        } catch (error) {
+            console.error('Failed to update developer notes quiz types:', error);
+        }
+    }
+
+    // Override openDeveloperNotesModal to refresh quiz types
+    const originalOpenDeveloperNotesModal = openDeveloperNotesModal;
+    openDeveloperNotesModal = function() {
+        updateDeveloperNotesQuizTypes();
+        document.getElementById('developerNotesModal').style.display = 'block';
+    };
+
+    // Copy Integration Code to Clipboard
+    function copyIntegrationCode() {
+        const quizType = document.getElementById('quizTypeValue').textContent;
+        const codeText = `<section class="style-quiz-widget container" data-quiz-type="${quizType}"> </section>`;
+
+        navigator.clipboard.writeText(codeText).then(() => {
+            // Update button to show success state
+            const copyIcon = document.getElementById('copyIcon');
+            const copyText = document.getElementById('copyText');
+
+            copyIcon.textContent = '✓';
+            copyText.textContent = 'Copied!';
+
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                copyIcon.textContent = '📋';
+                copyText.textContent = 'Copy';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy to clipboard');
+        });
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('developerNotesModal');
+        if (event.target === modal) {
+            closeDeveloperNotesModal();
+        }
     });
 </script>
 

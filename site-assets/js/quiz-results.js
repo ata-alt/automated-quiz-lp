@@ -8,8 +8,16 @@ let allResults = [];
 // Initialize results when tab is shown
 function initializeResults() {
   console.log('[Results] Initializing quiz results...');
-  loadResults();
-  loadProductFilter();
+
+  // Auto-filter by current product - ALWAYS filter by current product
+  const currentProduct = window.currentProductKey || 'default';
+  console.log('[Results] Current product key:', currentProduct);
+
+  // Update the product display badge
+  updateProductDisplay(currentProduct);
+
+  // Load results with current product filter (always filter by current product)
+  loadResults(0, currentLimit, currentProduct);
 }
 
 // Load quiz results from API
@@ -208,57 +216,37 @@ function updateResultsCount(pagination) {
   countElement.textContent = `Showing ${start}-${end} of ${pagination.total} results`;
 }
 
-// Load product filter options
-async function loadProductFilter() {
-  try {
-    // Get unique product keys from the API (you might need to add this endpoint)
-    const response = await fetch(`../api/quiz-results.php?_t=${Date.now()}`, {
-      method: 'GET',
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      }
-    });
-    const data = await response.json();
-
-    if (data.success) {
-      const productKeys = [
-        ...new Set(data.results.map((r) => r.product_key).filter(Boolean)),
-      ];
-      const filterSelect = document.getElementById('productFilter');
-
-      // Clear existing options except "All Products"
-      filterSelect.innerHTML = '<option value="">All Products</option>';
-
-      productKeys.forEach((key) => {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-        filterSelect.appendChild(option);
-      });
-    }
-  } catch (error) {
-    console.warn('[Results] Could not load product filter options:', error);
+// Update the product display text field
+function updateProductDisplay(productKey) {
+  const displayElement = document.getElementById('currentProductDisplay');
+  if (displayElement) {
+    // Capitalize product name for display
+    const displayName = productKey.charAt(0).toUpperCase() + productKey.slice(1);
+    displayElement.value = displayName;
   }
 }
 
-// Filter results by product
+// Filter results by product (now uses current product automatically)
 function filterResults() {
-  const filter = document.getElementById('productFilter').value;
-  loadResults(0, currentLimit, filter);
+  // Always use the current product as filter
+  const currentProduct = window.currentProductKey || 'default';
+  loadResults(0, currentLimit, currentProduct);
 }
 
 // Change results per page
 function changeResultsPerPage() {
   const limit = parseInt(document.getElementById('resultsPerPage').value);
-  loadResults(0, limit, currentFilter);
+  // Always use current product as filter
+  const currentProduct = window.currentProductKey || 'default';
+  loadResults(0, limit, currentProduct);
 }
 
 // Refresh results
 function refreshResults() {
   console.log('[Results] Refreshing results...');
-  loadResults(currentPage, currentLimit, currentFilter);
+  // Always use current product as filter
+  const currentProduct = window.currentProductKey || 'default';
+  loadResults(currentPage, currentLimit, currentProduct);
 }
 
 // View detailed answers for a result
@@ -496,4 +484,18 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(initializeResults, 100); // Small delay to ensure DOM is ready
     }
   };
+
+  // Override switchProductQuiz to refresh results when product changes
+  if (window.switchProductQuiz) {
+    const originalSwitchProductQuiz = window.switchProductQuiz;
+    window.switchProductQuiz = async function (productKey) {
+      await originalSwitchProductQuiz(productKey);
+
+      // If currently on results tab, refresh the results with new filter
+      const activeTab = document.querySelector('.tab-content.active');
+      if (activeTab && activeTab.id === 'results-tab') {
+        setTimeout(initializeResults, 100);
+      }
+    };
+  }
 });
