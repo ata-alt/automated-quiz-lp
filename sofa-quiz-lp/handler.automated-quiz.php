@@ -126,7 +126,7 @@ $dbData = [
     'lname' => isset(explode(' ', $userName)[1]) ? implode(' ', array_slice(explode(' ', $userName), 1)) : '', // Last name
     'email' => $userEmail,
     'phone' => $userPhone,
-    'form' => 'product-quiz'
+    'form' => 'automated-quiz'
 ];
 
 // Add tracking data if available

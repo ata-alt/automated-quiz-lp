@@ -579,13 +579,12 @@
   window.submitDetails = async function (e) {
     e.preventDefault();
 
-    const form = document.querySelector('#productquiz');
+    const form = document.querySelector('#automated-quiz');
     if (!form) {
       return;
     }
 
     const name = form.querySelector("input[name='fname']").value;
-    const lname = form.querySelector("input[name='lname']").value;
     const email = form.querySelector("input[name='email']").value;
     const phone = form.querySelector("input[name='phone']").value;
 
@@ -647,7 +646,6 @@
 
     const quizData = {
       name: name,
-      lname: lname,
       email: email,
       phone: phone,
       product_key: currentProduct,
@@ -655,7 +653,7 @@
     };
 
     // Store quiz result in database
-    fetch('/sofa-quiz-lp/api/quiz-results.php', {
+    fetch('/site-assets/automated-quiz/v2/api/quiz-results.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -666,7 +664,7 @@
       .then((data) => {
         if (data.success) {
           // Send to HubSpot
-          sendToHubspot(name, lname, email, phone, hubspotAnswers);
+          sendToHubspot(name, email, phone, hubspotAnswers);
 
           // Show final success message
           const result = document.getElementById('result-form');
@@ -680,7 +678,6 @@
             window
               .sendQuizToWebhook(
                 name,
-                lname,
                 email,
                 phone,
                 currentProduct,
@@ -688,6 +685,42 @@
               )
               .then((webhookResult) => {
                 console.log('[Quiz] Webhook result received:', webhookResult);
+
+                if (webhookResult.success && webhookResult.data) {
+                  console.log('[Quiz] Sending data to email handler...');
+                  fetch(
+                    '/site-assets/automated-quiz/v2/sofa-quiz-lp/handler.automated-quiz.php',
+                    {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(webhookResult.data),
+                    }
+                  )
+                    .then((response) => response.json())
+                    .then((emailResult) => {
+                      console.log(
+                        '[Quiz] Email handler response:',
+                        emailResult
+                      );
+                      if (emailResult.success) {
+                        console.log('[Quiz] Email sent successfully!');
+                      } else {
+                        console.error(
+                          '[Quiz] Email handler failed:',
+                          emailResult
+                        );
+                      }
+                    })
+                    .catch((error) => {
+                      console.error('[Quiz] Email handler error:', error);
+                    });
+                } else {
+                  console.warn(
+                    '[Quiz] Webhook did not return valid data for email handler'
+                  );
+                }
               })
               .catch((error) => {
                 console.warn('[Quiz] Webhook error but continuing:', error);
@@ -697,15 +730,15 @@
           // Track event
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({
-            formID: 'productquiz',
+            formID: 'automated-quiz',
             event: 'formsubmit',
             email: email,
             quizResultId: data.result_id,
           });
 
           if (typeof zaraz !== 'undefined') {
-            zaraz.track('productquiz', {
-              formID: 'productquiz',
+            zaraz.track('automated-quiz', {
+              formID: 'automated-quiz',
               quizResultId: data.result_id,
             });
           }
@@ -715,17 +748,16 @@
       })
       .catch((error) => {
         // Even if database fails, try to send to HubSpot
-        sendToHubspot(name, lname, email, phone, hubspotAnswers);
+        sendToHubspot(name, email, phone, hubspotAnswers);
         alert('Something went wrong. Please try again later.');
         submitBtn.value = originalBtnValue;
         submitBtn.disabled = false;
       });
 
     // HubSpot integration
-    function sendToHubspot(name, lname, email, phone, answers) {
+    function sendToHubspot(name, email, phone, answers) {
       const fields = [
         { name: 'firstname', value: name },
-        { name: 'lastname', value: lname },
         { name: 'email', value: email },
         { name: 'phone', value: phone },
         ...Object.entries(answers).map(([key, value]) => ({

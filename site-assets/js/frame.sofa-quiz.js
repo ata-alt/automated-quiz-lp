@@ -11,7 +11,7 @@
 
       // Load API client first
       const apiScript = document.createElement('script');
-      apiScript.src = '/api/api-client.js?v=4';
+      apiScript.src = '/site-assets/automated-quiz/v2/api/api-client.js?v=4';
       apiScript.onload = () => {
         console.log('[Frame] API client loaded');
         callback();
@@ -31,30 +31,28 @@
 
         // Load API client first, then load widget
         styleQuizWidget.loadApiClient(() => {
-          $.get('style-quiz-widget.php', function (html) {
-            container.html(html);
+          $.get(
+            '/site-assets/automated-quiz/v2/sofa-quiz-lp/style-quiz-widget.php',
+            function (html) {
+              container.html(html);
 
-            // Restore the data-quiz-type attribute after loading HTML
-            if (quizType) {
-              container.attr('data-quiz-type', quizType);
-              console.log('[Frame] Restored data-quiz-type:', quizType);
-            }
-            if (
-              typeof window.styleQuiz === 'object' &&
-              typeof window.styleQuiz.init === 'function'
-            ) {
-              console.log('[Loader] styleQuiz already defined. Calling init.');
-              window.styleQuiz.init();
-            } else {
-              // Load webhook handler first
-              const webhookScript = document.createElement('script');
-              webhookScript.src = '/sofa-quiz-lp/site-assets/js/webhook-handler.js';
-              webhookScript.defer = true;
-              webhookScript.onload = () => {
-                console.log('[Loader] Webhook handler loaded');
-                // Then load main quiz script
+              // Restore the data-quiz-type attribute after loading HTML
+              if (quizType) {
+                container.attr('data-quiz-type', quizType);
+                console.log('[Frame] Restored data-quiz-type:', quizType);
+              }
+              if (
+                typeof window.styleQuiz === 'object' &&
+                typeof window.styleQuiz.init === 'function'
+              ) {
+                console.log(
+                  '[Loader] styleQuiz already defined. Calling init.'
+                );
+                window.styleQuiz.init();
+              } else {
                 const script = document.createElement('script');
-                script.src = '/sofa-quiz-lp/site-assets/js/sofa-quiz.js';
+                script.src =
+                  '/site-assets/automated-quiz/v2/site-assets/js/sofa-quiz.js?v=25';
                 script.defer = true;
                 script.onload = () => {
                   if (
@@ -72,33 +70,9 @@
                   }
                 };
                 document.body.appendChild(script);
-              };
-              webhookScript.onerror = () => {
-                console.warn('[Loader] Failed to load webhook handler, continuing anyway');
-                // Continue loading main script even if webhook fails
-                const script = document.createElement('script');
-                script.src = '/sofa-quiz-lp/site-assets/js/sofa-quiz.js';
-                script.defer = true;
-                script.onload = () => {
-                  if (
-                    typeof window.styleQuiz !== 'undefined' &&
-                    typeof window.styleQuiz.init === 'function'
-                  ) {
-                    console.log(
-                      '[Loader] Script loaded. Calling window.styleQuiz.init()'
-                    );
-                    window.styleQuiz.init();
-                  } else {
-                    console.warn(
-                      '[Loader] Script loaded but styleQuiz not found'
-                    );
-                  }
-                };
-                document.body.appendChild(script);
-              };
-              document.body.appendChild(webhookScript);
+              }
             }
-          });
+          );
         });
       });
     },

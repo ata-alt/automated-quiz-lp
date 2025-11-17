@@ -43,47 +43,39 @@
             <p>Out of 6,561 possible design personalities, you have a completely unique profile that reveals exactly why certain spaces make you feel at home while others never quite feel right.</p>
             <p>We'll email you your personalised report shortly.</p>
             <div class="spacing-v"></div>
-            <form id="productquiz" class="webform" action="#" method="POST" onsubmit="submitDetails(event)">
+            <form id="automated-quiz" class="webform" action="#" method="POST" onsubmit="submitDetails(event)">
                 <div class="row">
-                    <div class="col col-12 col-6-mid">
+                    <div class="col col-12 col-4-mid">
                         <div class="field-block">
                             <input type="text" name="fname" placeholder="First Name" class="input-text input-lg" pattern=".{2,255}" required title="2 to 255 characters">
                         </div>
                     </div>
-                    <div class="col col-12 col-6-mid">
-                        <div class="field-block">
-                            <input type="text" name="lname" placeholder="Last Name" class="input-text input-lg" pattern=".{2,255}" required title="2 to 255 characters">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col col-12 col-6-mid">
-                        <div class="field-block">
-                            <input type="tel" name="phone" placeholder="Phone Number" class="input-text" required="required">
-                        </div>
-                    </div>
-                    <div class="col col-12 col-6-mid">
+                    <div class="col col-12 col-4-mid">
                         <div class="field-block">
                             <input type="email" name="email" placeholder="Email" class="input-text input-lg" required>
+                        </div>
+                    </div>
+                    <div class="col col-12 col-4-mid">
+                        <div class="field-block">
+                            <input type="tel" name="phone" placeholder="Phone Number" class="input-text" required="required">
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col col-12">
                         <div class="field-block">
-                            <input name="gdpr" id="gdpr-signup" type="checkbox" oninvalid="this.setCustomValidity( 'You must tick the consent statement before subscribing')" oninput="this.setCustomValidity( '')" class="input-checkbox" required>
+                            <input name="gdpr" id="gdpr-signup" type="checkbox" required>
                             <label for="gdpr-signup" class="input-checkbox-label">
-                                <span><a href="/privacy-policy.html" target="_blank"><u>Privacy Policy agreed</u></a> </span>
+                                <span><a href="/privacy-policy.html" target="_blank"><u>Privacy Policy agreed</u></a></span>
                             </label>
                         </div>
                     </div>
                     <div class="col col-12">
                         <div class="field-block mobile-show" style="flex: 1 0 auto;">
-                            <input class="btn font-uppercase btn-black full-width" contenteditable="false" style="background: #18191F !important;" type="submit" value="GET IN TOUCH">
+                            <input class="btn font-uppercase btn-black full-width" type="submit" value="Find My Match">
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="hs_google_click_id" name="hs_google_click_id" value="">
             </form>
         </div>
     </div>
