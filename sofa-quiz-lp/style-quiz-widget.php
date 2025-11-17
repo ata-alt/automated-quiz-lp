@@ -43,6 +43,7 @@
             <p>Out of 6,561 possible design personalities, you have a completely unique profile that reveals exactly why certain spaces make you feel at home while others never quite feel right.</p>
             <p>We'll email you your personalised report shortly.</p>
             <div class="spacing-v"></div>
+            /* Change to automated-quiz */
             <form id="automated-quiz" class="webform" action="#" method="POST" onsubmit="submitDetails(event)">
                 <div class="row">
                     <div class="col col-12 col-4-mid">
