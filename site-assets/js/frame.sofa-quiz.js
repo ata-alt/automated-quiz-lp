@@ -51,8 +51,9 @@
                 window.styleQuiz.init();
               } else {
                 const script = document.createElement('script');
+                // Load the main sofa-quiz.js script change the version to 26 to 27
                 script.src =
-                  '/site-assets/automated-quiz/v2/site-assets/js/sofa-quiz.js?v=25';
+                  '/site-assets/automated-quiz/v2/site-assets/js/sofa-quiz.js?v=27';
                 script.defer = true;
                 script.onload = () => {
                   if (

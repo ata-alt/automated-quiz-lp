@@ -143,6 +143,50 @@
           },
         ],
       },
+      {
+        id: 7,
+        title: '',
+        text: 'Question 7',
+        options: [
+          {
+            id: 'a',
+            text: 'Option A',
+            image: null,
+          },
+          {
+            id: 'b',
+            text: 'Option B',
+            image: null,
+          },
+          {
+            id: 'c',
+            text: 'Option C',
+            image: null,
+          },
+        ],
+      },
+      {
+        id: 8,
+        title: '',
+        text: 'Question 8',
+        options: [
+          {
+            id: 'a',
+            text: 'Option A',
+            image: null,
+          },
+          {
+            id: 'b',
+            text: 'Option B',
+            image: null,
+          },
+          {
+            id: 'c',
+            text: 'Option C',
+            image: null,
+          },
+        ],
+      },
     ];
   }
 
@@ -603,17 +647,28 @@
     // Also prepare answers for HubSpot format
     const hubspotAnswers = {};
 
+    console.log('[Quiz] Starting to process answers for HubSpot...');
+    console.log('[Quiz] Total answers to process:', styleQuiz.answers.length);
+
     styleQuiz.answers.forEach(function (a) {
       const q = styleQuiz.questions.find(function (q) {
         return q.id == a.questionId;
       });
 
       if (!q) {
+        console.warn('[Quiz] Question not found for answer:', a);
         return;
       }
 
       const selectedOption = q.options.find(function (opt) {
         return opt.id === a.optionId;
+      });
+
+      console.log('[Quiz] Processing Q' + a.questionId + ':', {
+        questionTitle: q.title,
+        questionText: q.text,
+        selectedOptionId: a.optionId,
+        selectedOptionText: selectedOption ? selectedOption.text : 'Unknown',
       });
 
       // For database
@@ -628,8 +683,16 @@
       // For HubSpot - include title if it exists and send option ID instead of text
       const questionDisplay =
         q.title && q.title.trim() ? q.title + ' - ' + q.text : q.text;
-      hubspotAnswers['q' + a.questionId] = questionDisplay + ': ' + a.optionId;
+      const hubspotValue = questionDisplay + ': ' + a.optionId;
+      hubspotAnswers['q' + a.questionId] = hubspotValue;
+
+      console.log(
+        '[Quiz] HubSpot field created - q' + a.questionId + ':',
+        hubspotValue
+      );
     });
+
+    console.log('[Quiz] Final HubSpot answers object:', hubspotAnswers);
 
     // Get current product key from data attribute or API
     let currentProduct = null;
@@ -767,7 +830,8 @@
       ];
 
       fetch(
-        'https://api.hsforms.com/submissions/v3/integration/submit/6991142/d02069e2-8aa3-4f69-b176-5e14d2abb0bf',
+        //change the d02069e2-8aa3-4f69-b176-5e14d2abb0bf to faa1ab45-641d-4ee5-befa-3442869ee1af copying from the form in hubspot and in the api-frame-cron-every5mins.php
+        'https://api.hsforms.com/submissions/v3/integration/submit/6991142/faa1ab45-641d-4ee5-befa-3442869ee1af',
         {
           method: 'POST',
           headers: {
